@@ -6,6 +6,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\ContactController;
 
 
 // Load authentication routes
@@ -30,6 +31,10 @@ Route::prefix('cart')->name('cart.')->group(function () {
 Route::get('/contact', function () {
     return view('pages.contact');
 })->name('contact');
+
+Route::post('/contact', [ContactController::class, 'submit'])->name('contact.submit');
+
+Route::get('/new-arrivals', [ProductController::class, 'newArrivals'])->name('newarrival');
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
