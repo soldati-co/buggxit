@@ -7,8 +7,8 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <!-- Favicon/Logo for browser tab -->
-    <link rel="icon" type="image/x-icon" href="{{ asset('logo.webp') }}">
-    <link rel="shortcut icon" type="image/png" href="{{ asset('logo.webp') }}">
+    <link rel="icon" type="image/x-icon" href="{{ asset('Favicon_Gold.svg') }}">
+    <link rel="shortcut icon" type="image/png" href="{{ asset('Favicon_Gold.svg') }}">
 
     <title>{{ config('app.name', 'Buggxit Couture Est 2018') }}</title>
 

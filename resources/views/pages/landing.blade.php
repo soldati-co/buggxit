@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'BUGGXIT Couture – Bespoke Traditional Ceremony Attire')
+@section('title', 'BUGGXIT Couture')
 
 @section('content')
 {{-- ========== HERO SECTION – FULL WIDTH, BOLD, MODERN ========== --}}

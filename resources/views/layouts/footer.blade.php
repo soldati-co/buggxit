@@ -12,14 +12,14 @@
             <!-- Logo & Social -->
             <div class="space-y-6">
                 <div class="flex items-center space-x-3">
-                    <img src="{{ asset('logo.webp') }}" alt="BUGGXIT Logo" class="h-12 w-auto drop-shadow-glow md:h-14">
+                    <img src="{{ asset('Buggxit_Submark_Gold.svg') }}" alt="BUGGXIT Logo" class="h-12 w-auto md:h-14">
                 </div>                
                 <div class="space-y-6">
                     <div class="flex flex-wrap gap-3">
-                        <a href="#" class="p-2.5 bg-gray-800/50 rounded-full text-gray-400 hover:text-yellow-500 hover:bg-gray-800/80 transition-all duration-300 group">
+                        <a href="https://www.instagram.com/buggxit_couture/" class="p-2.5 bg-gray-800/50 rounded-full text-gray-400 hover:text-yellow-500 hover:bg-gray-800/80 transition-all duration-300 group">
                             <i class="fab fa-instagram text-lg group-hover:scale-110"></i>
                         </a>
-                        <a href="#" class="p-2.5 bg-gray-800/50 rounded-full text-gray-400 hover:text-yellow-500 hover:bg-gray-800/80 transition-all duration-300 group">
+                        <a href="https://www.facebook.com/p/Buggxit-Couture-Clothing-Accessories-100053004263016/" class="p-2.5 bg-gray-800/50 rounded-full text-gray-400 hover:text-yellow-500 hover:bg-gray-800/80 transition-all duration-300 group">
                             <i class="fab fa-facebook text-lg group-hover:scale-110"></i>
                         </a>
                         <a href="#" class="p-2.5 bg-gray-800/50 rounded-full text-gray-400 hover:text-yellow-500 hover:bg-gray-800/80 transition-all duration-300 group">

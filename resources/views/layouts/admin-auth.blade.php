@@ -3,14 +3,14 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="BUGGXIT Couture - Admin Login">
+    <meta name="description" content="BUGGXIT Couture - Admin Forgot Password">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <!-- Favicon/Logo for browser tab -->
-    <link rel="icon" type="image/x-icon" href="{{ asset('logo.png') }}">
-    <link rel="shortcut icon" type="image/png" href="{{ asset('logo.png') }}">
+    <link rel="icon" type="image/x-icon" href="{{ asset('Buggxit_Submark_Gold.svg') }}">
+    <link rel="shortcut icon" type="image/svg" href="{{ asset('Buggxit_Submark_Gold.svg') }}">
 
-    <title>Admin Login - BUGGXIT Couture</title>
+    <title>Admin Forgot Password</title>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">

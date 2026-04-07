@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\AdminDressController;
 use App\Http\Controllers\Admin\AdminOrderController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\AdminPasswordResetController;
 
 // ================== ADMIN ROUTES ================== //
 Route::prefix('admin')->name('admin.')->group(function () {

@@ -168,8 +168,9 @@
                 <div>
                     <h3 class="text-white font-semibold text-xl mb-4">Connect Socially</h3>
                     <div class="flex gap-4">
-                        @foreach(['instagram', 'facebook-f', 'twitter', 'linkedin-in', 'pinterest'] as $icon)
-                            <a href="#" class="w-12 h-12 bg-black/50 border border-gray-700 rounded-full flex items-center justify-center hover:border-yellow-500 hover:bg-yellow-500/10 transition-all duration-300 group">
+                        @foreach(['instagram', 'facebook-f', 'twitter', 'tiktok'] as $icon)
+                            <a href="https://www.{{ $icon == 'instagram' ? 'instagram.com/buggxit_couture/' : ($icon == 'facebook-f' ? 'facebook.com/p/Buggxit-Couture-Clothing-Accessories-100053004263016/' : ($icon == 'twitter' ? 'twitter.com/' : ($icon == 'tiktok' ? 'tiktok.com/' : ''))) }}" 
+                            class="w-12 h-12 bg-black/50 border border-gray-700 rounded-full flex items-center justify-center hover:border-yellow-500 hover:bg-yellow-500/10 transition-all duration-300 group">
                                 <i class="fab fa-{{ $icon }} text-gray-400 group-hover:text-yellow-500 text-lg"></i>
                             </a>
                         @endforeach

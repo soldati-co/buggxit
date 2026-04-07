@@ -212,7 +212,7 @@
                     and personalized geometric style recommendations.
                 </p>
                 <div style="display: flex; gap: 1.5rem; justify-content: center; flex-wrap: wrap;">
-                    <a href="{{ route('register') }}" class="btn" style="padding: 1rem 2.5rem; font-size: 1rem;">
+                    <a href="{{ route('password.register') }}" class="btn" style="padding: 1rem 2.5rem; font-size: 1rem;">
                         <i class="fas fa-user-plus" style="margin-right: 0.75rem;"></i> Create Account
                     </a>
                     <a href="{{ route('about') }}" class="btn btn-outline" style="padding: 1rem 2.5rem; font-size: 1rem;">
