@@ -48,8 +48,8 @@
     @endif
 
     {{-- Overlay & Text (always on top) --}}
-    <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-black/30 pointer-events-none"></div>
-    <div class="absolute inset-0 flex flex-col items-center justify-center text-center px-4 z-10">
+    {{-- <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-black/30 pointer-events-none"></div>
+     <div class="absolute inset-0 flex flex-col items-center justify-center text-center px-4 z-10">
         <span class="inline-flex items-center px-4 py-2 rounded-full text-xs font-medium bg-yellow-500/10 text-yellow-500 border border-yellow-500/30 mb-6 backdrop-blur-sm">
             <span class="w-2 h-2 bg-yellow-500 rounded-full mr-2 animate-pulse"></span>
             Since 2018 • Handcrafted in South Africa
@@ -81,7 +81,7 @@
                 Our Story
             </a>
         </div>
-    </div>
+    </div> --}}
 
     {{-- Subtle wave separator --}}
     <div class="absolute bottom-0 left-0 right-0 h-12 bg-gradient-to-t from-black to-transparent pointer-events-none"></div>
