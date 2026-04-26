@@ -139,13 +139,13 @@
                 </div>
                 
                 <!-- Creator Credit with watermark - right on desktop but moved left -->
-                <div class="text-gray-400 text-sm text-center md:text-right md:pr-12">
+                {{-- <div class="text-gray-400 text-sm text-center md:text-right md:pr-12">
                     Crafted by
                     <img src="{{ asset('watermarks/watermark22.webp') }}" alt="Watermark" class="inline-block h-4 w-auto mx-1 align-middle">
                     <a href="https://linkedin.com/in/nkosi2k" class="text-yellow-500 hover:text-yellow-400 transition-colors duration-300 font-semibold" target="_blank">
                         Nkosi
                     </a>
-                </div>
+                </div> --}}
             </div>
         </div>
     </div>

@@ -20,14 +20,6 @@ Route::get('/about', function () {
     return view('pages.about');
 })->name('about');
 
-Route::get('/signin', function () {
-    return view('password.signin');
-})->name('signin');
-
-Route::get('/register', function () {
-    return view('password.register');
-})->name('register');
-
 // Cart routes
 Route::prefix('cart')->name('cart.')->group(function () {
     Route::get('/', [CartController::class, 'index'])->name('index');

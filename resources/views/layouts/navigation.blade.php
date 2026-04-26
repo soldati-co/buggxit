@@ -91,7 +91,7 @@
                                 </form>
                             </div>
                         @else
-                            <a href="{{ route('signin') }}" class="flex items-center px-4 py-3 text-sm text-gray-400 hover:text-yellow-500 hover:bg-gray-800/50 border-b border-gray-800/50 transition-all duration-200 group">
+                            <a href="{{ route('login') }}" class="flex items-center px-4 py-3 text-sm text-gray-400 hover:text-yellow-500 hover:bg-gray-800/50 border-b border-gray-800/50 transition-all duration-200 group">
                                 <i class="fas fa-sign-in-alt mr-3 text-yellow-500 group-hover:scale-110 transition-transform duration-300"></i> Sign In
                             </a>
                             <a href="{{ route('register') }}" class="flex items-center px-4 py-3 text-sm text-gray-400 hover:text-yellow-500 hover:bg-gray-800/50 transition-all duration-200 group">
