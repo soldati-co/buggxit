@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\AdminDressController;
 use App\Http\Controllers\Admin\AdminOrderController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\AdminPasswordResetController;
+use App\Http\Controllers\Admin\HeroSlideController;
 
 // ================== ADMIN ROUTES ================== //
 Route::prefix('admin')->name('admin.')->group(function () {
@@ -71,6 +72,16 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/', [AdminOrderController::class, 'index'])->name('index');
         Route::get('/{order}', [AdminOrderController::class, 'show'])->name('show');
         Route::patch('/{order}/status', [AdminOrderController::class, 'updateStatus'])->name('update-status');
+    });
+
+    Route::prefix('hero-slides')->name('hero-slides.')->group(function () {
+        Route::get('/', [HeroSlideController::class, 'index'])->name('index');
+        Route::get('/create', [HeroSlideController::class, 'create'])->name('create');
+        Route::post('/', [HeroSlideController::class, 'store'])->name('store');
+        Route::get('/{heroSlide}/edit', [HeroSlideController::class, 'edit'])->name('edit');
+        Route::put('/{heroSlide}', [HeroSlideController::class, 'update'])->name('update');
+        Route::delete('/{heroSlide}', [HeroSlideController::class, 'destroy'])->name('destroy');
+        Route::post('/update-order', [HeroSlideController::class, 'updateOrder'])->name('update-order');
     });
 
     // Logout

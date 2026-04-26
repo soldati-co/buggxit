@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="BUGGXIT Couture - Admin Forgot Password">
+    <meta name="description" content="BUGGXIT Couture">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <!-- Favicon/Logo for browser tab -->

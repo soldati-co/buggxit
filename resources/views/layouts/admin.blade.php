@@ -208,13 +208,13 @@
                     <span class="text-gray-700">•</span>
                     <span>Session timeout: 30 min</span>
                 </div>
-                <div class="text-gray-400 text-xs">
+                {{-- <div class="text-gray-400 text-xs">
                     Crafted by 
                     <img src="{{ asset('watermarks/watermark22.webp') }}" alt="Watermark" class="inline-block h-3 w-auto mx-1 align-middle">
                     <a href="https://linkedin.com/in/nkosi2k" class="text-yellow-500 hover:text-yellow-400 transition-colors" target="_blank">
                         Nkosi
                     </a>
-                </div>
+                </div> --}}
             </div>
         </div>
     </footer>
