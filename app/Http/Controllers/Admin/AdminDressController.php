@@ -103,9 +103,9 @@ class AdminDressController extends Controller
             'colors.*' => 'in:' . implode(',', array_keys($this->availableColors)),
             'status' => 'required|in:draft,active,out_of_stock',
             'is_featured' => 'boolean',
-            'main_image' => 'nullable|image|max:2048',
+            'main_image' => 'nullable|image|max:9048',
             'gallery_images' => 'nullable|array',
-            'gallery_images.*' => 'image|max:2048',
+            'gallery_images.*' => 'image|max:9048',
         ]);
 
         // Handle main image upload
@@ -185,9 +185,9 @@ class AdminDressController extends Controller
             'colors.*' => 'in:' . implode(',', array_keys($this->availableColors)),
             'status' => 'required|in:draft,active,out_of_stock',
             'is_featured' => 'boolean',
-            'main_image' => 'nullable|image|max:2048',
+            'main_image' => 'nullable|image|max:9048',
             'gallery_images' => 'nullable|array',
-            'gallery_images.*' => 'image|max:2048',
+            'gallery_images.*' => 'image|max:9048',
         ]);
 
         // Handle main image upload

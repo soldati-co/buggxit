@@ -235,7 +235,7 @@
                             </label>
                             <p class="pl-2 pt-2">or drag and drop</p>
                         </div>
-                        <p class="text-xs text-gray-500">PNG, JPG, GIF up to 2MB</p>
+                        <p class="text-xs text-gray-500">PNG, JPG, GIF up to 9MB</p>
                     </div>
                 </div>
                 @error('main_image')
