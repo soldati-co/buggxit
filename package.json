@@ -22,7 +22,7 @@
         "edgedriver": "^6.3.0",
         "geckodriver": "^6.1.0",
         "laravel-vite-plugin": "^2.0.0",
-        "nightwatch": "^3.15.0",
+        "nightwatch": "^0.3.1",
         "postcss": "^8.5.6",
         "tailwindcss": "^3.4.19",
         "vite": "^7.1.11"
