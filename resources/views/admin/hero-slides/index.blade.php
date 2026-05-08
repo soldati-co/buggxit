@@ -71,6 +71,7 @@
 </div>
 
 @push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
 <script>
     // Simple drag reorder (can be replaced with SortableJS)
     const sortable = document.getElementById('slides-sortable');
@@ -95,6 +96,5 @@
         });
     }
 </script>
-<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
 @endpush
 @endsection
