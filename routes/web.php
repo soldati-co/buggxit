@@ -64,20 +64,63 @@ Route::middleware('auth')->group(function () {
 // ================== END PUBLIC ROUTES ================== //
 
 Route::get('/nightwatch-test', function () {
-    // Standard log through the stack
-    \Illuminate\Support\Facades\Log::info('Nightwatch route test: ' . now());
+    // 1. Basic config
+    $config = [
+        'token_set'     => !empty(env('NIGHTWATCH_TOKEN')),
+        'token_prefix'  => substr((string)env('NIGHTWATCH_TOKEN'), 0, 8) . '...',
+        'ingest_url'    => env('NIGHTWATCH_INGEST_URL', 'default (https://ingest.nightwatch.io)'),
+        'log_channel'   => env('LOG_CHANNEL'),
+        'log_stack'     => env('LOG_STACK'),
+    ];
 
-    // Direct log to Nightwatch's dedicated channel
+    // 2. Look for Nightwatch errors in today's local log
+    $logFile = storage_path('logs/laravel-' . now()->format('Y-m-d') . '.log');
+    $recentLogLines = [];
+    if (file_exists($logFile)) {
+        $lines = file($logFile);
+        $lines = array_slice($lines, -50); // last 50 lines
+        foreach ($lines as $line) {
+            if (stripos($line, 'nightwatch') !== false) {
+                $recentLogLines[] = trim($line);
+            }
+        }
+    }
+
+    // 3. Test direct Nightwatch logging with detailed error capture
+    $testResult = 'unknown';
+    $errorDetail = '';
     try {
-        \Illuminate\Support\Facades\Log::channel('nightwatch')->info('Direct nightwatch test: ' . now());
-        $direct = 'OK';
+        \Illuminate\Support\Facades\Log::channel('nightwatch')->info('Diagnostic test ' . now());
+        $testResult = 'OK';
     } catch (\Exception $e) {
-        $direct = 'FAILED: ' . $e->getMessage();
+        $testResult = 'FAILED';
+        $errorDetail = $e->getMessage();
+    }
+
+    // 4. Try a raw HTTP ping to Nightwatch API (optional but definitive)
+    $httpTest = 'skipped';
+    try {
+        $client = new \GuzzleHttp\Client(['timeout' => 5]);
+        $res = $client->post('https://ingest.nightwatch.io/api/v1/logs', [
+            'headers' => [
+                'Authorization' => 'Bearer ' . env('NIGHTWATCH_TOKEN'),
+                'Content-Type'  => 'application/json',
+            ],
+            'json' => [
+                'message' => 'HTTP diagnostic test',
+                'level'   => 'info',
+                'timestamp' => now()->toIso8601String(),
+            ],
+        ]);
+        $httpTest = 'Status: ' . $res->getStatusCode();
+    } catch (\Exception $e) {
+        $httpTest = 'FAILED: ' . $e->getMessage();
     }
 
     return response()->json([
-        'stack_test'    => 'Logged to stack',
-        'direct_test'   => $direct,
-        'token_set'     => !empty(env('NIGHTWATCH_TOKEN')),
+        'config'          => $config,
+        'log_test_result' => $testResult . ($errorDetail ? ' - ' . $errorDetail : ''),
+        'recent_log_errors' => $recentLogLines,
+        'http_ping_test'  => $httpTest,
     ]);
 });
