@@ -11,7 +11,7 @@ COPY . .
 RUN npm run build
 
 # Stage 2: Production PHP-FPM + NGINX server
-FROM serversideup/php:8.3-fpm-nginx
+FROM serversideup/php:8.4-fpm-nginx
 
 WORKDIR /var/www/html
 
