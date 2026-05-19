@@ -15,16 +15,10 @@ FROM serversideup/php:8.4-fpm-nginx
 
 WORKDIR /var/www/html
 
-# Force container to use public DNS (fixes Nightwatch connectivity)
-USER root
-RUN mkdir -p /etc/cont-init.d
-RUN cat > /etc/cont-init.d/00-dns.sh <<'EOF'
-#!/bin/sh
-echo "nameserver 8.8.8.8" > /etc/resolv.conf
-echo "nameserver 1.1.1.1" >> /etc/resolv.conf
-EOF
-RUN chmod +x /etc/cont-init.d/00-dns.sh
-USER www-data
+# Copy the DNS fix entrypoint script
+COPY --chown=root:root docker-entrypoint-fix.sh /
+RUN chmod +x /docker-entrypoint-fix.sh
+ENTRYPOINT ["/docker-entrypoint-fix.sh"]
 
 # Copy application code
 COPY --chown=www-data:www-data . /var/www/html
