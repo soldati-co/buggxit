@@ -64,24 +64,6 @@ Route::middleware('auth')->group(function () {
 // ================== END PUBLIC ROUTES ================== //
 
 Route::get('/nightwatch-test', function () {
-    $ipUrl = env('NIGHTWATCH_INGEST_URL', 'https://ingest.nightwatch.io');
-    
-    try {
-        $client = new \GuzzleHttp\Client(['timeout' => 5]);
-        $res = $client->post($ipUrl . '/api/v1/logs', [
-            'headers' => [
-                'Authorization' => 'Bearer ' . env('NIGHTWATCH_TOKEN'),
-                'Content-Type'  => 'application/json',
-            ],
-            'json' => ['message' => 'Direct IP test', 'level' => 'info'],
-        ]);
-        $result = 'Status: ' . $res->getStatusCode();
-    } catch (\Exception $e) {
-        $result = 'FAILED: ' . $e->getMessage();
-    }
-
-    return response()->json([
-        'nightwatch_ingest_url' => $ipUrl,
-        'http_result'          => $result,
-    ]);
+    \Illuminate\Support\Facades\Log::info('Nightwatch test log via agent');
+    return response()->json(['message' => 'Logged. Check Nightwatch dashboard.']);
 });
