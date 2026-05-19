@@ -64,42 +64,24 @@ Route::middleware('auth')->group(function () {
 // ================== END PUBLIC ROUTES ================== //
 
 Route::get('/nightwatch-test', function () {
-    // 1. Show DNS environment variable
-    $dnsEnv = env('DNS_SERVER', 'not set');
-
-    // 2. Show contents of /etc/resolv.conf (where DNS servers are listed)
-    $resolvConf = file_get_contents('/etc/resolv.conf');
-
-    // 3. Try resolving the Nightwatch ingest hostname using PHP
-    $nightwatchHost = 'ingest.nightwatch.io';
-    $resolvedIp = gethostbyname($nightwatchHost);
-    $dnsWorks = ($resolvedIp !== $nightwatchHost) ? true : false;
-
-    // 4. HTTP ping test (same as before)
-    $httpTest = 'skipped';
-    if ($dnsWorks) {
-        try {
-            $client = new \GuzzleHttp\Client(['timeout' => 5]);
-            $res = $client->post('https://' . $nightwatchHost . '/api/v1/logs', [
-                'headers' => [
-                    'Authorization' => 'Bearer ' . env('NIGHTWATCH_TOKEN'),
-                    'Content-Type'  => 'application/json',
-                ],
-                'json' => ['message' => 'HTTP diagnostic', 'level' => 'info'],
-            ]);
-            $httpTest = 'Status: ' . $res->getStatusCode();
-        } catch (\Exception $e) {
-            $httpTest = 'FAILED: ' . $e->getMessage();
-        }
-    } else {
-        $httpTest = 'SKIPPED (DNS resolution failed)';
+    $ipUrl = env('NIGHTWATCH_INGEST_URL', 'https://ingest.nightwatch.io');
+    
+    try {
+        $client = new \GuzzleHttp\Client(['timeout' => 5]);
+        $res = $client->post($ipUrl . '/api/v1/logs', [
+            'headers' => [
+                'Authorization' => 'Bearer ' . env('NIGHTWATCH_TOKEN'),
+                'Content-Type'  => 'application/json',
+            ],
+            'json' => ['message' => 'Direct IP test', 'level' => 'info'],
+        ]);
+        $result = 'Status: ' . $res->getStatusCode();
+    } catch (\Exception $e) {
+        $result = 'FAILED: ' . $e->getMessage();
     }
 
     return response()->json([
-        'dns_server_env' => $dnsEnv,
-        'resolv_conf'    => $resolvConf,
-        'resolved_ip'    => $resolvedIp,
-        'dns_works'      => $dnsWorks,
-        'http_ping_test' => $httpTest,
+        'nightwatch_ingest_url' => $ipUrl,
+        'http_result'          => $result,
     ]);
 });
