@@ -64,63 +64,42 @@ Route::middleware('auth')->group(function () {
 // ================== END PUBLIC ROUTES ================== //
 
 Route::get('/nightwatch-test', function () {
-    // 1. Basic config
-    $config = [
-        'token_set'     => !empty(env('NIGHTWATCH_TOKEN')),
-        'token_prefix'  => substr((string)env('NIGHTWATCH_TOKEN'), 0, 8) . '...',
-        'ingest_url'    => env('NIGHTWATCH_INGEST_URL', 'default (https://ingest.nightwatch.io)'),
-        'log_channel'   => env('LOG_CHANNEL'),
-        'log_stack'     => env('LOG_STACK'),
-    ];
+    // 1. Show DNS environment variable
+    $dnsEnv = env('DNS_SERVER', 'not set');
 
-    // 2. Look for Nightwatch errors in today's local log
-    $logFile = storage_path('logs/laravel-' . now()->format('Y-m-d') . '.log');
-    $recentLogLines = [];
-    if (file_exists($logFile)) {
-        $lines = file($logFile);
-        $lines = array_slice($lines, -50); // last 50 lines
-        foreach ($lines as $line) {
-            if (stripos($line, 'nightwatch') !== false) {
-                $recentLogLines[] = trim($line);
-            }
-        }
-    }
+    // 2. Show contents of /etc/resolv.conf (where DNS servers are listed)
+    $resolvConf = file_get_contents('/etc/resolv.conf');
 
-    // 3. Test direct Nightwatch logging with detailed error capture
-    $testResult = 'unknown';
-    $errorDetail = '';
-    try {
-        \Illuminate\Support\Facades\Log::channel('nightwatch')->info('Diagnostic test ' . now());
-        $testResult = 'OK';
-    } catch (\Exception $e) {
-        $testResult = 'FAILED';
-        $errorDetail = $e->getMessage();
-    }
+    // 3. Try resolving the Nightwatch ingest hostname using PHP
+    $nightwatchHost = 'ingest.nightwatch.io';
+    $resolvedIp = gethostbyname($nightwatchHost);
+    $dnsWorks = ($resolvedIp !== $nightwatchHost) ? true : false;
 
-    // 4. Try a raw HTTP ping to Nightwatch API (optional but definitive)
+    // 4. HTTP ping test (same as before)
     $httpTest = 'skipped';
-    try {
-        $client = new \GuzzleHttp\Client(['timeout' => 5]);
-        $res = $client->post('https://ingest.nightwatch.io/api/v1/logs', [
-            'headers' => [
-                'Authorization' => 'Bearer ' . env('NIGHTWATCH_TOKEN'),
-                'Content-Type'  => 'application/json',
-            ],
-            'json' => [
-                'message' => 'HTTP diagnostic test',
-                'level'   => 'info',
-                'timestamp' => now()->toIso8601String(),
-            ],
-        ]);
-        $httpTest = 'Status: ' . $res->getStatusCode();
-    } catch (\Exception $e) {
-        $httpTest = 'FAILED: ' . $e->getMessage();
+    if ($dnsWorks) {
+        try {
+            $client = new \GuzzleHttp\Client(['timeout' => 5]);
+            $res = $client->post('https://' . $nightwatchHost . '/api/v1/logs', [
+                'headers' => [
+                    'Authorization' => 'Bearer ' . env('NIGHTWATCH_TOKEN'),
+                    'Content-Type'  => 'application/json',
+                ],
+                'json' => ['message' => 'HTTP diagnostic', 'level' => 'info'],
+            ]);
+            $httpTest = 'Status: ' . $res->getStatusCode();
+        } catch (\Exception $e) {
+            $httpTest = 'FAILED: ' . $e->getMessage();
+        }
+    } else {
+        $httpTest = 'SKIPPED (DNS resolution failed)';
     }
 
     return response()->json([
-        'config'          => $config,
-        'log_test_result' => $testResult . ($errorDetail ? ' - ' . $errorDetail : ''),
-        'recent_log_errors' => $recentLogLines,
-        'http_ping_test'  => $httpTest,
+        'dns_server_env' => $dnsEnv,
+        'resolv_conf'    => $resolvConf,
+        'resolved_ip'    => $resolvedIp,
+        'dns_works'      => $dnsWorks,
+        'http_ping_test' => $httpTest,
     ]);
 });
