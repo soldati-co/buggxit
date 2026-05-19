@@ -14,6 +14,10 @@ RUN npm run build
 FROM serversideup/php:8.4-fpm-nginx
 
 WORKDIR /var/www/html
+# Force container to use public DNS (overrides Docker's broken internal resolver)
+RUN mkdir -p /etc/cont-init.d && \
+    printf '#!/bin/sh\necho "nameserver 8.8.8.8" > /etc/resolv.conf\necho "nameserver 1.1.1.1" >> /etc/resolv.conf\n' > /etc/cont-init.d/00-dns.sh && \
+    chmod +x /etc/cont-init.d/00-dns.sh
 
 # Copy application code
 COPY --chown=www-data:www-data . /var/www/html
