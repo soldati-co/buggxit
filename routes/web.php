@@ -62,3 +62,25 @@ Route::middleware('auth')->group(function () {
 // Route::get('/search', [SearchController::class, 'index'])->name('search');
 
 // ================== END PUBLIC ROUTES ================== //
+
+Route::get('/nightwatch-test', function () {
+    // Log a clear message to the stack (which includes Nightwatch)
+    \Illuminate\Support\Facades\Log::info('Nightwatch route test: ' . now());
+
+    // Attempt to send a direct log to the Nightwatch channel
+    try {
+        \Illuminate\Support\Facades\Log::channel('nightwatch')->info('Direct nightwatch test: ' . now());
+        $direct = 'OK';
+    } catch (\Exception $e) {
+        $direct = 'FAILED: ' . $e->getMessage();
+    }
+
+    return response()->json([
+        'stack_test'    => 'Logged to stack (check Nightwatch Logs)',
+        'direct_test'   => $direct,
+        'nightwatch_config' => [
+            'token_set'  => !empty(env('NIGHTWATCH_TOKEN')),
+            'ingest_url' => config('nightwatch.ingest_url', 'default'),
+        ],
+    ]);
+});
