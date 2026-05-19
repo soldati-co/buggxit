@@ -64,10 +64,10 @@ Route::middleware('auth')->group(function () {
 // ================== END PUBLIC ROUTES ================== //
 
 Route::get('/nightwatch-test', function () {
-    // Log a clear message to the stack (which includes Nightwatch)
+    // Standard log through the stack
     \Illuminate\Support\Facades\Log::info('Nightwatch route test: ' . now());
 
-    // Attempt to send a direct log to the Nightwatch channel
+    // Direct log to Nightwatch's dedicated channel
     try {
         \Illuminate\Support\Facades\Log::channel('nightwatch')->info('Direct nightwatch test: ' . now());
         $direct = 'OK';
@@ -76,11 +76,8 @@ Route::get('/nightwatch-test', function () {
     }
 
     return response()->json([
-        'stack_test'    => 'Logged to stack (check Nightwatch Logs)',
+        'stack_test'    => 'Logged to stack',
         'direct_test'   => $direct,
-        'nightwatch_config' => [
-            'token_set'  => !empty(env('NIGHTWATCH_TOKEN')),
-            'ingest_url' => config('nightwatch.ingest_url', 'default'),
-        ],
+        'token_set'     => !empty(env('NIGHTWATCH_TOKEN')),
     ]);
 });
