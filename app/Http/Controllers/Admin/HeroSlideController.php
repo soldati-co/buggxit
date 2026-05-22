@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\HeroSlide;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Intervention\Image\ImageManager;
+use Intervention\Image\Drivers\Gd\Driver;
 
 class HeroSlideController extends Controller
 {
@@ -34,7 +36,18 @@ class HeroSlideController extends Controller
             'is_active'  => 'boolean',
         ]);
 
-        $path = $request->file('image')->store('hero-slides', 'public');
+        // Process image with Intervention
+        $manager = new ImageManager(new Driver());
+        $image = $manager->read($request->file('image'));
+        
+        // Scale down to max 1920px wide (hero images don't need to be huge)
+        $image->scale(width: 1920);
+        
+        // Convert to WebP with 80% quality
+        $encoded = $image->toWebp(80);
+        
+        $filename = 'hero-slides/' . uniqid() . '.webp';
+        Storage::disk('public')->put($filename, $encoded);
 
         HeroSlide::create([
             'title'      => $validated['title'] ?? null,
@@ -42,7 +55,7 @@ class HeroSlideController extends Controller
             'subheading' => $validated['subheading'] ?? null,
             'cta_text'   => $validated['cta_text'] ?? null,
             'cta_url'    => $validated['cta_url'] ?? null,
-            'image_path' => $path,
+            'image_path' => $filename,
             'alt_text'   => $validated['alt_text'] ?? null,
             'sort_order' => $validated['sort_order'] ?? 0,
             'is_active'  => $request->boolean('is_active', true),
@@ -78,10 +91,21 @@ class HeroSlideController extends Controller
         $data['is_active'] = $request->boolean('is_active', true);
 
         if ($request->hasFile('image')) {
+            // Delete old image (now may be WebP)
             if ($heroSlide->image_path) {
                 Storage::disk('public')->delete($heroSlide->image_path);
             }
-            $data['image_path'] = $request->file('image')->store('hero-slides', 'public');
+
+            // Process new image
+            $manager = new ImageManager(new Driver());
+            $image = $manager->read($request->file('image'));
+            $image->scale(width: 1920);
+            $encoded = $image->toWebp(80);
+            
+            $filename = 'hero-slides/' . uniqid() . '.webp';
+            Storage::disk('public')->put($filename, $encoded);
+            
+            $data['image_path'] = $filename;
         }
 
         $heroSlide->update($data);

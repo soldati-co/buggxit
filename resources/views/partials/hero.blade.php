@@ -44,8 +44,11 @@ class="relative w-full h-[60vh] md:h-[85vh] min-h-[450px] overflow-hidden bg-gra
         class="absolute inset-0 w-full h-full"
     >
         {{-- Background image --}}
-        <img src="{{ $slide->image_url }}" alt="{{ $slide->alt_text }}" 
-             class="absolute inset-0 w-full h-full object-cover object-center">
+        <img src="{{ $slide->image_url }}" 
+             alt="{{ $slide->alt_text }}" 
+             class="absolute inset-0 w-full h-full object-cover object-center"
+             loading="{{ $index === 0 ? 'eager' : 'lazy' }}"
+             fetchpriority="{{ $index === 0 ? 'high' : 'auto' }}">
         
         {{-- Dark overlay for readability --}}
         <div class="absolute inset-0 bg-black/50"></div>

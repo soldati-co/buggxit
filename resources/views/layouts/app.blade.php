@@ -13,13 +13,24 @@
 
     <title>{{ config('app.name', 'Buggxit Couture Est 2018') }}</title>
 
+    {{-- Preload the first active hero slide image (LCP) --}}
+    @if(Route::is('home'))
+        @php
+            $heroSlidesForPreload = \App\Models\HeroSlide::where('is_active', true)
+                                    ->orderBy('sort_order')
+                                    ->get();
+        @endphp
+        @if($heroSlidesForPreload->isNotEmpty())
+            <link rel="preload" href="{{ $heroSlidesForPreload->first()->image_url }}" as="image" fetchpriority="high">
+        @endif
+    @endif
+
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link
         href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Manrope:wght@400;500;600;700&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
 
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
