@@ -10,19 +10,15 @@
     <section class="container-wide px-4 sm:px-6 lg:px-8 mx-auto mt-5 mb-10">
         <div class="flex flex-col md:flex-row md:items-end justify-between mb-10">
             <div>
-                <p class="text-gray-400 text-lg mt-2">Collections.</p>
-                <h2 class="text-3xl md:text-4xl font-bold text-white">
+                <p class="text-yellow-500 text-sm font-semibold uppercase tracking-wider">Collections</p>
+                <h2 class="text-3xl md:text-4xl font-bold text-white mt-1">
                     Find <span class="text-yellow-500">Your</span> Silhouette.
                 </h2>
                 <p class="text-gray-400 text-lg mt-2">Every collection is designed for a moment. Find the one that fits yours.</p>
             </div>
-            <a href="{{ route('products.index') }}"
-                class="hidden md:flex items-center text-yellow-500 hover:text-yellow-400 font-medium mt-4 md:mt-0 group">
-                View all categories
-                <svg class="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" fill="none"
-                    stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                </svg>
+            <a href="{{ route('products.index') }}" 
+            class="inline-block px-8 py-3 mt-4 md:mt-0 bg-yellow-500 text-gray-900 font-semibold rounded-lg hover:bg-yellow-400 transition">
+                View All Categories
             </a>
         </div>
 
@@ -33,7 +29,6 @@
                     <div
                         class="absolute inset-0 bg-gradient-to-br from-yellow-500/0 to-yellow-500/0 group-hover:from-yellow-500/5 group-hover:to-transparent transition-all duration-700">
                     </div>
-
                     <div class="relative z-10">
                         <div
                             class="w-14 h-14 mb-4 bg-yellow-500/10 rounded-2xl flex items-center justify-center group-hover:bg-yellow-500/20 transition-colors">
