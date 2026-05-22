@@ -60,7 +60,7 @@
             <div class="flex flex-col md:flex-row md:items-end justify-between mb-10">
                 <div>
                     <h2 class="text-3xl md:text-4xl font-bold text-white">
-                        <span class="text-yellow-500">✦</span> Editor's Pick
+                       ✦ <span class="text-yellow-500">Buggz's Favourites</span> 
                     </h2>
                     <p class="text-gray-400 text-lg mt-2">The finest of our current collection.</p>
                 </div>
