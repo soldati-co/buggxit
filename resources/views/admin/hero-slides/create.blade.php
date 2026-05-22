@@ -1,4 +1,3 @@
-{{-- resources/views/admin/hero-slides/create.blade.php --}}
 @extends('layouts.admin')
 
 @section('title', 'Add Hero Slide - BUGGXIT Admin')

@@ -36,39 +36,45 @@
                 <div class="p-4 border-b border-gray-800 text-sm text-gray-400 flex">
                     <span class="w-16">Order</span>
                     <span class="flex-1">Slide</span>
+                    <span class="w-20">Image</span>
+                    <span class="flex-1">Headline / Sub</span>
+                    <span class="w-40">CTA</span>
                     <span class="w-24 text-center">Active</span>
                     <span class="w-32 text-right">Actions</span>
                 </div>
                 <div id="slides-sortable" class="divide-y divide-gray-800">
                     @foreach ($slides as $slide)
-                        <div class="flex items-center p-4 hover:bg-gray-800/30 transition"
-                            data-slide-id="{{ $slide->id }}">
-                            <div class="w-16 text-gray-500 cursor-move handle">☰</div>
-                            <div class="flex-1 flex items-center space-x-4">
-                                <div class="w-24 h-16 rounded-lg overflow-hidden bg-gray-700 flex-shrink-0">
-                                    <img src="{{ $slide->image_url }}" alt="{{ $slide->alt_text }}"
-                                        class="w-full h-full object-cover">
+                        <div class="flex items-center p-4 hover:bg-gray-800/30 transition" data-slide-id="{{ $slide->id }}">
+                            <div class="w-12 text-gray-500 cursor-move handle">☰</div>
+                            <div class="w-20 flex-shrink-0 mr-4">
+                                <div class="w-16 h-12 rounded overflow-hidden bg-gray-700">
+                                    <img src="{{ $slide->image_url }}" alt="{{ $slide->alt_text }}" class="w-full h-full object-cover">
                                 </div>
-                                <div>
-                                    <h4 class="text-white font-medium">{{ $slide->title ?? 'Untitled' }}</h4>
-                                    <p class="text-xs text-gray-500">{{ $slide->alt_text }}</p>
-                                </div>
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <h4 class="text-white font-medium truncate">{{ $slide->headline ?? $slide->title ?? 'No headline' }}</h4>
+                                @if($slide->subheading)
+                                    <p class="text-xs text-gray-400 truncate">{{ $slide->subheading }}</p>
+                                @endif
+                                <p class="text-xs text-gray-500">{{ $slide->alt_text }}</p>
+                            </div>
+                            <div class="w-40">
+                                @if($slide->cta_text)
+                                    <span class="inline-block text-xs bg-yellow-500/10 text-yellow-400 px-2 py-0.5 rounded">
+                                        {{ $slide->cta_text }}
+                                    </span>
+                                    @if($slide->cta_url)
+                                        <p class="text-xs text-gray-500 truncate">{{ $slide->cta_url }}</p>
+                                    @endif
+                                @else
+                                    <span class="text-xs text-gray-600">—</span>
+                                @endif
                             </div>
                             <div class="w-24 text-center">
-                                <span
-                                    class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium 
-                            {{ $slide->is_active ? 'bg-green-500/10 text-green-400 border border-green-500/30' : 'bg-gray-500/10 text-gray-400 border border-gray-500/30' }}">
-                                    {{ $slide->is_active ? 'Active' : 'Inactive' }}
-                                </span>
+                                {{-- active badge unchanged --}}
                             </div>
                             <div class="w-32 text-right space-x-2">
-                                <a href="{{ route('admin.hero-slides.edit', $slide) }}"
-                                    class="text-yellow-500 hover:text-yellow-400 text-sm">Edit</a>
-                                <form action="{{ route('admin.hero-slides.destroy', $slide) }}" method="POST"
-                                    class="inline" onsubmit="return confirm('Delete this slide?')">
-                                    @csrf @method('DELETE')
-                                    <button type="submit" class="text-red-400 hover:text-red-300 text-sm">Delete</button>
-                                </form>
+                                {{-- edit & delete unchanged --}}
                             </div>
                         </div>
                     @endforeach

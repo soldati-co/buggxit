@@ -7,6 +7,37 @@
             class="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-2.5 text-white focus:border-yellow-500 focus:ring-yellow-500">
     </div>
 
+     {{-- NEW FIELDS --}}
+    <!-- Headline -->
+    <div>
+        <label class="block text-sm font-medium text-gray-300 mb-1">Headline</label>
+        <input type="text" name="headline" value="{{ old('headline', $slide->headline ?? '') }}"
+            class="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-2.5 text-white focus:border-yellow-500 focus:ring-yellow-500">
+    </div>
+
+    <!-- Subheading -->
+    <div>
+        <label class="block text-sm font-medium text-gray-300 mb-1">Subheading</label>
+        <textarea name="subheading" rows="3"
+            class="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-2.5 text-white focus:border-yellow-500 focus:ring-yellow-500">{{ old('subheading', $slide->subheading ?? '') }}</textarea>
+    </div>
+
+    <!-- CTA Text -->
+    <div>
+        <label class="block text-sm font-medium text-gray-300 mb-1">CTA Button Text</label>
+        <input type="text" name="cta_text" value="{{ old('cta_text', $slide->cta_text ?? '') }}"
+            class="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-2.5 text-white focus:border-yellow-500 focus:ring-yellow-500">
+    </div>
+
+    <!-- CTA URL -->
+    <div>
+        <label class="block text-sm font-medium text-gray-300 mb-1">CTA Button Link</label>
+        <input type="url" name="cta_url" value="{{ old('cta_url', $slide->cta_url ?? '') }}"
+            class="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-2.5 text-white focus:border-yellow-500 focus:ring-yellow-500"
+            placeholder="https://example.com/collection">
+    </div>
+    {{-- END NEW FIELDS --}}
+
     <!-- Image -->
     <div>
         <label class="block text-sm font-medium text-gray-300 mb-1">Image</label>

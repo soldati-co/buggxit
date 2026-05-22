@@ -24,6 +24,10 @@ class HeroSlideController extends Controller
     {
         $validated = $request->validate([
             'title' => 'nullable|string|max:255',
+            'headline'   => 'nullable|string|max:255',
+            'subheading' => 'nullable|string|max:1000',
+            'cta_text'   => 'nullable|string|max:255',
+            'cta_url'    => 'nullable|url|max:2048',
             'image' => 'required|image|mimes:jpeg,png,jpg,webp,heic|max:9999048',
             'alt_text' => 'nullable|string|max:255',
             'sort_order' => 'nullable|integer|min:0',
@@ -35,10 +39,15 @@ class HeroSlideController extends Controller
 
         HeroSlide::create([
             'title' => $validated['title'] ?? null,
+            'headline' => $validated['headline'] ?? null,
+            'subheading' => $validated['subheading'] ?? null,
+            'cta_text' => $validated['cta_text'] ?? null,
+            'cta_url' => $validated['cta_url'] ?? null,
             'image_path' => $path,
             'alt_text' => $validated['alt_text'] ?? null,
             'sort_order' => $validated['sort_order'] ?? 0,
             'is_active' => $request->boolean('is_active', true),
+            
         ]);
 
         return redirect()->route('admin.hero-slides.index')
@@ -54,13 +63,26 @@ class HeroSlideController extends Controller
     {
         $validated = $request->validate([
             'title' => 'nullable|string|max:255',
+            'headline'   => 'nullable|string|max:255',
+            'subheading' => 'nullable|string|max:1000',
+            'cta_text'   => 'nullable|string|max:255',
+            'cta_url'    => 'nullable|url|max:2048',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,webp,heic|max:9999048',
             'alt_text' => 'nullable|string|max:255',
             'sort_order' => 'nullable|integer|min:0',
             'is_active' => 'boolean',
         ]);
 
-        $data = $request->only(['title', 'alt_text', 'sort_order', 'is_active']);
+        $data = $request->only([
+            'title', 
+            'headline', 
+            'subheading', 
+            'cta_text', 
+            'cta_url', 
+            'alt_text', 
+            'sort_order', 
+            'is_active'
+            ]);
         $data['is_active'] = $request->boolean('is_active', true);
 
         // Replace image if uploaded
