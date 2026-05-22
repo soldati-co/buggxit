@@ -30,7 +30,7 @@
         this.activeSlide = index;
     }
 }" 
-class="relative w-full h-[60vh] md:h-[85vh] min-h-[450px] -mt-16 overflow-hidden bg-gray-900"
+class="relative w-full h-[60vh] md:h-[85vh] min-h-[450px] overflow-hidden bg-gray-900"
 @mouseenter="stopAutoplay()"
 @mouseleave="startAutoplay()">
 

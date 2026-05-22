@@ -263,9 +263,6 @@
     </div>
 </nav>
 
-<!-- Add padding to main content -->
-<div class="h-16"></div>
-
 <!-- Glow effect for logo -->
 <style>
     @keyframes glow {
