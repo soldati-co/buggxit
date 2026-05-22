@@ -37,6 +37,9 @@
                         <h3 class="text-white font-semibold text-lg mb-1 group-hover:text-yellow-500 transition-colors">
                             {{ $category['name'] }}
                         </h3>
+                        <p class="text-gray-400 text-sm">
+                            {{ $category['description'] }}
+                        </p>
                         <p class="text-gray-500 text-sm">
                             {{ $category['count'] }} {{ Str::plural('dress', $category['count']) }}
                         </p>

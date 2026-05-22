@@ -50,13 +50,13 @@ class ProductController extends Controller
     private function categories()
     {
         return [
-            'SLMK' => ['name' => 'Slay Makoti', 'icon' => 'fas fa-crown'],
-            'ZMBN' => ['name' => 'Zimbini', 'icon' => 'fas fa-fan'],
-            'CLPS' => ['name' => 'Classic Panel', 'icon' => 'fas fa-vest'],
-            'NKWA' => ['name' => 'Nokwanda', 'icon' => 'fas fa-gem'],
-            'PNDK' => ['name' => 'Phenduka', 'icon' => 'fas fa-ribbon'],
-            'SLBL' => ['name' => 'Slay Bubble', 'icon' => 'fas fa-bubble'],
-            'CUSTOM' => ['name' => 'Bespoke', 'icon' => 'fas fa-pen-fancy'],
+            'SLMK' => ['name' => 'Slay Makoti dress set', 'icon' => 'fas fa-crown', description => 'For the Makoti who walks in and owns the room.' ],
+            'ZMBN' => ['name' => 'Zimbini dress set', 'icon' => 'fas fa-fan', description => 'Two looks. One statement.' ],
+            'CLPS' => ['name' => 'Classic Panel skirt set', 'icon' => 'fas fa-vest', description => 'Structure. Elegance. Always in style.' ],
+            'NKWA' => ['name' => 'Nokwanda dress set', 'icon' => 'fas fa-gem', description => 'Graceful, grounded, made to be remembered.' ],
+            'PNDK' => ['name' => 'Phenduka Reversable skirts dress set', 'icon' => 'fas fa-ribbon', description => 'Turn heads with two looks. Own the moment.' ],
+            'SLBL' => ['name' => 'Slay Bubble dress set', 'icon' => 'fas fa-bubble', description => 'Playful and feminine for a charming look.' ],
+            'CUSTOM' => ['name' => 'Bespoke dress set', 'icon' => 'fas fa-pen-fancy', description => 'Tailored to your unique style and preferences.' ],
         ];
     }
 }
