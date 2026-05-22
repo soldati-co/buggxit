@@ -38,9 +38,9 @@
                             {{ $category['name'] }}
                         </h3>
                         <p class="text-gray-400 text-sm">
-                            {{ $category['description'] }}
+                            {{ $category['description'] ?? '' }}
                         </p>
-                        <p class="text-gray-500 text-sm">
+                        <p class="text-gray-500 text-sm mt-1">
                             {{ $category['count'] }} {{ Str::plural('dress', $category['count']) }}
                         </p>
                     </div>

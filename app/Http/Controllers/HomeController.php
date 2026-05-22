@@ -23,23 +23,23 @@ class HomeController extends Controller
             ->get();
 
         // 3. Full category definitions (icons + names)
-        $categories = [
-            'SLMK' => ['name' => 'Slay Makoti', 'icon' => 'fas fa-crown'],
-            'ZMBN' => ['name' => 'Zimbini', 'icon' => 'fas fa-fan'],
-            'CLPS' => ['name' => 'Classic Panel', 'icon' => 'fas fa-vest'],
-            'NKWA' => ['name' => 'Nokwanda', 'icon' => 'fas fa-gem'],
-            'PNDK' => ['name' => 'Phenduka', 'icon' => 'fas fa-ribbon'],
-            'SLBL' => ['name' => 'Slay Bubble', 'icon' => 'fas fa-bubble'],
-            'CUSTOM' => ['name' => 'Bespoke', 'icon' => 'fas fa-pen-fancy'],
-        ];
+        $activeCategories = [
+        'SLMK' => ['name' => 'Slay Makoti dress set', 'icon' => 'fas fa-crown', 'description' => 'For the Makoti who walks in and owns the room.'],
+        'ZMBN' => ['name' => 'Zimbini dress set', 'icon' => 'fas fa-fan', 'description' => 'Two looks. One statement.'],
+        'CLPS' => ['name' => 'Classic Panel skirt set', 'icon' => 'fas fa-vest', 'description' => 'Structure. Elegance. Always in style.'],
+        'NKWA' => ['name' => 'Nokwanda dress set', 'icon' => 'fas fa-gem', 'description' => 'Graceful, grounded, made to be remembered.'],
+        'PNDK' => ['name' => 'Phenduka Reversable skirts dress set', 'icon' => 'fas fa-ribbon', 'description' => 'Turn heads with two looks. Own the moment.'],
+        'SLBL' => ['name' => 'Slay Bubble dress set', 'icon' => 'fas fa-bubble', 'description' => 'Playful and feminine for a charming look.'],
+        'CUSTOM' => ['name' => 'Bespoke dress set', 'icon' => 'fas fa-pen-fancy', 'description' => 'Tailored to your unique style and preferences.'],
+    ];
 
         // 4. Add live counts to each category
-        foreach ($categories as $sku => &$data) {
+        foreach ($activeCategories as $sku => &$data) {
             $data['count'] = Dress::where('sku_prefix', $sku)->count();
         }
 
         // 5. Filter out categories with zero dresses
-        $activeCategories = array_filter($categories, fn($cat) => $cat['count'] > 0);
+        $activeCategories = array_filter($activeCategories, fn($cat) => $cat['count'] > 0);
 
         // 6. Return the view – change 'home' to 'pages.landing' if that's your file path
         return view('pages.landing', compact(
