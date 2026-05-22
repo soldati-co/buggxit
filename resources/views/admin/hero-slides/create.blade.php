@@ -13,7 +13,7 @@
 
         <div class="bg-black/90 backdrop-blur-sm border border-gray-800 rounded-xl p-6 md:p-8">
             <form action="{{ route('admin.hero-slides.store') }}" method="POST" enctype="multipart/form-data">
-                @include('admin.hero-slides._form')
+                @include('admin.hero-slides._form', ['slide' => new \App\Models\HeroSlide()])
             </form>
         </div>
     </div>

@@ -1,13 +1,12 @@
 @csrf
 <div class="space-y-6">
-    <!-- Title -->
+    <!-- Title (admin label) -->
     <div>
-        <label class="block text-sm font-medium text-gray-300 mb-1">Title (optional)</label>
+        <label class="block text-sm font-medium text-gray-300 mb-1">Title (admin label)</label>
         <input type="text" name="title" value="{{ old('title', $slide->title ?? '') }}"
             class="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-2.5 text-white focus:border-yellow-500 focus:ring-yellow-500">
     </div>
 
-     {{-- NEW FIELDS --}}
     <!-- Headline -->
     <div>
         <label class="block text-sm font-medium text-gray-300 mb-1">Headline</label>
@@ -36,7 +35,6 @@
             class="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-2.5 text-white focus:border-yellow-500 focus:ring-yellow-500"
             placeholder="https://example.com/collection">
     </div>
-    {{-- END NEW FIELDS --}}
 
     <!-- Image -->
     <div>

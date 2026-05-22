@@ -7,7 +7,7 @@
         <h2 class="text-2xl font-bold text-white mb-6">Edit Hero Slide</h2>
         <form action="{{ route('admin.hero-slides.update', $heroSlide) }}" method="POST" enctype="multipart/form-data">
             @method('PUT')
-            @include('admin.hero-slides._form')
+            @include('admin.hero-slides._form', ['slide' => $heroSlide])
         </form>
     </div>
 @endsection

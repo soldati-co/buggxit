@@ -34,8 +34,7 @@
         @else
             <div class="bg-black/90 border border-gray-800 rounded-xl overflow-hidden">
                 <div class="p-4 border-b border-gray-800 text-sm text-gray-400 flex">
-                    <span class="w-16">Order</span>
-                    <span class="flex-1">Slide</span>
+                    <span class="w-12">Order</span>
                     <span class="w-20">Image</span>
                     <span class="flex-1">Headline / Sub</span>
                     <span class="w-40">CTA</span>
@@ -71,10 +70,17 @@
                                 @endif
                             </div>
                             <div class="w-24 text-center">
-                                {{-- active badge unchanged --}}
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium 
+                                    {{ $slide->is_active ? 'bg-green-500/10 text-green-400 border border-green-500/30' : 'bg-gray-500/10 text-gray-400 border border-gray-500/30' }}">
+                                    {{ $slide->is_active ? 'Active' : 'Inactive' }}
+                                </span>
                             </div>
                             <div class="w-32 text-right space-x-2">
-                                {{-- edit & delete unchanged --}}
+                                <a href="{{ route('admin.hero-slides.edit', $slide) }}" class="text-yellow-500 hover:text-yellow-400 text-sm">Edit</a>
+                                <form action="{{ route('admin.hero-slides.destroy', $slide) }}" method="POST" class="inline" onsubmit="return confirm('Delete this slide?')">
+                                    @csrf @method('DELETE')
+                                    <button type="submit" class="text-red-400 hover:text-red-300 text-sm">Delete</button>
+                                </form>
                             </div>
                         </div>
                     @endforeach
@@ -86,7 +92,6 @@
     @push('scripts')
         <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
         <script>
-            // Simple drag reorder (can be replaced with SortableJS)
             const sortable = document.getElementById('slides-sortable');
             if (sortable) {
                 new Sortable(sortable, {
@@ -106,9 +111,7 @@
                                 'Content-Type': 'application/json',
                                 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
                             },
-                            body: JSON.stringify({
-                                order: order
-                            })
+                            body: JSON.stringify({ order: order })
                         }).then(r => r.json()).then(data => console.log('Reordered'));
                     }
                 });

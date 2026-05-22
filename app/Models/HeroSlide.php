@@ -15,7 +15,6 @@ class HeroSlide extends Model
         'is_active' => 'boolean',
     ];
 
-    // Helper to get full image URL
     public function getImageUrlAttribute()
     {
         return asset('storage/' . $this->image_path);

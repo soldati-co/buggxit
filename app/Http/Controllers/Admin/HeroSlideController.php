@@ -23,31 +23,29 @@ class HeroSlideController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'title' => 'nullable|string|max:255',
+            'title'      => 'nullable|string|max:255',
             'headline'   => 'nullable|string|max:255',
             'subheading' => 'nullable|string|max:1000',
             'cta_text'   => 'nullable|string|max:255',
             'cta_url'    => 'nullable|url|max:2048',
-            'image' => 'required|image|mimes:jpeg,png,jpg,webp,heic|max:9999048',
-            'alt_text' => 'nullable|string|max:255',
+            'image'      => 'required|image|mimes:jpeg,png,jpg,webp,heic|max:9999048',
+            'alt_text'   => 'nullable|string|max:255',
             'sort_order' => 'nullable|integer|min:0',
-            'is_active' => 'boolean',
+            'is_active'  => 'boolean',
         ]);
 
-        // Store image
         $path = $request->file('image')->store('hero-slides', 'public');
 
         HeroSlide::create([
-            'title' => $validated['title'] ?? null,
-            'headline' => $validated['headline'] ?? null,
+            'title'      => $validated['title'] ?? null,
+            'headline'   => $validated['headline'] ?? null,
             'subheading' => $validated['subheading'] ?? null,
-            'cta_text' => $validated['cta_text'] ?? null,
-            'cta_url' => $validated['cta_url'] ?? null,
+            'cta_text'   => $validated['cta_text'] ?? null,
+            'cta_url'    => $validated['cta_url'] ?? null,
             'image_path' => $path,
-            'alt_text' => $validated['alt_text'] ?? null,
+            'alt_text'   => $validated['alt_text'] ?? null,
             'sort_order' => $validated['sort_order'] ?? 0,
-            'is_active' => $request->boolean('is_active', true),
-            
+            'is_active'  => $request->boolean('is_active', true),
         ]);
 
         return redirect()->route('admin.hero-slides.index')
@@ -62,32 +60,24 @@ class HeroSlideController extends Controller
     public function update(Request $request, HeroSlide $heroSlide)
     {
         $validated = $request->validate([
-            'title' => 'nullable|string|max:255',
+            'title'      => 'nullable|string|max:255',
             'headline'   => 'nullable|string|max:255',
             'subheading' => 'nullable|string|max:1000',
             'cta_text'   => 'nullable|string|max:255',
             'cta_url'    => 'nullable|url|max:2048',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,webp,heic|max:9999048',
-            'alt_text' => 'nullable|string|max:255',
+            'image'      => 'nullable|image|mimes:jpeg,png,jpg,webp,heic|max:9999048',
+            'alt_text'   => 'nullable|string|max:255',
             'sort_order' => 'nullable|integer|min:0',
-            'is_active' => 'boolean',
+            'is_active'  => 'boolean',
         ]);
 
         $data = $request->only([
-            'title', 
-            'headline', 
-            'subheading', 
-            'cta_text', 
-            'cta_url', 
-            'alt_text', 
-            'sort_order', 
-            'is_active'
-            ]);
+            'title', 'headline', 'subheading', 'cta_text', 'cta_url',
+            'alt_text', 'sort_order', 'is_active'
+        ]);
         $data['is_active'] = $request->boolean('is_active', true);
 
-        // Replace image if uploaded
         if ($request->hasFile('image')) {
-            // Delete old image
             if ($heroSlide->image_path) {
                 Storage::disk('public')->delete($heroSlide->image_path);
             }
@@ -102,7 +92,6 @@ class HeroSlideController extends Controller
 
     public function destroy(HeroSlide $heroSlide)
     {
-        // Delete image from disk
         if ($heroSlide->image_path) {
             Storage::disk('public')->delete($heroSlide->image_path);
         }
@@ -112,7 +101,6 @@ class HeroSlideController extends Controller
             ->with('success', 'Slide deleted.');
     }
 
-    // Optional: reorder via AJAX
     public function updateOrder(Request $request)
     {
         $request->validate([

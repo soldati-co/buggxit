@@ -3,86 +3,8 @@
 @section('title', 'Buggxit Couture')
 
 @section('content')
-    {{-- ========== HERO CAROUSEL – 3 SLIDES, REDUCED HEIGHT ========== --}}
-    @php
-        $heroSlides = \App\Models\HeroSlide::where('is_active', true)->orderBy('sort_order')->get();
-    @endphp
-
-    <section class="relative -mt-[64px] mb-20 overflow-hidden h-[60vh] md:h-[85vh] min-h-[450px] bg-black">
-        {{-- Background orbs --}}
-        <div class="absolute -top-40 -right-40 w-96 h-96 bg-yellow-500/10 rounded-full blur-3xl pointer-events-none"></div>
-        <div class="absolute -bottom-40 -left-40 w-96 h-96 bg-yellow-500/5 rounded-full blur-3xl pointer-events-none"></div>
-
-        @if ($heroSlides->isNotEmpty())
-            {{-- Swiper Container --}}
-            <div class="swiper hero-swiper w-full h-full">
-                <div class="swiper-wrapper">
-                    @foreach ($heroSlides as $slide)
-                        <div class="swiper-slide">
-                            <img src="{{ $slide->image_url }}" alt="{{ $slide->alt_text ?? 'Traditional dress' }}"
-                                class="w-full h-full object-contain object-center" loading="lazy">
-                        </div>
-                    @endforeach
-                </div>
-
-                {{-- Pagination dots --}}
-                <div class="swiper-pagination !bottom-6"></div>
-
-                {{-- Navigation arrows --}}
-                <div class="swiper-button-prev after:!text-yellow-500"></div>
-                <div class="swiper-button-next after:!text-yellow-500"></div>
-            </div>
-        @else
-            {{-- Fallback --}}
-            <div class="absolute inset-0 flex items-center justify-center">
-                <div class="text-center px-4">
-                    <div class="text-6xl mb-6">👗</div>
-                    <h2 class="text-3xl text-white font-bold mb-4">Coming Soon</h2>
-                    <p class="text-gray-400">Our new collection is on its way.</p>
-                </div>
-            </div>
-        @endif
-
-        {{-- Overlay & Text (always on top) --}}
-        {{-- <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-black/30 pointer-events-none"></div>
-     <div class="absolute inset-0 flex flex-col items-center justify-center text-center px-4 z-10">
-        <span class="inline-flex items-center px-4 py-2 rounded-full text-xs font-medium bg-yellow-500/10 text-yellow-500 border border-yellow-500/30 mb-6 backdrop-blur-sm">
-            <span class="w-2 h-2 bg-yellow-500 rounded-full mr-2 animate-pulse"></span>
-            Since 2018 • Handcrafted in South Africa
-        </span>
-        
-        <h1 class="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight max-w-4xl">
-            Where Tradition Wears
-            <span class="text-yellow-500 block mt-2">Geometric Royalty</span>
-        </h1>
-        
-        <p class="text-xl text-gray-300 mb-10 max-w-2xl">
-            Every stitch tells your story. Custom‑made traditional ceremony attire, 
-            sized perfectly from 32 to 42.
-        </p>
-        
-        <div class="flex flex-col sm:flex-row gap-4 justify-center">
-            <a href="{{ route('products.index') }}" 
-               class="group inline-flex items-center px-8 py-4 bg-gradient-to-r from-yellow-500 to-yellow-600 text-gray-900 font-bold rounded-full hover:from-yellow-400 hover:to-yellow-500 transition-all duration-300 shadow-xl shadow-yellow-500/25">
-                <span>Explore Collections</span>
-                <svg class="w-5 h-5 ml-3 group-hover:translate-x-1.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                </svg>
-            </a>
-            <a href="{{ route('about') }}" 
-               class="group inline-flex items-center px-8 py-4 bg-gray-800/50 backdrop-blur-sm border border-gray-700 text-gray-300 font-bold rounded-full hover:bg-gray-800 hover:text-white hover:border-yellow-500/50 transition-all duration-300">
-                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                </svg>
-                Our Story
-            </a>
-        </div>
-    </div> --}}
-
-        {{-- Subtle wave separator --}}
-        <div class="absolute bottom-0 left-0 right-0 h-12 bg-gradient-to-t from-black to-transparent pointer-events-none">
-        </div>
-    </section>
+    {{-- ========== HERO CAROUSEL – TEXT OVERLAY, DYNAMIC ========== --}}
+    @include('partials.hero')
 
     {{-- ========== CATEGORIES – DYNAMIC FROM DATABASE ========== --}}
     <section class="container-wide px-4 sm:px-6 lg:px-8 mx-auto mb-20">
@@ -328,47 +250,7 @@
 @endsection
 
 @push('scripts')
-    {{-- Swiper CSS & JS --}}
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
-    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-
     <script>
-        // Initialize Swiper – 3 slides at once, responsive
-        const heroSwiper = new Swiper('.hero-swiper', {
-            loop: {{ $heroSlides->count() >= 3 ? 'true' : 'false' }},
-            slidesPerView: 1, // mobile default
-            spaceBetween: 10,
-            centeredSlides: true,
-            breakpoints: {
-                768: { // tablets
-                    slidesPerView: 2,
-                    spaceBetween: 15,
-                },
-                1024: { // desktop
-                    slidesPerView: 3,
-                    spaceBetween: 20,
-                },
-            },
-            autoplay: {
-                delay: 3000,
-                disableOnInteraction: false,
-                pauseOnMouseEnter: true,
-            },
-            pagination: {
-                el: '.swiper-pagination',
-                clickable: true,
-                dynamicBullets: true,
-            },
-            navigation: {
-                nextEl: '.swiper-button-next',
-                prevEl: '.swiper-button-prev',
-            },
-            keyboard: {
-                enabled: true,
-            },
-            speed: 600,
-        });
-
         // Cart functionality (unchanged)
         const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
         document.querySelectorAll('.add-to-cart').forEach(button => {
@@ -413,36 +295,6 @@
     </script>
 
     <style>
-        .swiper-pagination-bullet {
-            background: rgba(255, 255, 255, 0.5);
-            opacity: 1;
-        }
-
-        .swiper-pagination-bullet-active {
-            background: #EAB308;
-            /* yellow-500 */
-        }
-
-        .swiper-button-prev,
-        .swiper-button-next {
-            width: 40px;
-            height: 40px;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(4px);
-            border-radius: 50%;
-            transition: opacity 0.3s;
-        }
-
-        .swiper-button-prev:after,
-        .swiper-button-next:after {
-            font-size: 1.2rem;
-        }
-
-        .swiper-button-prev:hover,
-        .swiper-button-next:hover {
-            background: rgba(255, 255, 255, 0.2);
-        }
-
         .animate-fade-in-up {
             animation: fadeInUp 0.3s ease-out;
         }
@@ -452,7 +304,6 @@
                 opacity: 0;
                 transform: translateY(10px);
             }
-
             to {
                 opacity: 1;
                 transform: translateY(0);
