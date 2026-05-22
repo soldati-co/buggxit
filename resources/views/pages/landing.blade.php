@@ -10,10 +10,11 @@
     <section class="container-wide px-4 sm:px-6 lg:px-8 mx-auto mt-5 mb-10">
         <div class="flex flex-col md:flex-row md:items-end justify-between mb-10">
             <div>
+                <p class="text-gray-400 text-lg mt-2">Collections.</p>
                 <h2 class="text-3xl md:text-4xl font-bold text-white">
-                    <span class="text-yellow-500">//</span> Collections
+                    Find <span class="text-yellow-500">Your</span> Silhouette.
                 </h2>
-                <p class="text-gray-400 text-lg mt-2">Choose your silhouette, we'll craft it.</p>
+                <p class="text-gray-400 text-lg mt-2">Every collection is designed for a moment. Find the one that fits yours.</p>
             </div>
             <a href="{{ route('products.index') }}"
                 class="hidden md:flex items-center text-yellow-500 hover:text-yellow-400 font-medium mt-4 md:mt-0 group">
