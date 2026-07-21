@@ -11,7 +11,7 @@
     <link rel="icon" type="image/x-icon" href="{{ asset('Buggxit_Submark_Gold.svg') }}">
     <link rel="shortcut icon" type="image/svg" href="{{ asset('Buggxit_Submark_Gold.svg') }}">
 
-    <title>Admin Forgot Password</title>
+    <title>Admin Login</title>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">

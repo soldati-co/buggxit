@@ -98,7 +98,7 @@
                         <th class="px-6 py-4 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Dress
                         </th>
                         <th class="px-6 py-4 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-                            Category/SKU</th>
+                            Categories / SKU</th>
                         <th class="px-6 py-4 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Price
                         </th>
                         <th class="px-6 py-4 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Sizes
@@ -141,7 +141,8 @@
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <div class="text-sm text-gray-300">
-                                    {{ $categories[$dress->sku_prefix] ?? $dress->sku_prefix }}</div>
+                                    {{ $dress->categories->pluck('name')->join(', ') ?: 'No category' }}
+                                </div>
                                 <div class="text-xs text-gray-500">{{ $dress->display_sku }}</div>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">

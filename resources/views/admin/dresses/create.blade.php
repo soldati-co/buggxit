@@ -31,17 +31,17 @@
                         @enderror
                     </div>
 
-                    <!-- Category -->
+                    <!-- SKU Prefix (dropdown) -->
                     <div>
-                        <label for="sku_prefix" class="block text-sm font-medium text-gray-400 mb-2">Category <span
+                        <label for="sku_prefix" class="block text-sm font-medium text-gray-400 mb-2">SKU Prefix <span
                                 class="text-yellow-500">*</span></label>
                         <select name="sku_prefix" id="sku_prefix" required onchange="toggleCustomSku()"
                             class="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white text-sm focus:outline-none focus:border-yellow-500 focus:ring-1 focus:ring-yellow-500/30 transition-all duration-200">
-                            <option value="" class="bg-gray-900">Select a category</option>
-                            @foreach ($categories as $sku => $category)
-                                <option value="{{ $sku }}" {{ old('sku_prefix') == $sku ? 'selected' : '' }}
+                            <option value="" class="bg-gray-900">Select a prefix</option>
+                            @foreach ($skuPrefixes as $code => $label)
+                                <option value="{{ $code }}" {{ old('sku_prefix') == $code ? 'selected' : '' }}
                                     class="bg-gray-900">
-                                    {{ $category }}
+                                    {{ $label }}
                                 </option>
                             @endforeach
                         </select>
@@ -50,7 +50,7 @@
                         @enderror
                     </div>
 
-                    <!-- Custom SKU (only for CUSTOM category) -->
+                    <!-- Custom SKU (only for CUSTOM prefix) -->
                     <div id="custom-sku-container" class="hidden">
                         <label for="custom_sku" class="block text-sm font-medium text-gray-400 mb-2">Custom SKU <span
                                 class="text-yellow-500">*</span></label>
@@ -99,6 +99,26 @@
                     </div>
                 </div>
 
+                <!-- Categories (checkboxes) -->
+                <div class="mt-6">
+                    <label class="block text-sm font-medium text-gray-400 mb-3">Categories <span
+                            class="text-yellow-500">*</span></label>
+                    <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+                        @foreach ($categories as $category)
+                            <label
+                                class="flex items-center p-3 bg-gray-800/30 border border-gray-700 rounded-lg hover:border-yellow-500/50 cursor-pointer transition-colors">
+                                <input type="checkbox" name="category_ids[]" value="{{ $category->id }}"
+                                    {{ in_array($category->id, old('category_ids', [])) ? 'checked' : '' }}
+                                    class="h-4 w-4 text-yellow-500 bg-gray-800 border-gray-600 rounded focus:ring-yellow-500/30 focus:ring-offset-0">
+                                <span class="ml-2 text-sm text-gray-300">{{ $category->name }}</span>
+                            </label>
+                        @endforeach
+                    </div>
+                    @error('category_ids')
+                        <p class="mt-2 text-sm text-red-400">{{ $message }}</p>
+                    @enderror
+                </div>
+
                 <!-- Description -->
                 <div class="mt-6">
                     <label for="description" class="block text-sm font-medium text-gray-400 mb-2">Description <span
@@ -112,7 +132,7 @@
                 </div>
             </div>
 
-            <!-- Sizes & Colors Card -->
+            <!-- Sizes & Colors Card (unchanged) -->
             <div class="bg-black/90 backdrop-blur-sm border border-gray-800 rounded-xl p-6">
                 <h3 class="text-lg font-semibold text-white mb-4 flex items-center">
                     <svg class="w-5 h-5 text-yellow-500 mr-2" fill="currentColor" viewBox="0 0 24 24">
@@ -171,7 +191,7 @@
                 </div>
             </div>
 
-            <!-- Production & Delivery Card -->
+            <!-- Production & Delivery Card (unchanged) -->
             <div class="bg-black/90 backdrop-blur-sm border border-gray-800 rounded-xl p-6">
                 <h3 class="text-lg font-semibold text-white mb-4 flex items-center">
                     <svg class="w-5 h-5 text-yellow-500 mr-2" fill="currentColor" viewBox="0 0 24 24">
@@ -223,7 +243,7 @@
                 </div>
             </div>
 
-            <!-- Images Card -->
+            <!-- Images Card (unchanged) -->
             <div class="bg-black/90 backdrop-blur-sm border border-gray-800 rounded-xl p-6">
                 <h3 class="text-lg font-semibold text-white mb-4 flex items-center">
                     <svg class="w-5 h-5 text-yellow-500 mr-2" fill="currentColor" viewBox="0 0 24 24">
@@ -291,17 +311,17 @@
 
     <script>
         function toggleCustomSku() {
-            const categorySelect = document.getElementById('sku_prefix');
-            const customSkuContainer = document.getElementById('custom-sku-container');
-            const customSkuInput = document.getElementById('custom_sku');
+            const prefixSelect = document.getElementById('sku_prefix');
+            const customContainer = document.getElementById('custom-sku-container');
+            const customInput = document.getElementById('custom_sku');
 
-            if (categorySelect.value === 'CUSTOM') {
-                customSkuContainer.classList.remove('hidden');
-                customSkuInput.required = true;
+            if (prefixSelect.value === 'CUSTOM') {
+                customContainer.classList.remove('hidden');
+                customInput.required = true;
             } else {
-                customSkuContainer.classList.add('hidden');
-                customSkuInput.required = false;
-                customSkuInput.value = '';
+                customContainer.classList.add('hidden');
+                customInput.required = false;
+                customInput.value = '';
             }
         }
 

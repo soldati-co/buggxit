@@ -66,17 +66,19 @@
                 <div class="hidden md:flex items-center justify-center flex-1 space-x-1">
                     <a href="{{ route('admin.dashboard') }}"
                         class="px-3 py-2 rounded-lg text-sm font-medium transition-all duration-300
-                              {{ request()->routeIs('admin.dashboard')
-                                  ? 'bg-yellow-500/10 text-yellow-500 border border-yellow-500/30'
-                                  : 'text-gray-400 hover:text-yellow-500 hover:bg-gray-800/50' }}">
+                              {{ request()->routeIs('admin.dashboard') ? 'bg-yellow-500/10 text-yellow-500 border border-yellow-500/30' : 'text-gray-400 hover:text-yellow-500 hover:bg-gray-800/50' }}">
                         <i class="fas fa-tachometer-alt mr-2"></i>Dashboard
                     </a>
                     <a href="{{ route('admin.dresses.index') }}"
                         class="px-3 py-2 rounded-lg text-sm font-medium transition-all duration-300
-                              {{ request()->routeIs('admin.dresses.*')
-                                  ? 'bg-yellow-500/10 text-yellow-500 border border-yellow-500/30'
-                                  : 'text-gray-400 hover:text-yellow-500 hover:bg-gray-800/50' }}">
+                              {{ request()->routeIs('admin.dresses.*') ? 'bg-yellow-500/10 text-yellow-500 border border-yellow-500/30' : 'text-gray-400 hover:text-yellow-500 hover:bg-gray-800/50' }}">
                         <i class="fas fa-tshirt mr-2"></i>Dresses
+                    </a>
+                    <!-- NEW: Categories link -->
+                    <a href="{{ route('admin.categories.index') }}"
+                        class="px-3 py-2 rounded-lg text-sm font-medium transition-all duration-300
+                              {{ request()->routeIs('admin.categories.*') ? 'bg-yellow-500/10 text-yellow-500 border border-yellow-500/30' : 'text-gray-400 hover:text-yellow-500 hover:bg-gray-800/50' }}">
+                        <i class="fas fa-tags mr-2"></i>Categories
                     </a>
                 </div>
 
@@ -155,6 +157,11 @@
                     class="block px-4 py-3 rounded-lg text-gray-400 hover:text-yellow-500 hover:bg-gray-800/50 transition-all duration-200">
                     <i class="fas fa-tshirt mr-3 w-5"></i> Dresses
                 </a>
+                <!-- NEW: Categories mobile link -->
+                <a href="{{ route('admin.categories.index') }}" @click="mobileMenuOpen = false"
+                    class="block px-4 py-3 rounded-lg text-gray-400 hover:text-yellow-500 hover:bg-gray-800/50 transition-all duration-200">
+                    <i class="fas fa-tags mr-3 w-5"></i> Categories
+                </a>
                 <div class="border-t border-gray-800/50 my-2"></div>
                 <form method="POST" action="{{ route('admin.logout') }}">
                     @csrf
@@ -214,7 +221,7 @@
         @yield('content')
     </main>
 
-    <!-- ========== ADMIN FOOTER (simplified, consistent with login page footer style) ========== -->
+    <!-- ========== ADMIN FOOTER ========== -->
     <footer class="relative bg-black/90 backdrop-blur-sm border-t border-gray-800/50 w-full mt-auto">
         <div
             class="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-yellow-500/30 to-transparent pointer-events-none">
@@ -231,13 +238,6 @@
                     <span class="text-gray-700">•</span>
                     <span>Session timeout: 30 min</span>
                 </div>
-                {{-- <div class="text-gray-400 text-xs">
-                    Crafted by 
-                    <img src="{{ asset('watermarks/watermark22.webp') }}" alt="Watermark" class="inline-block h-3 w-auto mx-1 align-middle">
-                    <a href="https://linkedin.com/in/nkosi2k" class="text-yellow-500 hover:text-yellow-400 transition-colors" target="_blank">
-                        Nkosi
-                    </a>
-                </div> --}}
             </div>
         </div>
     </footer>

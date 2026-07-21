@@ -33,7 +33,6 @@ return [
         'admins' => [
             'driver' => 'eloquent',
             'model' => App\Models\Admin::class,
-            // REMOVE the connection line - Let Laravel handle this automatically
         ],
     ],
 

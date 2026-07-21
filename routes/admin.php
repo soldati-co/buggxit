@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\AdminAuthController;
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\AdminDressController;
 use App\Http\Controllers\Admin\AdminOrderController;
+use App\Http\Controllers\Admin\AdminCategoryController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\AdminPasswordResetController;
 use App\Http\Controllers\Admin\HeroSlideController;
@@ -18,7 +19,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::post('/login', [AdminAuthController::class, 'login'])
         ->name('login.post');
 
-       // Password reset routes
+    // Password reset routes
     Route::get('/password/reset', [AdminPasswordResetController::class, 'requestForm'])
         ->name('password.request');
     
@@ -38,7 +39,10 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::post('/dashboard/clear-cache', [AdminDashboardController::class, 'clearCache'])
         ->name('dashboard.clear-cache');
 
-    // Dress Management
+    // ===== Category Management (fully dynamic) =====
+    Route::resource('categories', AdminCategoryController::class)->except(['show']);
+
+    // ===== Dress Management =====
     Route::prefix('dresses')->name('dresses.')->group(function () {
         Route::get('/', [AdminDressController::class, 'index'])
             ->name('index');
@@ -68,12 +72,14 @@ Route::prefix('admin')->name('admin.')->group(function () {
             ->name('update-status');
     });
 
+    // ===== Order Management =====
     Route::prefix('orders')->name('orders.')->group(function () {
         Route::get('/', [AdminOrderController::class, 'index'])->name('index');
         Route::get('/{order}', [AdminOrderController::class, 'show'])->name('show');
         Route::patch('/{order}/status', [AdminOrderController::class, 'updateStatus'])->name('update-status');
     });
 
+    // ===== Hero Slides =====
     Route::prefix('hero-slides')->name('hero-slides.')->group(function () {
         Route::get('/', [HeroSlideController::class, 'index'])->name('index');
         Route::get('/create', [HeroSlideController::class, 'create'])->name('create');
@@ -84,7 +90,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::post('/update-order', [HeroSlideController::class, 'updateOrder'])->name('update-order');
     });
 
-    // Logout
+    // ===== Logout =====
     Route::post('/logout', [AdminAuthController::class, 'logout'])
         ->name('logout');
 });

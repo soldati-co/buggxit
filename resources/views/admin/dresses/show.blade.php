@@ -72,9 +72,10 @@
             <!-- SKU and Category -->
             <div class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div class="p-4 bg-gray-800/30 border border-gray-800 rounded-lg">
-                    <p class="text-xs text-gray-500 uppercase tracking-wider">Category</p>
+                    <p class="text-xs text-gray-500 uppercase tracking-wider">Categories</p>
                     <p class="mt-1 text-sm font-medium text-white">
-                        {{ $categories[$dress->sku_prefix] ?? $dress->sku_prefix }}</p>
+                        {{ $dress->categories->pluck('name')->join(', ') ?: 'No category' }}
+                    </p>
                 </div>
                 <div class="p-4 bg-gray-800/30 border border-gray-800 rounded-lg">
                     <p class="text-xs text-gray-500 uppercase tracking-wider">SKU</p>
@@ -168,8 +169,8 @@
                                 <span
                                     class="px-3 py-1.5 bg-gray-800 text-gray-300 rounded-lg border border-gray-700 text-sm flex items-center">
                                     <span class="w-3 h-3 rounded-full mr-2"
-                                        style="background-color: {{ $color == 'Multi-color' ? 'linear-gradient(to right, red, blue, yellow)' : '' }}"></span>
-                                    {{ $color }}
+                                        style="background-color: {{ $color['hex'] ?? '#ffffff' }}"></span>
+                                    {{ $color['name'] ?? 'Custom' }}
                                 </span>
                             @endforeach
                         </div>

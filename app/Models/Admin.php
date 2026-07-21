@@ -7,11 +7,16 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\CanResetPassword;
 use Illuminate\Auth\Passwords\CanResetPassword as CanResetPasswordTrait;
 use App\Notifications\AdminResetPasswordNotification;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 
 
 class Admin extends Authenticatable implements CanResetPassword
 {
-    use Notifiable, CanResetPasswordTrait;
+    use Notifiable, HasUuids, CanResetPasswordTrait;
+
+    public $incrementing = false;
+
+    protected $keyType = 'string';
 
     public function sendPasswordResetNotification($token)
     {

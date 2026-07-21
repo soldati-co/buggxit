@@ -217,18 +217,7 @@
                                             <div class="flex items-center text-xs text-gray-500 mt-1">
                                                 <span>R{{ number_format($dress->price, 2) }}</span>
                                                 <span class="mx-2">•</span>
-                                                @php
-                                                    $catNames = [
-                                                        'SLMK' => 'Slay Makoti',
-                                                        'ZMBN' => 'Zimbini',
-                                                        'CLPS' => 'Classic Panel',
-                                                        'NKWA' => 'Nokwanda',
-                                                        'PNDK' => 'Phenduka',
-                                                        'SLBL' => 'Slay Bubble',
-                                                        'CUSTOM' => 'Custom',
-                                                    ];
-                                                @endphp
-                                                <span>{{ $catNames[$dress->sku_prefix] ?? $dress->sku_prefix }}</span>
+                                                <span>{{ $dress->categories->pluck('name')->join(', ') ?: 'No category' }}</span>
                                             </div>
                                         </div>
                                     </div>
@@ -284,37 +273,28 @@
 
                 <div class="space-y-4">
                     @php
-                        $categoryNames = [
-                            'SLMK' => 'Slay Makoti',
-                            'ZMBN' => 'Zimbini',
-                            'CLPS' => 'Classic Panel',
-                            'NKWA' => 'Nokwanda',
-                            'PNDK' => 'Phenduka',
-                            'SLBL' => 'Slay Bubble',
-                            'CUSTOM' => 'Custom',
-                        ];
-                        $totalDresses = $stats['total_dresses'] ?: 1; // avoid division by zero
+                        $totalDresses = $stats['total_dresses'] ?: 1;
                     @endphp
-                    @foreach ($categories as $code => $count)
-                        @if ($count > 0)
-                            <div>
-                                <div class="flex justify-between text-sm mb-1">
-                                    <span class="text-gray-300">{{ $categoryNames[$code] ?? $code }}</span>
-                                    <span class="text-white font-medium">{{ $count }}</span>
-                                </div>
-                                <div class="w-full bg-gray-800 rounded-full h-2 overflow-hidden">
-                                    <div class="bg-yellow-500 h-2 rounded-full"
-                                        style="width: {{ ($count / $totalDresses) * 100 }}%"></div>
-                                </div>
+                    @forelse ($categories as $cat)
+                        <div>
+                            <div class="flex justify-between text-sm mb-1">
+                                <span class="text-gray-300">{{ $cat->name }}</span>
+                                <span class="text-white font-medium">{{ $cat->dresses_count }}</span>
                             </div>
-                        @endif
-                    @endforeach
+                            <div class="w-full bg-gray-800 rounded-full h-2 overflow-hidden">
+                                <div class="bg-yellow-500 h-2 rounded-full"
+                                    style="width: {{ ($cat->dresses_count / $totalDresses) * 100 }}%"></div>
+                            </div>
+                        </div>
+                    @empty
+                        <p class="text-gray-400 text-sm">No categories created yet.</p>
+                    @endforelse
                 </div>
 
                 <div class="mt-6 pt-4 border-t border-gray-800/50">
                     <div class="flex justify-between items-center">
                         <span class="text-gray-400 text-sm">Total distinct categories</span>
-                        <span class="text-white font-bold">{{ count(array_filter($categories)) }}</span>
+                        <span class="text-white font-bold">{{ $categories->count() }}</span>
                     </div>
                 </div>
             </div>
@@ -346,7 +326,7 @@
                     </div>
                 </div>
 
-                <!-- Estimated revenue placeholder -->
+                <!-- Estimated revenue -->
                 <div
                     class="mt-6 p-4 bg-gradient-to-br from-yellow-500/5 to-yellow-500/10 border border-yellow-500/20 rounded-lg">
                     <p class="text-xs text-gray-400 uppercase tracking-wider">Est. Monthly Revenue</p>
