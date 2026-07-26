@@ -7,20 +7,16 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\Admin\HeroSlideController;
+use App\Http\Controllers\ImageController;
 
-
-// Load authentication routes
-require __DIR__.'/auth.php'; // Customer auth
-require __DIR__.'/admin.php'; // Admin routes
+require __DIR__.'/auth.php';
+require __DIR__.'/admin.php';
 
 // ================== PUBLIC ROUTES ================== //
 
-// Static pages
-Route::get('/about', function () {
-    return view('pages.about');
-})->name('about');
+Route::get('/about', function () { return view('pages.about'); })->name('about');
 
-// Cart routes
 Route::prefix('cart')->name('cart.')->group(function () {
     Route::get('/', [CartController::class, 'index'])->name('index');
     Route::post('/add', [CartController::class, 'add'])->name('add');
@@ -28,14 +24,10 @@ Route::prefix('cart')->name('cart.')->group(function () {
     Route::post('/remove', [CartController::class, 'remove'])->name('remove');
 });
 
-Route::get('/contact', function () {
-    return view('pages.contact');
-})->name('contact');
-
+Route::get('/contact', function () { return view('pages.contact'); })->name('contact');
 Route::post('/contact', [ContactController::class, 'submit'])->name('contact.submit');
 
 Route::get('/new-arrivals', [ProductController::class, 'newArrivals'])->name('newarrival');
-
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
 Route::prefix('products')->name('products.')->group(function () {
@@ -50,20 +42,29 @@ Route::prefix('checkout')->name('checkout.')->middleware('web')->group(function 
 });
 
 Route::middleware('auth')->group(function () {
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->name('dashboard');
-
+    Route::get('/dashboard', function () { return view('dashboard'); })->name('dashboard');
     Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
     Route::get('/orders/{order}', [OrderController::class, 'show'])->name('orders.show');
 });
 
-// Search (make sure SearchController exists)
 // Route::get('/search', [SearchController::class, 'index'])->name('search');
-
-// ================== END PUBLIC ROUTES ================== //
 
 Route::get('/nightwatch-test', function () {
     \Illuminate\Support\Facades\Log::info('Nightwatch test log via agent');
     return response()->json(['message' => 'Logged. Check Nightwatch dashboard.']);
 });
+
+// ================== API ROUTES ================== //
+// Route::get('/api/hero-slides/{id}/image', [HeroSlideController::class, 'getImage'])->name('api.hero-slides.image');
+// Route::get('/api/dresses/{id}/image', [App\Http\Controllers\Admin\AdminDressController::class, 'getImage'])->name('api.dresses.image');
+
+Route::get('/images/{id}', [ImageController::class, 'show'])->name('api.image.show');
+
+// ================== STORAGE FALLBACK (keep as last resort) ================== //
+Route::get('/storage/{path}', function ($path) {
+    $fullPath = storage_path('app/public/' . $path);
+    if (!file_exists($fullPath)) {
+        abort(404);
+    }
+    return response()->file($fullPath);
+})->where('path', '.*');

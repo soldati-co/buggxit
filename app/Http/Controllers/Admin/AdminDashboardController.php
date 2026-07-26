@@ -8,6 +8,7 @@ use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Str;
 
 class AdminDashboardController extends Controller
 {
@@ -16,7 +17,17 @@ class AdminDashboardController extends Controller
      */
     public function index()
     {
-        // Authentication check
+        // Safety net: if the stored admin ID is not a valid UUID, force logout and redirect to login
+        $adminId = Auth::guard('admin')->id();
+        if ($adminId && !Str::isUuid($adminId)) {
+            Auth::guard('admin')->logout();
+            session()->invalidate();
+            session()->regenerateToken();
+            return redirect()->route('admin.login')
+                ->withErrors('Your session was invalid. Please log in again.');
+        }
+
+        // Regular authentication check
         if (!Auth::guard('admin')->check()) {
             return redirect()->route('admin.login');
         }
@@ -45,12 +56,9 @@ class AdminDashboardController extends Controller
             ->get();
 
         // Calculate estimated revenue from active dresses
-        // (if you have orders, replace this with actual order revenue)
         $estimatedRevenue = Dress::where('status', 'active')->sum('price') * 0.3;
 
-        // No hardcoded activity – we pass an empty collection or remove it entirely.
-        // If you later add an ActivityLog model, you can fetch real data here.
-        $recentActivity = collect(); // empty collection
+        $recentActivity = collect();
 
         return view('admin.dashboard', compact(
             'stats',

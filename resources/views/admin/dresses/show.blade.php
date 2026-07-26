@@ -94,12 +94,11 @@
                 <!-- Main Image -->
                 <div class="bg-black/90 backdrop-blur-sm border border-gray-800 rounded-xl overflow-hidden">
                     @if ($dress->main_image_url)
-                        <img src="{{ $dress->main_image_url }}" alt="{{ $dress->name }}" class="w-full h-96 object-cover">
+                        <img src="{{ route('api.dresses.image', $dress->id) }}?t={{ time() }}" alt="{{ $dress->name }}" class="w-full h-96 object-cover">
                     @else
                         <div class="w-full h-96 bg-gray-900 flex items-center justify-center">
                             <svg class="w-24 h-24 text-gray-700" fill="currentColor" viewBox="0 0 24 24">
-                                <path
-                                    d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2z" />
+                                <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2z" />
                             </svg>
                         </div>
                     @endif
@@ -117,8 +116,8 @@
                         <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
                             @foreach ($dress->gallery_images as $image)
                                 <div class="rounded-lg overflow-hidden border border-gray-800">
-                                    <img src="{{ $image }}" alt="{{ $dress->name }}"
-                                        class="w-full h-40 object-cover hover:scale-105 transition-transform duration-300">
+                                    {{-- Gallery images are full URLs; they may still 404 if symlink missing --}}
+                                    <img src="{{ $image }}" alt="{{ $dress->name }}" class="w-full h-40 object-cover hover:scale-105 transition-transform duration-300">
                                 </div>
                             @endforeach
                         </div>

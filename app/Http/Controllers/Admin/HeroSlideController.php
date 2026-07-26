@@ -4,24 +4,33 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\HeroSlide;
+use App\Models\Image;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
 use Intervention\Image\ImageManager;
-use Intervention\Image\Drivers\Gd\Driver;
 
 class HeroSlideController extends Controller
 {
+    /**
+     * Display a listing of hero slides.
+     */
     public function index()
     {
-        $slides = HeroSlide::orderBy('sort_order')->get();
+        $slides = HeroSlide::ordered()->get();
         return view('admin.hero-slides.index', compact('slides'));
     }
 
+    /**
+     * Show the form for creating a new hero slide.
+     */
     public function create()
     {
         return view('admin.hero-slides.create');
     }
 
+    /**
+     * Store a newly created hero slide.
+     */
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -30,46 +39,64 @@ class HeroSlideController extends Controller
             'subheading' => 'nullable|string|max:1000',
             'cta_text'   => 'nullable|string|max:255',
             'cta_url'    => 'nullable|url|max:2048',
-            'image'      => 'required|image|mimes:jpeg,png,jpg,webp,heic|max:9999048',
+            'image'      => 'required|image|max:9999048',
             'alt_text'   => 'nullable|string|max:255',
             'sort_order' => 'nullable|integer|min:0',
             'is_active'  => 'boolean',
         ]);
 
-        // Process image with Intervention
-        $manager = new ImageManager(new Driver());
-        $image = $manager->read($request->file('image'));
-        
-        // Scale down to max 1920px wide (hero images don't need to be huge)
-        $image->scale(width: 1920);
-        
-        // Convert to WebP with 80% quality
-        $encoded = $image->toWebp(80);
-        
-        $filename = 'hero-slides/' . uniqid() . '.webp';
-        Storage::disk('public')->put($filename, $encoded);
+        try {
+            // Process image and get binary + mime
+            $manager = new ImageManager();
+            $img = $manager->make($request->file('image'));
+            $img->resize(1920, null, function ($constraint) {
+                $constraint->aspectRatio();
+                $constraint->upsize();
+            });
+            $encoded = (string) $img->encode('webp', 80); // get binary string
 
-        HeroSlide::create([
-            'title'      => $validated['title'] ?? null,
-            'headline'   => $validated['headline'] ?? null,
-            'subheading' => $validated['subheading'] ?? null,
-            'cta_text'   => $validated['cta_text'] ?? null,
-            'cta_url'    => $validated['cta_url'] ?? null,
-            'image_path' => $filename,
-            'alt_text'   => $validated['alt_text'] ?? null,
-            'sort_order' => $validated['sort_order'] ?? 0,
-            'is_active'  => $request->boolean('is_active', true),
-        ]);
+            // Create slide (no image_path needed)
+            $slide = HeroSlide::create([
+                'title'      => $validated['title'] ?? null,
+                'headline'   => $validated['headline'] ?? null,
+                'subheading' => $validated['subheading'] ?? null,
+                'cta_text'   => $validated['cta_text'] ?? null,
+                'cta_url'    => $validated['cta_url'] ?? null,
+                'alt_text'   => $validated['alt_text'] ?? null,
+                'sort_order' => $validated['sort_order'] ?? 0,
+                'is_active'  => $request->boolean('is_active', true),
+            ]);
 
-        return redirect()->route('admin.hero-slides.index')
-            ->with('success', 'Slide added successfully.');
+            // Save the image as binary via polymorphic relationship
+            $slide->image()->create([
+                'image_data' => $encoded,
+                'image_mime' => 'image/webp',
+                'collection' => 'hero',
+                'sort_order' => 0,
+            ]);
+
+            Log::info('HeroSlide created with database image', ['id' => $slide->id]);
+
+            return redirect()->route('admin.hero-slides.index')
+                ->with('success', 'Slide added successfully.');
+
+        } catch (\Exception $e) {
+            Log::error('HeroSlide store error: ' . $e->getMessage(), ['trace' => $e->getTraceAsString()]);
+            return back()->withErrors(['error' => 'Failed to create slide: ' . $e->getMessage()])->withInput();
+        }
     }
 
+    /**
+     * Show the form for editing the specified hero slide.
+     */
     public function edit(HeroSlide $heroSlide)
     {
         return view('admin.hero-slides.edit', compact('heroSlide'));
     }
 
+    /**
+     * Update the specified hero slide.
+     */
     public function update(Request $request, HeroSlide $heroSlide)
     {
         $validated = $request->validate([
@@ -78,7 +105,7 @@ class HeroSlideController extends Controller
             'subheading' => 'nullable|string|max:1000',
             'cta_text'   => 'nullable|string|max:255',
             'cta_url'    => 'nullable|url|max:2048',
-            'image'      => 'nullable|image|mimes:jpeg,png,jpg,webp,heic|max:9999048',
+            'image'      => 'nullable|image|max:9999048',
             'alt_text'   => 'nullable|string|max:255',
             'sort_order' => 'nullable|integer|min:0',
             'is_active'  => 'boolean',
@@ -90,41 +117,64 @@ class HeroSlideController extends Controller
         ]);
         $data['is_active'] = $request->boolean('is_active', true);
 
-        if ($request->hasFile('image')) {
-            // Delete old image (now may be WebP)
-            if ($heroSlide->image_path) {
-                Storage::disk('public')->delete($heroSlide->image_path);
+        try {
+            if ($request->hasFile('image')) {
+                // Delete old image record from database
+                $heroSlide->image()->delete();
+
+                // Process and store new image
+                $manager = new ImageManager();
+                $img = $manager->make($request->file('image'));
+                $img->resize(1920, null, function ($constraint) {
+                    $constraint->aspectRatio();
+                    $constraint->upsize();
+                });
+                $encoded = (string) $img->encode('webp', 80);
+
+                $heroSlide->image()->create([
+                    'image_data' => $encoded,
+                    'image_mime' => 'image/webp',
+                    'collection' => 'hero',
+                    'sort_order' => 0,
+                ]);
             }
 
-            // Process new image
-            $manager = new ImageManager(new Driver());
-            $image = $manager->read($request->file('image'));
-            $image->scale(width: 1920);
-            $encoded = $image->toWebp(80);
-            
-            $filename = 'hero-slides/' . uniqid() . '.webp';
-            Storage::disk('public')->put($filename, $encoded);
-            
-            $data['image_path'] = $filename;
+            $heroSlide->update($data);
+            Log::info('HeroSlide updated', ['id' => $heroSlide->id]);
+
+            return redirect()->route('admin.hero-slides.index')
+                ->with('success', 'Slide updated successfully.');
+
+        } catch (\Exception $e) {
+            Log::error('HeroSlide update error: ' . $e->getMessage(), ['trace' => $e->getTraceAsString()]);
+            return back()->withErrors(['error' => 'Update failed: ' . $e->getMessage()])->withInput();
         }
-
-        $heroSlide->update($data);
-
-        return redirect()->route('admin.hero-slides.index')
-            ->with('success', 'Slide updated successfully.');
     }
 
+    /**
+     * Remove the specified hero slide.
+     */
     public function destroy(HeroSlide $heroSlide)
     {
-        if ($heroSlide->image_path) {
-            Storage::disk('public')->delete($heroSlide->image_path);
-        }
-        $heroSlide->delete();
+        try {
+            // Polymorphic images are automatically deleted if you set up cascading or soft deletes?
+            // For now, delete the associated image record manually.
+            $heroSlide->image()->delete();
+            $heroSlide->delete();
 
-        return redirect()->route('admin.hero-slides.index')
-            ->with('success', 'Slide deleted.');
+            Log::info('HeroSlide deleted', ['id' => $heroSlide->id]);
+
+            return redirect()->route('admin.hero-slides.index')
+                ->with('success', 'Slide deleted.');
+        } catch (\Exception $e) {
+            Log::error('HeroSlide delete error: ' . $e->getMessage(), ['trace' => $e->getTraceAsString()]);
+            return back()->withErrors(['error' => 'Delete failed: ' . $e->getMessage()]);
+        }
     }
 
+    /**
+     * Update the sort order of hero slides (AJAX).
+     */
     public function updateOrder(Request $request)
     {
         $request->validate([

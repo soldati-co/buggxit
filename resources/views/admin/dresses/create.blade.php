@@ -132,7 +132,7 @@
                 </div>
             </div>
 
-            <!-- Sizes & Colors Card (unchanged) -->
+            <!-- Sizes & Colors Card -->
             <div class="bg-black/90 backdrop-blur-sm border border-gray-800 rounded-xl p-6">
                 <h3 class="text-lg font-semibold text-white mb-4 flex items-center">
                     <svg class="w-5 h-5 text-yellow-500 mr-2" fill="currentColor" viewBox="0 0 24 24">
@@ -191,7 +191,7 @@
                 </div>
             </div>
 
-            <!-- Production & Delivery Card (unchanged) -->
+            <!-- Production & Delivery Card -->
             <div class="bg-black/90 backdrop-blur-sm border border-gray-800 rounded-xl p-6">
                 <h3 class="text-lg font-semibold text-white mb-4 flex items-center">
                     <svg class="w-5 h-5 text-yellow-500 mr-2" fill="currentColor" viewBox="0 0 24 24">
@@ -243,7 +243,7 @@
                 </div>
             </div>
 
-            <!-- Images Card (unchanged) -->
+            <!-- Images Card with Previews & Detailed Errors -->
             <div class="bg-black/90 backdrop-blur-sm border border-gray-800 rounded-xl p-6">
                 <h3 class="text-lg font-semibold text-white mb-4 flex items-center">
                     <svg class="w-5 h-5 text-yellow-500 mr-2" fill="currentColor" viewBox="0 0 24 24">
@@ -277,9 +277,25 @@
                             <p class="text-xs text-gray-500">PNG, JPG, GIF up to 9MB</p>
                         </div>
                     </div>
+                    
+                    <!-- Detailed Main Image Error -->
                     @error('main_image')
-                        <p class="mt-2 text-sm text-red-400">{{ $message }}</p>
+                        <div class="mt-3 p-3 bg-red-500/10 border border-red-500/30 rounded-lg">
+                            <p class="text-red-400 text-sm flex items-center">
+                                <svg class="w-5 h-5 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+                                </svg>
+                                <span>{{ $message }}</span>
+                            </p>
+                        </div>
                     @enderror
+
+                    <!-- Main Image Preview -->
+                    <div id="main-image-preview" class="mt-3 hidden">
+                        <p class="text-sm text-gray-400 mb-2">Preview:</p>
+                        <img id="main-image-thumb" src="#" alt="Main image preview"
+                            class="w-48 h-48 object-cover rounded-lg border border-gray-700">
+                    </div>
                 </div>
 
                 <!-- Gallery Images -->
@@ -289,10 +305,46 @@
                     <input type="file" name="gallery_images[]" id="gallery_images" multiple accept="image/*"
                         class="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white text-sm focus:outline-none focus:border-yellow-500 focus:ring-1 focus:ring-yellow-500/30 transition-all duration-200 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-yellow-500/10 file:text-yellow-500 hover:file:bg-yellow-500/20">
                     <p class="mt-2 text-xs text-gray-500">Upload multiple images to show different angles</p>
-                    @error('gallery_images.*')
-                        <p class="mt-2 text-sm text-red-400">{{ $message }}</p>
+                    
+                    <!-- Detailed Gallery Images Errors -->
+                    @error('gallery_images')
+                        <div class="mt-3 p-3 bg-red-500/10 border border-red-500/30 rounded-lg">
+                            <p class="text-red-400 text-sm flex items-center">
+                                <svg class="w-5 h-5 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+                                </svg>
+                                <span>{{ $message }}</span>
+                            </p>
+                        </div>
                     @enderror
+                    @error('gallery_images.*')
+                        <div class="mt-3 p-3 bg-red-500/10 border border-red-500/30 rounded-lg">
+                            <p class="text-red-400 text-sm flex items-center">
+                                <svg class="w-5 h-5 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+                                </svg>
+                                <span>{{ $message }}</span>
+                            </p>
+                        </div>
+                    @enderror
+
+                    <!-- Gallery Images Preview -->
+                    <div id="gallery-preview" class="mt-3 grid grid-cols-2 sm:grid-cols-4 gap-3 hidden">
+                        <!-- Thumbnails will be injected here -->
+                    </div>
                 </div>
+
+                <!-- General Error -->
+                @error('error')
+                    <div class="mt-3 p-3 bg-red-500/10 border border-red-500/30 rounded-lg">
+                        <p class="text-red-400 text-sm flex items-center">
+                            <svg class="w-5 h-5 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+                            </svg>
+                            <span>{{ $message }}</span>
+                        </p>
+                    </div>
+                @enderror
             </div>
 
             <!-- Form Actions -->
@@ -327,6 +379,54 @@
 
         document.addEventListener('DOMContentLoaded', function() {
             toggleCustomSku();
+
+            // --- Main Image Preview ---
+            const mainImageInput = document.getElementById('main_image');
+            const mainPreviewContainer = document.getElementById('main-image-preview');
+            const mainThumb = document.getElementById('main-image-thumb');
+
+            mainImageInput.addEventListener('change', function() {
+                const file = this.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        mainThumb.src = e.target.result;
+                        mainPreviewContainer.classList.remove('hidden');
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    mainPreviewContainer.classList.add('hidden');
+                    mainThumb.src = '#';
+                }
+            });
+
+            // --- Gallery Images Preview ---
+            const galleryInput = document.getElementById('gallery_images');
+            const galleryPreviewContainer = document.getElementById('gallery-preview');
+
+            galleryInput.addEventListener('change', function() {
+                const files = this.files;
+                galleryPreviewContainer.innerHTML = '';
+                if (files.length > 0) {
+                    galleryPreviewContainer.classList.remove('hidden');
+                    Array.from(files).forEach(file => {
+                        const reader = new FileReader();
+                        reader.onload = function(e) {
+                            const img = document.createElement('img');
+                            img.src = e.target.result;
+                            img.className =
+                                'w-full h-24 object-cover rounded-lg border border-gray-700';
+                            const wrapper = document.createElement('div');
+                            wrapper.className = 'relative';
+                            wrapper.appendChild(img);
+                            galleryPreviewContainer.appendChild(wrapper);
+                        };
+                        reader.readAsDataURL(file);
+                    });
+                } else {
+                    galleryPreviewContainer.classList.add('hidden');
+                }
+            });
         });
     </script>
 @endsection

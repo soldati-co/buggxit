@@ -39,17 +39,26 @@
     <!-- Image -->
     <div>
         <label class="block text-sm font-medium text-gray-300 mb-1">Image</label>
-        @if (isset($slide) && $slide->image_url)
-            <div class="mb-3">
-                <img src="{{ $slide->image_url }}" class="w-40 h-24 object-cover rounded-lg border border-gray-700">
+        @if (isset($slide) && $slide->image_path)
+            <div class="mb-3" id="current-image-container">
+                <img src="{{ route('api.hero-slides.image', $slide->id) }}?t={{ time() }}"
+                     id="current-image"
+                     class="w-40 h-24 object-cover rounded-lg border border-gray-700"
+                     onerror="this.style.display='none'; this.parentElement.innerHTML+='<p class=\'text-red-400 text-xs mt-1\'>Image not found</p>';">
                 <p class="text-xs text-gray-500 mt-1">Current image</p>
             </div>
         @endif
-        <input type="file" name="image" accept="image/*"
+        <input type="file" name="image" id="image-input" accept="image/*"
             class="w-full text-gray-300 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-yellow-500/10 file:text-yellow-500 hover:file:bg-yellow-500/20 transition">
         @error('image')
             <p class="text-red-400 text-xs mt-1">{{ $message }}</p>
         @enderror
+
+        <!-- Live preview -->
+        <div id="image-preview-container" class="mt-3 hidden">
+            <p class="text-sm text-gray-400 mb-2">Preview:</p>
+            <img id="image-preview" src="#" alt="Preview" class="w-40 h-24 object-cover rounded-lg border border-gray-700">
+        </div>
     </div>
 
     <!-- Alt Text -->
@@ -83,3 +92,35 @@
         {{ $submitLabel ?? 'Save Slide' }}
     </button>
 </div>
+
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const imageInput = document.getElementById('image-input');
+    const previewContainer = document.getElementById('image-preview-container');
+    const previewImg = document.getElementById('image-preview');
+    const currentImageContainer = document.getElementById('current-image-container');
+
+    imageInput.addEventListener('change', function() {
+        const file = this.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                previewImg.src = e.target.result;
+                previewContainer.classList.remove('hidden');
+                if (currentImageContainer) {
+                    currentImageContainer.style.display = 'none';
+                }
+            };
+            reader.readAsDataURL(file);
+        } else {
+            previewContainer.classList.add('hidden');
+            previewImg.src = '#';
+            if (currentImageContainer) {
+                currentImageContainer.style.display = 'block';
+            }
+        }
+    });
+});
+</script>
+@endpush

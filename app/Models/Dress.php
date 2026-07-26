@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Support\Str;
 
 class Dress extends Model
@@ -14,22 +16,22 @@ class Dress extends Model
     public $incrementing = false;
     protected $keyType = 'string';
 
-    // ---------- Standard Color Palette (Hex Mapping) ----------
+    // ---------- Standard Color Palette ----------
     public const STANDARD_COLORS = [
-        'red'    => '#FF0000',
-        'blue'   => '#0000FF',
-        'green'  => '#008000',
-        'yellow' => '#FFFF00',
-        'purple' => '#800080',
-        'pink'   => '#FFC0CB',
-        'orange' => '#FFA500',
-        'black'  => '#000000',
-        'white'  => '#FFFFFF',
-        'brown'  => '#A52A2A',
-        'gray'   => '#808080',
-        'gold'   => '#FFD700',
-        'silver' => '#C0C0C0',
-        'multi'  => '#FF00FF', // fallback
+        'red'    => 'red',
+        'blue'   => 'blue',
+        'green'  => 'green',
+        'yellow' => 'yellow',
+        'purple' => 'purple',
+        'pink'   => 'pink',
+        'orange' => 'orange',
+        'black'  => 'black',
+        'white'  => 'white',
+        'brown'  => 'brown',
+        'gray'   => 'gray',
+        'gold'   => 'gold',
+        'silver' => 'silver',
+        'multi'  => 'multi',
     ];
 
     // ---------- Fillable & Casts ----------
@@ -48,9 +50,9 @@ class Dress extends Model
         'status',
         'is_featured',
         'sizes',
-        'colors',           // JSON array – can contain keys or hex strings
-        'main_image_url',
-        'gallery_images',
+        'colors',
+        // 'main_image_url' and 'gallery_images' are obsolete now,
+        // but you may keep them temporarily until you drop the columns.
         'is_taxable',
         'requires_shipping',
         'meta_title',
@@ -58,31 +60,21 @@ class Dress extends Model
     ];
 
     protected $casts = [
-        // JSON columns
         'sizes'          => 'array',
-        'colors'         => 'array',        // stored as simple array of strings
-        'gallery_images' => 'array',
-
-        // Booleans
+        'colors'         => 'array',
         'is_featured'       => 'boolean',
         'is_taxable'        => 'boolean',
         'requires_shipping' => 'boolean',
-
-        // Decimals
         'price'            => 'decimal:2',
         'compare_at_price' => 'decimal:2',
-
-        // Integers
         'stock_quantity'     => 'integer',
         'low_stock_threshold' => 'integer',
-
-        // Timestamps
         'deleted_at' => 'datetime',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];
 
-    // ---------- Boot (UUID generation) ----------
+    // ---------- Boot ----------
     protected static function boot()
     {
         parent::boot();
@@ -93,7 +85,42 @@ class Dress extends Model
         });
     }
 
-    // ---------- Relationships ----------
+    // ---------- Image Relationships ----------
+    public function images(): MorphMany
+    {
+        return $this->morphMany(Image::class, 'imageable');
+    }
+
+    public function mainImage(): MorphOne
+    {
+        return $this->morphOne(Image::class, 'imageable')->where('collection', 'main');
+    }
+
+    public function galleryImages(): MorphMany
+    {
+        return $this->morphMany(Image::class, 'imageable')
+            ->where('collection', 'gallery')
+            ->orderBy('sort_order');
+    }
+
+    // ---------- Image URL Helpers (use these in your views) ----------
+    /**
+     * API URL for the main image (null if none).
+     */
+    public function getMainImageUrlAttribute(): ?string
+    {
+        return $this->mainImage ? route('api.image.show', $this->mainImage->id) : null;
+    }
+
+    /**
+     * List of API URLs for gallery images.
+     */
+    public function getGalleryImageUrlsAttribute(): array
+    {
+        return $this->galleryImages->map(fn($img) => route('api.image.show', $img->id))->toArray();
+    }
+
+    // ---------- Other Relationships ----------
     public function categories()
     {
         return $this->belongsToMany(Category::class, 'category_dress')
@@ -135,30 +162,21 @@ class Dress extends Model
             : $this->sku_prefix;
     }
 
-    /**
-     * Get available sizes (filtered to the 32-42 range).
-     */
     public function getAvailableSizesAttribute()
     {
         $allSizes = range(32, 42);
         $selectedSizes = $this->sizes ?? [];
-
         return array_values(array_filter($selectedSizes, function ($size) use ($allSizes) {
             return in_array($size, $allSizes, true);
         }));
     }
 
-    /**
-     * Get structured color data for display.
-     * Each item: ['name' => string, 'hex' => string, 'is_custom' => bool]
-     */
     public function getDisplayColorsAttribute()
     {
         $colors = $this->colors ?? [];
         $standard = self::STANDARD_COLORS;
 
         return array_map(function ($color) use ($standard) {
-            // If the value is a known key in our standard palette
             if (array_key_exists($color, $standard)) {
                 return [
                     'name'      => ucfirst($color),
@@ -166,9 +184,6 @@ class Dress extends Model
                     'is_custom' => false,
                 ];
             }
-
-            // Otherwise, treat it as a hex code (custom color)
-            // Ensure it has a # prefix for safety
             $hex = str_starts_with($color, '#') ? $color : '#' . $color;
             return [
                 'name'      => 'Custom',
@@ -178,9 +193,6 @@ class Dress extends Model
         }, $colors);
     }
 
-    /**
-     * Get only the hex values of all colors (useful for swatches).
-     */
     public function getColorHexesAttribute()
     {
         return array_column($this->display_colors, 'hex');

@@ -23,8 +23,8 @@
         </div>
 
         <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 md:gap-6">
-            @forelse($activeCategories as $key => $category)
-                <a href="{{ route('products.index', ['category' => $key]) }}"
+            @forelse($activeCategories as $category)
+                <a href="{{ route('products.index', ['category' => $category->slug]) }}"
                     class="group relative bg-black/90 backdrop-blur-sm border border-gray-800 rounded-2xl p-6 hover:border-yellow-500/50 transition-all duration-500 hover:shadow-2xl hover:shadow-yellow-500/10 overflow-hidden">
                     <div
                         class="absolute inset-0 bg-gradient-to-br from-yellow-500/0 to-yellow-500/0 group-hover:from-yellow-500/5 group-hover:to-transparent transition-all duration-700">
@@ -32,16 +32,16 @@
                     <div class="relative z-10">
                         <div
                             class="w-14 h-14 mb-4 bg-yellow-500/10 rounded-2xl flex items-center justify-center group-hover:bg-yellow-500/20 transition-colors">
-                            <i class="{{ $category['icon'] }} text-2xl text-yellow-500"></i>
+                            <i class="{{ $category->icon ?? 'fas fa-tshirt' }} text-2xl text-yellow-500"></i>
                         </div>
                         <h3 class="text-white font-semibold text-lg mb-1 group-hover:text-yellow-500 transition-colors">
-                            {{ $category['name'] }}
+                            {{ $category->name }}
                         </h3>
                         <p class="text-gray-400 text-sm">
-                            {{ $category['description'] ?? '' }}
+                            {{ $category->description ?? '' }}
                         </p>
                         <p class="text-gray-500 text-sm mt-1">
-                            {{ $category['count'] }} {{ Str::plural('dress', $category['count']) }}
+                            {{ $category->dresses_count }} {{ Str::plural('dress', $category->dresses_count) }}
                         </p>
                     </div>
                 </a>
@@ -106,7 +106,7 @@
 
                         <div class="p-5">
                             <div class="text-xs text-yellow-500 uppercase tracking-wider mb-1">
-                                {{ $categories[$dress->sku_prefix]['name'] ?? $dress->sku_prefix }}
+                                {{ $dress->categories->pluck('name')->join(', ') ?: 'Collection' }}
                             </div>
                             <h3 class="font-semibold text-white text-lg mb-2 line-clamp-1">
                                 {{ $dress->name }}

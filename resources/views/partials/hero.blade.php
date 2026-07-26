@@ -43,12 +43,13 @@ class="relative w-full h-[60vh] md:h-[85vh] min-h-[450px] overflow-hidden bg-gra
         x-transition:enter-end="opacity-100 scale-100"
         class="absolute inset-0 w-full h-full"
     >
-        {{-- Background image --}}
-        <img src="{{ $slide->image_url }}" 
-             alt="{{ $slide->alt_text }}" 
+        {{-- Background image using new API URL --}}
+        <img src="{{ $slide->image_api_url }}?t={{ time() }}" 
+             alt="{{ $slide->alt_text ?? $slide->headline ?? 'Hero slide' }}" 
              class="absolute inset-0 w-full h-full object-cover object-center"
              loading="{{ $index === 0 ? 'eager' : 'lazy' }}"
-             fetchpriority="{{ $index === 0 ? 'high' : 'auto' }}">
+             fetchpriority="{{ $index === 0 ? 'high' : 'auto' }}"
+             onerror="this.style.display='none'; this.parentElement.querySelector('.bg-black\\/50')?.style?.display='block';">
         
         {{-- Dark overlay for readability --}}
         <div class="absolute inset-0 bg-black/50"></div>

@@ -17,6 +17,17 @@
 @endsection
 
 @section('content')
+    <!-- Back Button -->
+    <div class="mb-4">
+        <a href="{{ route('admin.dashboard') }}"
+            class="text-gray-400 hover:text-yellow-500 transition-colors inline-flex items-center text-sm group">
+            <svg class="w-4 h-4 mr-1 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+            Back to Dashboard
+        </a>
+    </div>
+
     <!-- Stats Cards -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
 
@@ -115,27 +126,23 @@
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <div class="flex items-center">
                                     @if ($dress->main_image_url)
-                                        <div
-                                            class="flex-shrink-0 h-10 w-10 rounded-lg border border-gray-700 overflow-hidden">
-                                            <img class="h-10 w-10 object-cover" src="{{ $dress->main_image_url }}"
-                                                alt="{{ $dress->name }}">
+                                        <div class="flex-shrink-0 h-10 w-10 rounded-lg border border-gray-700 overflow-hidden">
+                                            <img src="{{ route('api.dresses.image', $dress->id) }}?t={{ time() }}"
+                                                alt="{{ $dress->name }}"
+                                                class="h-10 w-10 object-cover">
                                         </div>
                                     @else
-                                        <div
-                                            class="flex-shrink-0 h-10 w-10 rounded-lg bg-gray-800/50 border border-gray-700 flex items-center justify-center">
+                                        <div class="flex-shrink-0 h-10 w-10 rounded-lg bg-gray-800/50 border border-gray-700 flex items-center justify-center">
                                             <svg class="w-5 h-5 text-gray-500" fill="currentColor" viewBox="0 0 24 24">
-                                                <path
-                                                    d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2z" />
+                                                <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2z" />
                                             </svg>
                                         </div>
                                     @endif
                                     <div class="ml-4">
-                                        <a href="{{ route('admin.dresses.show', $dress) }}"
-                                            class="text-sm font-medium text-white hover:text-yellow-500 transition-colors">
+                                        <a href="{{ route('admin.dresses.show', $dress) }}" class="text-sm font-medium text-white hover:text-yellow-500 transition-colors">
                                             {{ $dress->name }}
                                         </a>
-                                        <div class="text-xs text-gray-500 mt-0.5">{{ Str::limit($dress->description, 40) }}
-                                        </div>
+                                        <div class="text-xs text-gray-500 mt-0.5">{{ Str::limit($dress->description, 40) }}</div>
                                     </div>
                                 </div>
                             </td>

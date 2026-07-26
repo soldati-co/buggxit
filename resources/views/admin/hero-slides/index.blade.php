@@ -4,6 +4,17 @@
 
 @section('content')
     <div class="mb-8">
+        <!-- Back Button -->
+        <div class="mb-4">
+            <a href="{{ route('admin.dashboard') }}"
+                class="text-gray-400 hover:text-yellow-500 transition-colors inline-flex items-center text-sm group">
+                <svg class="w-4 h-4 mr-1 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                </svg>
+                Back to Dashboard
+            </a>
+        </div>
+
         <div class="flex items-center justify-between mb-6">
             <h2 class="text-2xl font-bold text-white">Hero Carousel Slides</h2>
             <a href="{{ route('admin.hero-slides.create') }}"
@@ -46,8 +57,15 @@
                         <div class="flex items-center p-4 hover:bg-gray-800/30 transition" data-slide-id="{{ $slide->id }}">
                             <div class="w-12 text-gray-500 cursor-move handle">☰</div>
                             <div class="w-20 flex-shrink-0 mr-4">
-                                <div class="w-16 h-12 rounded overflow-hidden bg-gray-700">
-                                    <img src="{{ $slide->image_url }}" alt="{{ $slide->alt_text }}" class="w-full h-full object-cover">
+                                <div class="w-16 h-12 rounded overflow-hidden bg-gray-700 flex items-center justify-center">
+                                    @if ($slide->image_path)
+                                        <img src="{{ route('api.hero-slides.image', $slide->id) }}?t={{ time() }}"
+                                             alt="{{ $slide->alt_text }}"
+                                             class="w-full h-full object-cover"
+                                             onerror="this.style.display='none'; this.parentElement.innerHTML='<span class=\'text-xs text-red-400\'>Broken</span>';">
+                                    @else
+                                        <span class="text-xs text-gray-400">No image</span>
+                                    @endif
                                 </div>
                             </div>
                             <div class="flex-1 min-w-0">
@@ -76,10 +94,15 @@
                                 </span>
                             </div>
                             <div class="w-32 text-right space-x-2">
-                                <a href="{{ route('admin.hero-slides.edit', $slide) }}" class="text-yellow-500 hover:text-yellow-400 text-sm">Edit</a>
-                                <form action="{{ route('admin.hero-slides.destroy', $slide) }}" method="POST" class="inline" onsubmit="return confirm('Delete this slide?')">
+                                <a href="{{ route('admin.hero-slides.edit', $slide) }}"
+                                    class="p-1.5 text-gray-400 hover:text-yellow-500 hover:bg-gray-800/50 rounded-lg transition-all duration-200 inline-block" title="Edit">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <form action="{{ route('admin.hero-slides.destroy', $slide) }}" method="POST" class="inline-block" onsubmit="return confirm('Delete this slide?')">
                                     @csrf @method('DELETE')
-                                    <button type="submit" class="text-red-400 hover:text-red-300 text-sm">Delete</button>
+                                    <button type="submit" class="p-1.5 text-gray-400 hover:text-red-500 hover:bg-red-500/10 rounded-lg transition-all duration-200" title="Delete">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
                                 </form>
                             </div>
                         </div>
