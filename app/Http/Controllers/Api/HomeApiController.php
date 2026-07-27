@@ -29,7 +29,7 @@ class HomeApiController extends Controller
 
         $activeCategories = Category::withCount('dresses')
             ->where('is_active', true)
-            ->having('dresses_count', '>', 0)
+            ->whereHas('dresses')
             ->orderBy('sort_order')
             ->get();
 
