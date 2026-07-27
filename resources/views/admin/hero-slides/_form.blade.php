@@ -41,7 +41,7 @@
         <label class="block text-sm font-medium text-gray-300 mb-1">Image</label>
         @if (isset($slide) && $slide->image_path)
             <div class="mb-3" id="current-image-container">
-                <img src="{{ route('api.hero-slides.image', $slide->id) }}?t={{ time() }}"
+                <img src="{{ $slide->image_api_url }}?t={{ time() }}"
                      id="current-image"
                      class="w-40 h-24 object-cover rounded-lg border border-gray-700"
                      onerror="this.style.display='none'; this.parentElement.innerHTML+='<p class=\'text-red-400 text-xs mt-1\'>Image not found</p>';">

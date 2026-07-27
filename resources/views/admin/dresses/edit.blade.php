@@ -233,7 +233,7 @@
                 @if ($dress->main_image_url)
                     <div class="mb-4">
                         <p class="text-sm font-medium text-gray-400 mb-2">Current Main Image</p>
-                        <img src="{{ route('api.dresses.image', $dress->id) }}?t={{ time() }}"
+                                <img src="{{ $dress->main_image_url }}?t={{ time() }}"
                             alt="{{ $dress->name }}"
                             class="w-48 h-48 object-cover rounded-lg border border-gray-700">
                     </div>

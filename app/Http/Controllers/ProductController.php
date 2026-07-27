@@ -13,37 +13,23 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Dress::with('categories')->where('status', 'active');
+        return view('products.index');
+    }
 
-        if ($request->filled('category')) {
-            $category = Category::where('slug', $request->category)
-                ->orWhere('id', $request->category)
-                ->first();
-
-            if ($category) {
-                $query->whereHas('categories', fn ($query) => $query->where('categories.id', $category->id));
-            }
-        }
-
-        $dresses = $query->latest()->paginate(12);
-
+    public function newArrivals()
+    {
         return view('products.index', [
-            'dresses' => $dresses,
+            'newArrivals' => true,
         ]);
     }
 
     /**
      * Display the specified dress.
      */
-    public function show(Dress $dress)
+    public function show(string $dressIdentifier)
     {
-        // Ensure only active dresses are viewable
-        if ($dress->status !== 'active') {
-            abort(404);
-        }
-
         return view('products.show', [
-            'dress' => $dress,
+            'productIdentifier' => $dressIdentifier,
         ]);
     }
 

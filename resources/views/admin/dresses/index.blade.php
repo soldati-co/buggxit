@@ -127,7 +127,7 @@
                                 <div class="flex items-center">
                                     @if ($dress->main_image_url)
                                         <div class="flex-shrink-0 h-10 w-10 rounded-lg border border-gray-700 overflow-hidden">
-                                            <img src="{{ route('api.dresses.image', $dress->id) }}?t={{ time() }}"
+                                            <img src="{{ $dress->main_image_url }}?t={{ time() }}"
                                                 alt="{{ $dress->name }}"
                                                 class="h-10 w-10 object-cover">
                                         </div>

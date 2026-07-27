@@ -59,7 +59,7 @@
                             <div class="w-20 flex-shrink-0 mr-4">
                                 <div class="w-16 h-12 rounded overflow-hidden bg-gray-700 flex items-center justify-center">
                                     @if ($slide->image_path)
-                                        <img src="{{ route('api.hero-slides.image', $slide->id) }}?t={{ time() }}"
+                                        <img src="{{ $slide->image_api_url }}?t={{ time() }}"
                                              alt="{{ $slide->alt_text }}"
                                              class="w-full h-full object-cover"
                                              onerror="this.style.display='none'; this.parentElement.innerHTML='<span class=\'text-xs text-red-400\'>Broken</span>';">

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\DressResource;
 use App\Models\Category;
 use App\Models\Dress;
 use Illuminate\Http\Request;
@@ -37,7 +38,7 @@ class DressApiController extends Controller
         }
 
         $dresses = $query->latest()->paginate(12);
-        return response()->json($dresses);
+        return DressResource::collection($dresses);
     }
 
     public function show(Dress $dress)
@@ -46,7 +47,7 @@ class DressApiController extends Controller
             return response()->json(['message' => 'Dress not found.'], 404);
         }
 
-        return response()->json($dress->load('categories'));
+        return new DressResource($dress->load('categories'));
     }
 
     public function store(Request $request)

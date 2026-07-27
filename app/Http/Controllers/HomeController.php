@@ -31,11 +31,6 @@ class HomeController extends Controller
             ->orderBy('sort_order')
             ->get();
 
-        // 4. Return the view with only the data it needs
-        return view('pages.landing', compact(
-            'featuredDresses',
-            'newArrivals',
-            'activeCategories'
-        ));
+        return view('pages.landing');
     }
 }

@@ -9,7 +9,7 @@
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {{-- Checkout Form (left column) --}}
             <div class="lg:col-span-2">
-                <form method="POST" action="{{ route('checkout.store') }}" id="checkout-form">
+                <form method="POST" action="{{ route('api.checkout.store') }}" id="checkout-form">
                     @csrf
 
                     {{-- Shipping Address --}}
