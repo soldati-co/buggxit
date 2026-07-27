@@ -153,10 +153,10 @@
                         this.loading = true;
                         this.dresses = [];
                         const params = new URLSearchParams(window.location.search);
-                        let endpoint = '{{ route('api.products.index') }}';
+                        let endpoint = '{{ route('api.products.index', [], false) }}';
 
                         if (this.newArrivals) {
-                            endpoint = '{{ route('api.products.new-arrivals') }}';
+                            endpoint = '{{ route('api.products.new-arrivals', [], false) }}';
                         } else {
                             params.set('page', page);
                         }
@@ -207,7 +207,7 @@
 
                 async addToCart(productId) {
                     try {
-                        const response = await fetch('{{ route('api.cart.add') }}', {
+                        const response = await fetch('{{ route('api.cart.add', [], false) }}', {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json',

@@ -252,7 +252,7 @@
 
                 async fetchHome() {
                     try {
-                        const response = await fetch('{{ route('api.home.index') }}');
+                        const response = await fetch('{{ route('api.home.index', [], false) }}');
                         if (!response.ok) {
                             throw new Error('Unable to load home data.');
                         }
@@ -284,7 +284,7 @@
 
                 async addToCart(productId) {
                     try {
-                        const response = await fetch('{{ route('api.cart.add') }}', {
+                        const response = await fetch('{{ route('api.cart.add', [], false) }}', {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json',

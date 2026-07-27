@@ -192,7 +192,7 @@
                 const container = this.closest('.cart-item');
                 const productId = container.dataset.productId;
 
-                fetch('{{ route('api.cart.remove') }}', {
+                fetch('{{ route('api.cart.remove', [], false) }}', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
@@ -218,7 +218,7 @@
         });
 
         function updateCart(productId, newQty, container) {
-            fetch('{{ route('api.cart.update') }}', {
+            fetch('{{ route('api.cart.update', [], false) }}', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

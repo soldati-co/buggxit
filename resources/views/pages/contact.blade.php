@@ -403,7 +403,7 @@
             submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
             submitBtn.disabled = true;
 
-            fetch('{{ route('api.contact.submit') }}', {
+            fetch('{{ route('api.contact.submit', [], false) }}', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
