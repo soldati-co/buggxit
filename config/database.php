@@ -30,7 +30,7 @@ return [
             'prefix'         => '',
             'prefix_indexes' => true,
             'search_path'    => 'public', // ⬅️ forces public schema to avoid ambiguity
-            'sslmode'        => env('DB_SSLMODE', 'require'),
+            'sslmode'        => env('DB_SSLMODE', 'disable'),
 
             'options' => extension_loaded('pdo_pgsql') ? array_filter([
                 PDO::ATTR_PERSISTENT => false,

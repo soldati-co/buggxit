@@ -32,34 +32,14 @@
                         @enderror
                     </div>
 
-                    <!-- SKU Prefix (dropdown) -->
+                    <!-- SKU -->
                     <div>
-                        <label for="sku_prefix" class="block text-sm font-medium text-gray-400 mb-2">SKU Prefix <span
+                        <label for="sku" class="block text-sm font-medium text-gray-400 mb-2">SKU <span
                                 class="text-yellow-500">*</span></label>
-                        <select name="sku_prefix" id="sku_prefix" required onchange="toggleCustomSku()"
-                            class="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white text-sm focus:outline-none focus:border-yellow-500 focus:ring-1 focus:ring-yellow-500/30 transition-all duration-200">
-                            <option value="" class="bg-gray-900">Select a prefix</option>
-                            @foreach ($skuPrefixes as $code => $label)
-                                <option value="{{ $code }}"
-                                    {{ old('sku_prefix', $dress->sku_prefix) == $code ? 'selected' : '' }}
-                                    class="bg-gray-900">
-                                    {{ $label }}
-                                </option>
-                            @endforeach
-                        </select>
-                        @error('sku_prefix')
-                            <p class="mt-2 text-sm text-red-400">{{ $message }}</p>
-                        @enderror
-                    </div>
-
-                    <!-- Custom SKU (only for CUSTOM prefix) -->
-                    <div id="custom-sku-container" class="{{ $dress->sku_prefix === 'CUSTOM' ? '' : 'hidden' }}">
-                        <label for="custom_sku" class="block text-sm font-medium text-gray-400 mb-2">Custom SKU <span
-                                class="text-yellow-500">*</span></label>
-                        <input type="text" name="custom_sku" id="custom_sku"
-                            value="{{ old('custom_sku', $dress->custom_sku) }}"
-                            class="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white text-sm focus:outline-none focus:border-yellow-500 focus:ring-1 focus:ring-yellow-500/30 transition-all duration-200">
-                        @error('custom_sku')
+                        <input type="text" name="sku" id="sku" value="{{ old('sku', $dress->sku) }}" required
+                            class="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white text-sm focus:outline-none focus:border-yellow-500 focus:ring-1 focus:ring-yellow-500/30 transition-all duration-200"
+                            placeholder="e.g., SLMK-001">
+                        @error('sku')
                             <p class="mt-2 text-sm text-red-400">{{ $message }}</p>
                         @enderror
                     </div>
@@ -299,25 +279,4 @@
             </div>
         </form>
     </div>
-
-    <script>
-        function toggleCustomSku() {
-            const prefixSelect = document.getElementById('sku_prefix');
-            const customContainer = document.getElementById('custom-sku-container');
-            const customInput = document.getElementById('custom_sku');
-
-            if (prefixSelect.value === 'CUSTOM') {
-                customContainer.classList.remove('hidden');
-                customInput.required = true;
-            } else {
-                customContainer.classList.add('hidden');
-                customInput.required = false;
-                customInput.value = '';
-            }
-        }
-
-        document.addEventListener('DOMContentLoaded', function() {
-            toggleCustomSku();
-        });
-    </script>
 @endsection

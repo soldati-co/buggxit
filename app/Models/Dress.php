@@ -38,8 +38,7 @@ class Dress extends Model
     protected $fillable = [
         'slug',
         'name',
-        'sku_prefix',
-        'custom_sku',
+        'sku',
         'description',
         'price',
         'compare_at_price',
@@ -157,9 +156,7 @@ class Dress extends Model
     // ---------- Custom Accessors & Helpers ----------
     public function getDisplaySkuAttribute()
     {
-        return $this->sku_prefix === 'CUSTOM'
-            ? $this->custom_sku
-            : $this->sku_prefix;
+        return $this->sku;
     }
 
     public function getAvailableSizesAttribute()

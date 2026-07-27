@@ -22,16 +22,6 @@ class AdminDressController extends Controller
         'image/avif',
     ];
 
-    private $skuPrefixes = [
-        'SLMK' => 'Slay Makoti',
-        'ZMBN' => 'Zimbini',
-        'CLPS' => 'Classic Panel',
-        'NKWA' => 'Nokwanda',
-        'PNDK' => 'Phenduka',
-        'SLBL' => 'Slay Bubble',
-        'CUSTOM' => 'Other (Custom SKU)',
-    ];
-
     private $availableSizes = [32, 34, 36, 38, 40, 42];
 
     private function checkAuth()
@@ -55,7 +45,6 @@ class AdminDressController extends Controller
         $categories = Category::orderBy('sort_order')->get();
         return view('admin.dresses.create', [
             'categories'      => $categories,
-            'skuPrefixes'     => $this->skuPrefixes,
             'availableSizes'  => $this->availableSizes,
             'availableColors' => Dress::STANDARD_COLORS,
         ]);
@@ -76,10 +65,6 @@ class AdminDressController extends Controller
             $validated['is_taxable'] = $validated['is_taxable'] ?? true;
             $validated['requires_shipping'] = $validated['requires_shipping'] ?? true;
             $validated['is_featured'] = $validated['is_featured'] ?? false;
-
-            if ($validated['sku_prefix'] !== 'CUSTOM') {
-                $validated['custom_sku'] = null;
-            }
 
             // Remove image fields from validated data (we handle them separately)
             unset($validated['main_image'], $validated['gallery_images']);
@@ -127,7 +112,6 @@ class AdminDressController extends Controller
             'dress'              => $dress,
             'categories'         => $categories,
             'selectedCategories' => $selectedCategories,
-            'skuPrefixes'        => $this->skuPrefixes,
             'availableSizes'     => $this->availableSizes,
             'availableColors'    => Dress::STANDARD_COLORS,
         ]);
@@ -144,10 +128,6 @@ class AdminDressController extends Controller
                 $validated['slug'] = Str::slug($validated['name']);
             }
 
-            if ($validated['sku_prefix'] !== 'CUSTOM') {
-                $validated['custom_sku'] = null;
-            }
-
             // Remove image fields from validated data
             unset($validated['main_image'], $validated['gallery_images']);
 
@@ -158,7 +138,7 @@ class AdminDressController extends Controller
                 $this->storeMainImage($request->file('main_image'), $dress);
             }
 
-            // Handle gallery images replacement (you might want to add/remove individually instead)
+            // Handle gallery images replacement
             if ($request->hasFile('gallery_images')) {
                 // Delete all old gallery images
                 $dress->galleryImages()->delete();
@@ -210,13 +190,11 @@ class AdminDressController extends Controller
     private function validateDress(Request $request, ?Dress $dress = null)
     {
         $standardColorKeys = array_keys(Dress::STANDARD_COLORS);
-        $skuPrefixKeys = array_keys($this->skuPrefixes);
 
         $rules = [
             'slug' => 'nullable|string|max:255|unique:dresses,slug' . ($dress ? ',' . $dress->id : ''),
             'name' => 'required|string|max:255',
-            'sku_prefix' => 'required|in:' . implode(',', $skuPrefixKeys),
-            'custom_sku' => 'nullable|required_if:sku_prefix,CUSTOM|string|max:20',
+            'sku' => 'required|string|max:50|unique:dresses,sku' . ($dress ? ',' . $dress->id : ''),
             'description' => 'required|string',
             'price' => 'required|numeric|min:0',
             'compare_at_price' => 'nullable|numeric|min:0',
