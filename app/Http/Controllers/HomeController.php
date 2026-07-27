@@ -31,6 +31,10 @@ class HomeController extends Controller
             ->orderBy('sort_order')
             ->get();
 
-        return view('pages.landing');
+        return view('pages.landing', compact(
+            'featuredDresses',
+            'newArrivals',
+            'activeCategories'
+        ));
     }
 }
