@@ -20,8 +20,8 @@
                                     ->orderBy('sort_order')
                                     ->get();
         @endphp
-        @if($heroSlidesForPreload->isNotEmpty())
-            <link rel="preload" href="{{ $heroSlidesForPreload->first()->image_url }}" as="image" fetchpriority="high">
+        @if($heroSlidesForPreload->isNotEmpty() && $heroSlidesForPreload->first()->image_api_url)
+            <link rel="preload" href="{{ $heroSlidesForPreload->first()->image_api_url }}" as="image" fetchpriority="high">
         @endif
     @endif
 
