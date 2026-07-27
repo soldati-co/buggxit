@@ -24,10 +24,10 @@ class HomeController extends Controller
             ->take(4)
             ->get();
 
-        // 3. Active categories with dress count, ordered by sort_order
+        // 3. Active categories with associated dresses, ordered by sort_order
         $activeCategories = Category::withCount('dresses')
             ->where('is_active', true)
-            ->having('dresses_count', '>', 0)
+            ->whereHas('dresses')
             ->orderBy('sort_order')
             ->get();
 
