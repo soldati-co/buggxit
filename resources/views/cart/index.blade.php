@@ -54,7 +54,7 @@
                             <div class="flex-1 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                                 <div>
                                     <div class="text-xs text-yellow-500 uppercase tracking-wider">
-                                        {{ $categories[$dress->sku_prefix]['name'] ?? $dress->sku_prefix }}
+                                        Traditional Dress
                                     </div>
                                     <a href="{{ route('products.show', $dress) }}"
                                         class="text-white font-semibold hover:text-yellow-500 transition-colors">

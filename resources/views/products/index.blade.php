@@ -28,49 +28,13 @@
         </div>
     </section>
 
-    {{-- ========== CATEGORY FILTER ========== --}}
+    {{-- ========== COLLECTIONS INTRO ========== --}}
     <section class="container-wide px-4 sm:px-6 lg:px-8 mx-auto mb-12">
-        <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
+        <div class="flex items-center justify-between gap-4">
             <h2 class="text-white font-semibold text-lg flex items-center">
                 <i class="fas fa-filter mr-2 text-yellow-500"></i>
-                Filter by collection
+                Explore all collections
             </h2>
-
-            {{-- Reset filter link --}}
-            <a href="{{ route('products.index') }}"
-                class="text-sm text-gray-400 hover:text-yellow-500 transition-colors {{ request()->has('category') ? '' : 'hidden' }}">
-                <i class="fas fa-times mr-1"></i> Clear filter
-            </a>
-        </div>
-
-        <div class="flex flex-wrap gap-3">
-            {{-- All categories pill --}}
-            <a href="{{ route('products.index') }}"
-                class="inline-flex items-center px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-300
-                  {{ !request()->has('category')
-                      ? 'bg-yellow-500 text-gray-900 shadow-lg shadow-yellow-500/30'
-                      : 'bg-gray-800/50 border border-gray-700 text-gray-300 hover:bg-gray-800 hover:text-white hover:border-yellow-500/50' }}">
-                <i class="fas fa-tags mr-2"></i>
-                All
-            </a>
-
-            {{-- Dynamic category pills from database --}}
-            @foreach ($categories as $key => $category)
-                @php
-                    $count = \App\Models\Dress::where('sku_prefix', $key)->where('status', 'active')->count();
-                @endphp
-                @if ($count > 0)
-                    <a href="{{ route('products.index', ['category' => $key]) }}"
-                        class="inline-flex items-center px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-300
-                          {{ request('category') == $key
-                              ? 'bg-yellow-500 text-gray-900 shadow-lg shadow-yellow-500/30'
-                              : 'bg-gray-800/50 border border-gray-700 text-gray-300 hover:bg-gray-800 hover:text-white hover:border-yellow-500/50' }}">
-                        <i class="{{ $category['icon'] }} mr-2"></i>
-                        {{ $category['name'] }}
-                        <span class="ml-2 text-xs opacity-75">({{ $count }})</span>
-                    </a>
-                @endif
-            @endforeach
         </div>
     </section>
 
@@ -146,7 +110,7 @@
 
                         <div class="p-5">
                             <div class="text-xs text-yellow-500 uppercase tracking-wider mb-1">
-                                {{ $categories[$dress->sku_prefix]['name'] ?? $dress->sku_prefix }}
+                                Traditional Dress
                             </div>
                             <a href="{{ route('products.show', $dress) }}" class="block">
                                 <h3

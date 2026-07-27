@@ -67,11 +67,8 @@
 
             {{-- Right: Details --}}
             <div class="space-y-6">
-                {{-- Category & Name --}}
+                {{-- Name --}}
                 <div>
-                    <div class="text-sm text-yellow-500 uppercase tracking-wider mb-2">
-                        {{ $categories[$dress->sku_prefix]['name'] ?? $dress->sku_prefix }}
-                    </div>
                     <h1 class="text-3xl md:text-4xl font-bold text-white">{{ $dress->name }}</h1>
                 </div>
 
@@ -200,7 +197,7 @@
                         @endif
                     </div>
                     <div class="p-4">
-                        <div class="text-xs text-yellow-500">{{ $categories[$related->sku_prefix]['name'] ?? $related->sku_prefix }}</div>
+                        <div class="text-xs text-yellow-500">Traditional Dress</div>
                         <h3 class="font-medium text-white mt-1 group-hover:text-yellow-500 transition-colors">{{ $related->name }}</h3>
                         <p class="text-yellow-500 font-bold mt-2">R{{ number_format($related->price, 0) }}</p>
                     </div>

@@ -9,22 +9,6 @@ use Illuminate\Support\Facades\Session;
 class CartController extends Controller
 {
     /**
-     * Category definitions (same as in ProductController)
-     */
-    private function categories()
-    {
-        return [
-            'SLMK' => ['name' => 'Slay Makoti', 'icon' => 'fas fa-crown'],
-            'ZMBN' => ['name' => 'Zimbini', 'icon' => 'fas fa-fan'],
-            'CLPS' => ['name' => 'Classic Panel', 'icon' => 'fas fa-vest'],
-            'NKWA' => ['name' => 'Nokwanda', 'icon' => 'fas fa-gem'],
-            'PNDK' => ['name' => 'Phenduka', 'icon' => 'fas fa-ribbon'],
-            'SLBL' => ['name' => 'Slay Bubble', 'icon' => 'fas fa-bubble'],
-            'CUSTOM' => ['name' => 'Bespoke', 'icon' => 'fas fa-pen-fancy'],
-        ];
-    }
-
-    /**
      * Display the cart page.
      */
     public function index()
@@ -46,9 +30,8 @@ class CartController extends Controller
         }
         
         return view('cart.index', [
-            'items'      => $items,
-            'subtotal'   => $subtotal,
-            'categories' => $this->categories(),
+            'items'    => $items,
+            'subtotal' => $subtotal,
         ]);
     }
 
