@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\Dress;
 use Illuminate\Http\Request;
 
@@ -12,7 +13,18 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Dress::where('status', 'active');
+        $query = Dress::with('categories')->where('status', 'active');
+
+        if ($request->filled('category')) {
+            $category = Category::where('slug', $request->category)
+                ->orWhere('id', $request->category)
+                ->first();
+
+            if ($category) {
+                $query->whereHas('categories', fn ($query) => $query->where('categories.id', $category->id));
+            }
+        }
+
         $dresses = $query->latest()->paginate(12);
 
         return view('products.index', [

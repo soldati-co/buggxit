@@ -7,6 +7,7 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\Api\DressApiController;
 use App\Http\Controllers\Admin\HeroSlideController;
 use App\Http\Controllers\ImageController;
 
@@ -60,11 +61,10 @@ Route::get('/nightwatch-test', function () {
 
 Route::get('/images/{id}', [ImageController::class, 'show'])->name('api.image.show');
 
-// ================== STORAGE FALLBACK (keep as last resort) ================== //
-Route::get('/storage/{path}', function ($path) {
-    $fullPath = storage_path('app/public/' . $path);
-    if (!file_exists($fullPath)) {
-        abort(404);
-    }
-    return response()->file($fullPath);
-})->where('path', '.*');
+Route::prefix('api')->name('api.')->group(function () {
+    Route::get('/dresses', [DressApiController::class, 'index'])->name('dresses.index');
+    Route::get('/dresses/{dress}', [DressApiController::class, 'show'])->name('dresses.show');
+    Route::post('/dresses', [DressApiController::class, 'store'])->name('dresses.store');
+    Route::put('/dresses/{dress}', [DressApiController::class, 'update'])->name('dresses.update');
+    Route::delete('/dresses/{dress}', [DressApiController::class, 'destroy'])->name('dresses.destroy');
+});
