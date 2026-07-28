@@ -16,12 +16,12 @@ class ProductApiController extends Controller
         $query = Dress::with('categories')->where('status', 'active');
 
         if ($request->filled('category')) {
-            $category = Category::where('slug', $request->category)
-                ->orWhere('id', $request->category)
+            $category = Category::where('slug', '=', $request->category, 'and')
+                ->orWhere('id', '=', $request->category, 'or')
                 ->first();
 
             if ($category) {
-                $query->whereHas('categories', fn ($query) => $query->where('categories.id', $category->id));
+                $query->whereHas('categories', fn ($query) => $query->where('categories.id', '=', $category->id, 'and'));
             }
         }
 

@@ -7,6 +7,7 @@ use App\Http\Resources\DressResource;
 use App\Models\Category;
 use App\Models\Dress;
 use Illuminate\Http\Request;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Str;
 
 class DressApiController extends Controller
@@ -28,12 +29,12 @@ class DressApiController extends Controller
         $query = Dress::with('categories')->where('status', 'active');
 
         if ($request->filled('category')) {
-            $category = Category::where('slug', $request->category)
-                ->orWhere('id', $request->category)
+            $category = Category::where('slug', '=', $request->category, 'and')
+                ->orWhere('id', '=', $request->category, 'or')
                 ->first();
 
             if ($category) {
-                $query->whereHas('categories', fn ($query) => $query->where('categories.id', $category->id));
+                $query->whereHas('categories', fn ($query) => $query->where('categories.id', '=', $category->id, 'and'));
             }
         }
 
@@ -93,12 +94,17 @@ class DressApiController extends Controller
         unset($validated['main_image'], $validated['gallery_images']);
 
         if ($request->hasFile('main_image')) {
-            $dress->mainImage()->delete();
+            $mainImage = $dress->mainImage()->first();
+            if ($mainImage) {
+                $mainImage->delete();
+            }
             $this->storeMainImage($request->file('main_image'), $dress);
         }
 
         if ($request->hasFile('gallery_images')) {
-            $dress->galleryImages()->delete();
+            foreach ($dress->galleryImages()->get() as $oldImg) {
+                $oldImg->delete();
+            }
             $this->storeGalleryImages($request->file('gallery_images'), $dress);
         }
 
@@ -110,8 +116,10 @@ class DressApiController extends Controller
 
     public function destroy(Dress $dress)
     {
-        $dress->images()->delete();
-        $dress->delete();
+        foreach ($dress->images()->get() as $img) {
+            $img->delete();
+        }
+        Dress::destroy($dress->id);
 
         return response()->json(['message' => 'Dress deleted successfully.']);
     }
@@ -162,7 +170,7 @@ class DressApiController extends Controller
         return $request->validate($rules);
     }
 
-    private function storeMainImage($file, Dress $dress)
+    private function storeMainImage(UploadedFile $file, Dress $dress): void
     {
         $mime = $file->getMimeType();
         if (!in_array($mime, self::ALLOWED_IMAGE_MIMETYPES)) {
@@ -177,7 +185,7 @@ class DressApiController extends Controller
         ]);
     }
 
-    private function storeGalleryImages($files, Dress $dress)
+    private function storeGalleryImages(UploadedFile|array $files, Dress $dress): void
     {
         if (!is_array($files)) {
             $files = [$files];

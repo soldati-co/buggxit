@@ -2,10 +2,17 @@
 
 namespace App\Models;
 
+/**
+ * @property-read \Illuminate\Database\Eloquent\Collection|Image[] $images
+ * @property-read Image|null $mainImage
+ * @property-read \Illuminate\Database\Eloquent\Collection|Image[] $galleryImages
+ * @property-read \Illuminate\Database\Eloquent\Collection|Category[] $categories
+ */
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Str;
 
 class Dress extends Model
@@ -133,22 +140,22 @@ class Dress extends Model
     }
 
     // ---------- Scopes ----------
-    public function scopeActive($query)
+    public function scopeActive(Builder $query): Builder
     {
         return $query->where('status', 'active');
     }
 
-    public function scopeFeatured($query)
+    public function scopeFeatured(Builder $query): Builder
     {
         return $query->where('is_featured', true);
     }
 
-    public function scopeInStock($query)
+    public function scopeInStock(Builder $query): Builder
     {
         return $query->where('stock_quantity', '>', 0);
     }
 
-    public function scopeLowStock($query)
+    public function scopeLowStock(Builder $query): Builder
     {
         return $query->whereRaw('stock_quantity <= low_stock_threshold');
     }

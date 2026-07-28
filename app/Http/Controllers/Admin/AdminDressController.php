@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
+use Illuminate\Http\UploadedFile;
 
 class AdminDressController extends Controller
 {
@@ -42,7 +43,7 @@ class AdminDressController extends Controller
     public function create()
     {
         if ($redirect = $this->checkAuth()) return $redirect;
-        $categories = Category::orderBy('sort_order')->get();
+        $categories = Category::orderBy('sort_order', 'asc')->get();
         return view('admin.dresses.create', [
             'categories'      => $categories,
             'availableSizes'  => $this->availableSizes,
@@ -85,7 +86,7 @@ class AdminDressController extends Controller
                 $dress->categories()->sync($request->input('category_ids', []));
             }
 
-            return redirect()->route('admin.dresses.index')
+            return redirect()->route('admin.dresses.index', [])
                 ->with('success', 'Dress created successfully!');
 
         } catch (\Illuminate\Validation\ValidationException $e) {
@@ -106,7 +107,7 @@ class AdminDressController extends Controller
     public function edit(Dress $dress)
     {
         if ($redirect = $this->checkAuth()) return $redirect;
-        $categories = Category::orderBy('sort_order')->get();
+        $categories = Category::orderBy('sort_order', 'asc')->get();
         $selectedCategories = $dress->categories->pluck('id')->toArray();
         return view('admin.dresses.edit', [
             'dress'              => $dress,
@@ -133,22 +134,27 @@ class AdminDressController extends Controller
 
             // Handle main image replacement
             if ($request->hasFile('main_image')) {
-                // Delete old main image record
-                $dress->mainImage()->delete();
+                // Delete old main image record (delete model if exists)
+                $mainImage = $dress->mainImage()->first();
+                if ($mainImage) {
+                    $mainImage->delete();
+                }
                 $this->storeMainImage($request->file('main_image'), $dress);
             }
 
             // Handle gallery images replacement
             if ($request->hasFile('gallery_images')) {
-                // Delete all old gallery images
-                $dress->galleryImages()->delete();
+                // Delete all old gallery images (delete each model)
+                foreach ($dress->galleryImages()->get() as $oldImg) {
+                    $oldImg->delete();
+                }
                 $this->storeGalleryImages($request->file('gallery_images'), $dress);
             }
 
             $dress->update($validated);
             $dress->categories()->sync($request->input('category_ids', []));
 
-            return redirect()->route('admin.dresses.index')
+            return redirect()->route('admin.dresses.index', [])
                 ->with('success', 'Dress updated successfully!');
 
         } catch (\Illuminate\Validation\ValidationException $e) {
@@ -162,10 +168,12 @@ class AdminDressController extends Controller
     public function destroy(Dress $dress)
     {
         if ($redirect = $this->checkAuth()) return $redirect;
-        // Delete all associated images (polymorphic)
-        $dress->images()->delete();
-        $dress->delete();
-        return redirect()->route('admin.dresses.index')
+        // Delete all associated images (delete each model)
+        foreach ($dress->images()->get() as $img) {
+            $img->delete();
+        }
+        Dress::destroy($dress->id);
+        return redirect()->route('admin.dresses.index', [])
             ->with('success', 'Dress deleted successfully!');
     }
 
@@ -232,7 +240,7 @@ class AdminDressController extends Controller
     /**
      * Store a main image as database binary.
      */
-    private function storeMainImage($file, Dress $dress)
+    private function storeMainImage(UploadedFile $file, Dress $dress): void
     {
         $mime = $file->getMimeType();
         if (!in_array($mime, self::ALLOWED_IMAGE_MIMETYPES)) {
@@ -250,7 +258,7 @@ class AdminDressController extends Controller
     /**
      * Store multiple gallery images as database binaries.
      */
-    private function storeGalleryImages($files, Dress $dress)
+    private function storeGalleryImages(UploadedFile|array $files, Dress $dress): void
     {
         if (!is_array($files)) {
             $files = [$files];
