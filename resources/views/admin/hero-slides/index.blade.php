@@ -113,32 +113,36 @@
     </div>
 
     @push('scripts')
-        <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
         <script>
-            const sortable = document.getElementById('slides-sortable');
-            if (sortable) {
+            document.addEventListener('DOMContentLoaded', function () {
+                const sortable = document.getElementById('slides-sortable');
+                if (!sortable || typeof Sortable === 'undefined') {
+                    return;
+                }
+
                 new Sortable(sortable, {
                     handle: '.handle',
                     animation: 150,
-                    onEnd: function(evt) {
+                    onEnd: function () {
                         let order = [];
                         sortable.querySelectorAll('[data-slide-id]').forEach((el, index) => {
                             order.push({
                                 id: el.dataset.slideId,
-                                sort_order: index
+                                sort_order: index,
                             });
                         });
+
                         fetch('{{ route('admin.hero-slides.update-order') }}', {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json',
-                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
                             },
-                            body: JSON.stringify({ order: order })
-                        }).then(r => r.json()).then(data => console.log('Reordered'));
-                    }
+                            body: JSON.stringify({ order: order }),
+                        }).then((r) => r.json()).then(() => console.log('Reordered'));
+                    },
                 });
-            }
+            });
         </script>
     @endpush
 @endsection

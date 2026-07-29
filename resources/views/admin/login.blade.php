@@ -13,11 +13,6 @@
 @endsection
 
 @section('content')
-    <!-- Preload critical fonts -->
-    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" as="style"
-        crossorigin="anonymous">
-    <link rel="preconnect" href="https://cdnjs.cloudflare.com/ajax/libs">
-
     <div class="min-h-[calc(100vh-200px)] flex items-center justify-center px-4 py-8 relative overflow-hidden"
         style="contain: layout paint;">
         <!-- Simplified decorative elements - CSS only when needed -->
@@ -250,8 +245,6 @@
     </div>
 
     <!-- Defer Font Awesome loading -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
-        media="print" onload="this.media='all'" crossorigin="anonymous">
 
     <!-- Inline critical JavaScript -->
     <script>

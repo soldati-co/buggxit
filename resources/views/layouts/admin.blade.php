@@ -8,18 +8,7 @@
 
     <title>@yield('title', 'BUGGXIT Admin') – Buggxit Couture</title>
 
-    <!-- Preload critical assets -->
-    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
-    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" as="style"
-        crossorigin="anonymous">
-
-    <!-- Tailwind via CDN (or use your local build) -->
-    <script src="https://cdn.tailwindcss.com"></script>
-
-    <!-- Deferred Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
-        media="print" onload="this.media='all'" crossorigin="anonymous">
-
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
     @stack('styles')
 </head>
 
@@ -247,9 +236,6 @@
         class="fixed bottom-6 right-6 p-3 bg-black/80 backdrop-blur-sm border border-gray-800 rounded-full text-gray-400 hover:text-yellow-500 hover:border-yellow-500 transition-all duration-300 z-50 shadow-lg group">
         <i class="fas fa-arrow-up text-lg group-hover:-translate-y-1 transition-transform duration-300"></i>
     </button>
-
-    <!-- Alpine.js for interactivity -->
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
     <!-- Inline styles for consistency -->
     <style>
