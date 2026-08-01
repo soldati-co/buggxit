@@ -86,3 +86,8 @@ Route::prefix('api')->name('api.')->middleware(['web', 'throttle:60,1'])->group(
     Route::put('/dresses/{dress}', [DressApiController::class, 'update'])->name('dresses.update');
     Route::delete('/dresses/{dress}', [DressApiController::class, 'destroy'])->name('dresses.destroy');
 });
+
+// ================== HEALTH CHECKER ROUTE ================== //
+Route::get('/health', function () {
+    return response('ok', 200);
+});
