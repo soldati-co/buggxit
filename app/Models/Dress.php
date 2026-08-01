@@ -181,9 +181,15 @@ class Dress extends Model
     /**
      * API URL for the main image (null if none).
      */
-    public function getMainImageUrlAttribute(): ?string
+    public function getMainImageUrlAttribute(): string
     {
-        return $this->mainImage ? route('api.image.show', $this->mainImage->id) : null;
+        $mainImage = $this->mainImage;
+
+        if ($mainImage && !empty($mainImage->image_data)) {
+            return route('api.image.show', $mainImage->id);
+        }
+
+        return asset('logo.webp');
     }
 
     /**
