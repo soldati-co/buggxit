@@ -44,21 +44,17 @@ Route::prefix('checkout')->name('checkout.')->middleware('web')->group(function 
 });
 
 Route::middleware('auth')->group(function () {
-    Route::get('/dashboard', function () { return view('dashboard'); })->name('dashboard');
+    Route::get('/dashboard', function () { return view('pages.dashboard'); })->name('dashboard');
     Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
     Route::get('/orders/{order}', [OrderController::class, 'show'])->name('orders.show');
 });
 
 // Route::get('/search', [SearchController::class, 'index'])->name('search');
 
-Route::get('/nightwatch-test', function () {
-    \Illuminate\Support\Facades\Log::info('Nightwatch test log via agent');
-    return response()->json(['message' => 'Logged. Check Nightwatch dashboard.']);
-});
 
 // ================== API ROUTES ================== //
-// Route::get('/api/hero-slides/{id}/image', [HeroSlideController::class, 'getImage'])->name('api.hero-slides.image');
-// Route::get('/api/dresses/{id}/image', [App\Http\Controllers\Admin\AdminDressController::class, 'getImage'])->name('api.dresses.image');
+
+Route::get('/api/dresses/{id}/image', [App\Http\Controllers\Admin\AdminDressController::class, 'getImage'])->name('api.dresses.image');
 
 Route::get('/images/{id}', [ImageController::class, 'show'])->name('api.image.show');
 

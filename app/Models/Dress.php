@@ -7,6 +7,74 @@ namespace App\Models;
  * @property-read Image|null $mainImage
  * @property-read \Illuminate\Database\Eloquent\Collection|Image[] $galleryImages
  * @property-read \Illuminate\Database\Eloquent\Collection|Category[] $categories
+ * @property string $id
+ * @property string $slug
+ * @property string $name
+ * @property string|null $custom_sku
+ * @property string|null $description
+ * @property numeric $price
+ * @property numeric|null $compare_at_price
+ * @property int $stock_quantity
+ * @property int|null $low_stock_threshold
+ * @property array<array-key, mixed>|null $sizes
+ * @property array<array-key, mixed>|null $colors
+ * @property string|null $main_image_url
+ * @property string|null $gallery_images
+ * @property string $status
+ * @property bool $is_featured
+ * @property bool $is_taxable
+ * @property bool $requires_shipping
+ * @property string|null $meta_title
+ * @property string|null $meta_description
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string|null $turnaround_time
+ * @property string|null $expected_delivery
+ * @property-read int|null $categories_count
+ * @property-read int|null $gallery_images_count
+ * @property-read mixed $available_sizes
+ * @property-read mixed $category_names
+ * @property-read mixed $color_hexes
+ * @property-read mixed $display_colors
+ * @property-read mixed $display_sku
+ * @property-read array $gallery_image_urls
+ * @property-read int|null $images_count
+ * @method static Builder<static>|Dress active()
+ * @method static Builder<static>|Dress featured()
+ * @method static Builder<static>|Dress inStock()
+ * @method static Builder<static>|Dress lowStock()
+ * @method static Builder<static>|Dress newModelQuery()
+ * @method static Builder<static>|Dress newQuery()
+ * @method static Builder<static>|Dress onlyTrashed()
+ * @method static Builder<static>|Dress query()
+ * @method static Builder<static>|Dress whereColors($value)
+ * @method static Builder<static>|Dress whereCompareAtPrice($value)
+ * @method static Builder<static>|Dress whereCreatedAt($value)
+ * @method static Builder<static>|Dress whereCustomSku($value)
+ * @method static Builder<static>|Dress whereDeletedAt($value)
+ * @method static Builder<static>|Dress whereDescription($value)
+ * @method static Builder<static>|Dress whereExpectedDelivery($value)
+ * @method static Builder<static>|Dress whereGalleryImages($value)
+ * @method static Builder<static>|Dress whereId($value)
+ * @method static Builder<static>|Dress whereIsFeatured($value)
+ * @method static Builder<static>|Dress whereIsTaxable($value)
+ * @method static Builder<static>|Dress whereLowStockThreshold($value)
+ * @method static Builder<static>|Dress whereMainImageUrl($value)
+ * @method static Builder<static>|Dress whereMetaDescription($value)
+ * @method static Builder<static>|Dress whereMetaTitle($value)
+ * @method static Builder<static>|Dress whereName($value)
+ * @method static Builder<static>|Dress wherePrice($value)
+ * @method static Builder<static>|Dress whereRequiresShipping($value)
+ * @method static Builder<static>|Dress whereSizes($value)
+ * @method static Builder<static>|Dress whereSlug($value)
+ * @method static Builder<static>|Dress whereStatus($value)
+ * @method static Builder<static>|Dress whereStockQuantity($value)
+ * @method static Builder<static>|Dress whereTurnaroundTime($value)
+ * @method static Builder<static>|Dress whereUpdatedAt($value)
+ * @method static Builder<static>|Dress withTrashed(bool $withTrashed = true)
+ * @method static Builder<static>|Dress withoutTrashed()
+ * @mixin \Eloquent
  */
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;

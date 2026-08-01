@@ -21,7 +21,7 @@
             style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, rgba(10,10,10,0.9) 0%, rgba(26,26,26,0.7) 100%); z-index: 1;">
         </div>
         <div
-            style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-image: url('https://images.unsplash.com/photo-1544441893-675973e31985?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80'); background-size: cover; background-position: center; opacity: 0.3; z-index: 0;">
+            style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-image: url('{{ asset('images/collections-hero-bg.jpg') }}'); background-size: cover; background-position: center; opacity: 0.3; z-index: 0;">
         </div>
     </section>
 
@@ -80,7 +80,7 @@
                 <div class="products-grid">
                     <!-- Product 1 -->
                     <div class="product-card">
-                        <img src="https://images.unsplash.com/photo-1558769132-cb1f3f5d5c75?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
+                        <img src="{{ asset('images/placeholder-product.jpg') }}"
                             alt="Geometric Blazer" class="product-img">
                         <div class="product-info">
                             <div class="product-category">Blazers</div>
@@ -99,7 +99,7 @@
 
                     <!-- Product 2 -->
                     <div class="product-card">
-                        <img src="https://images.unsplash.com/photo-1539109136881-3be0616acf4b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
+                        <img src="{{ asset('images/placeholder-product.jpg') }}"
                             alt="Geometric Dress" class="product-img">
                         <div class="product-info">
                             <div class="product-category">Dresses</div>
@@ -119,7 +119,7 @@
                     <!-- Product 3 -->
                     <div class="product-card">
                         <div class="product-badge">Best Seller</div>
-                        <img src="https://images.unsplash.com/photo-1595777457583-95e059d581b8?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
+                        <img src="{{ asset('images/placeholder-product.jpg') }}"
                             alt="Geometric Trousers" class="product-img">
                         <div class="product-info">
                             <div class="product-category">Trousers</div>
@@ -138,7 +138,7 @@
 
                     <!-- Product 4 -->
                     <div class="product-card">
-                        <img src="https://images.unsplash.com/photo-1591047139829-d91aecb6caea?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
+                        <img src="{{ asset('images/placeholder-product.jpg') }}"
                             alt="Geometric Top" class="product-img">
                         <div class="product-info">
                             <div class="product-category">Tops</div>
@@ -157,7 +157,7 @@
 
                     <!-- Product 5 -->
                     <div class="product-card">
-                        <img src="https://images.unsplash.com/photo-1586790170083-2f9ceadc732d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
+                        <img src="{{ asset('images/placeholder-product.jpg') }}"
                             alt="Geometric Jacket" class="product-img">
                         <div class="product-info">
                             <div class="product-category">Outerwear</div>
@@ -176,7 +176,7 @@
 
                     <!-- Product 6 -->
                     <div class="product-card">
-                        <img src="https://images.unsplash.com/photo-1523381210434-271e8be1f52b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
+                        <img src="{{ asset('images/placeholder-product.jpg') }}"
                             alt="Geometric Skirt" class="product-img">
                         <div class="product-info">
                             <div class="product-category">Skirts</div>
@@ -196,7 +196,7 @@
                     <!-- Product 7 -->
                     <div class="product-card">
                         <div class="product-badge">New</div>
-                        <img src="https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
+                        <img src="{{ asset('images/placeholder-product.jpg') }}"
                             alt="Geometric Bag" class="product-img">
                         <div class="product-info">
                             <div class="product-category">Accessories</div>
@@ -215,7 +215,7 @@
 
                     <!-- Product 8 -->
                     <div class="product-card">
-                        <img src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
+                        <img src="{{ asset('images/placeholder-product.jpg') }}"
                             alt="Geometric Shirt" class="product-img">
                         <div class="product-info">
                             <div class="product-category">Shirts</div>
@@ -234,7 +234,7 @@
 
                     <!-- Product 9 -->
                     <div class="product-card">
-                        <img src="https://images.unsplash.com/photo-1544441893-675973e31985?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
+                        <img src="{{ asset('images/placeholder-product.jpg') }}"
                             alt="Geometric Suit" class="product-img">
                         <div class="product-info">
                             <div class="product-category">Suits</div>
@@ -254,7 +254,7 @@
                     <!-- Product 10 -->
                     <div class="product-card">
                         <div class="product-badge">Limited</div>
-                        <img src="https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
+                        <img src="{{ asset('images/placeholder-product.jpg') }}"
                             alt="Geometric Jewelry" class="product-img">
                         <div class="product-info">
                             <div class="product-category">Jewelry</div>
@@ -273,7 +273,7 @@
 
                     <!-- Product 11 -->
                     <div class="product-card">
-                        <img src="https://images.unsplash.com/photo-1572635196237-14b3f281503f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
+                        <img src="{{ asset('images/placeholder-product.jpg') }}"
                             alt="Geometric Eyewear" class="product-img">
                         <div class="product-info">
                             <div class="product-category">Eyewear</div>
@@ -292,7 +292,7 @@
 
                     <!-- Product 12 -->
                     <div class="product-card">
-                        <img src="https://images.unsplash.com/photo-1595777457583-95e059d581b8?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
+                        <img src="{{ asset('images/placeholder-product.jpg') }}"
                             alt="Geometric Jumpsuit" class="product-img">
                         <div class="product-info">
                             <div class="product-category">Jumpsuits</div>
@@ -330,9 +330,8 @@
                 </div>
 
                 <div class="products-grid">
-                    <!-- Apparel products would go here -->
                     <div class="product-card">
-                        <img src="https://images.unsplash.com/photo-1558769132-cb1f3f5d5c75?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
+                        <img src="{{ asset('images/placeholder-product.jpg') }}"
                             alt="Geometric Blazer" class="product-img">
                         <div class="product-info">
                             <div class="product-category">Blazers</div>
@@ -348,8 +347,6 @@
                             </div>
                         </div>
                     </div>
-
-                    <!-- More apparel products... -->
                 </div>
             </div>
 
@@ -366,9 +363,8 @@
                 </div>
 
                 <div class="products-grid">
-                    <!-- Accessory products would go here -->
                     <div class="product-card">
-                        <img src="https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
+                        <img src="{{ asset('images/placeholder-product.jpg') }}"
                             alt="Geometric Jewelry" class="product-img">
                         <div class="product-info">
                             <div class="product-category">Jewelry</div>
@@ -384,8 +380,6 @@
                             </div>
                         </div>
                     </div>
-
-                    <!-- More accessory products... -->
                 </div>
             </div>
 
@@ -406,10 +400,9 @@
                 </div>
 
                 <div class="products-grid">
-                    <!-- Signature products would go here -->
                     <div class="product-card">
                         <div class="product-badge" style="background: var(--accent);">Signature</div>
-                        <img src="https://images.unsplash.com/photo-1586790170083-2f9ceadc732d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
+                        <img src="{{ asset('images/placeholder-product.jpg') }}"
                             alt="Signature Jacket" class="product-img">
                         <div class="product-info">
                             <div class="product-category">Outerwear</div>
@@ -425,8 +418,6 @@
                             </div>
                         </div>
                     </div>
-
-                    <!-- More signature products... -->
                 </div>
             </div>
 
@@ -447,10 +438,9 @@
                 </div>
 
                 <div class="products-grid">
-                    <!-- Archival products would go here -->
                     <div class="product-card">
                         <div class="product-badge" style="background: #8B4513;">Archival</div>
-                        <img src="https://images.unsplash.com/photo-1544441893-675973e31985?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
+                        <img src="{{ asset('images/placeholder-product.jpg') }}"
                             alt="Archival Suit" class="product-img">
                         <div class="product-info">
                             <div class="product-category">Suits</div>
@@ -466,8 +456,6 @@
                             </div>
                         </div>
                     </div>
-
-                    <!-- More archival products... -->
                 </div>
             </div>
         </div>
@@ -486,7 +474,7 @@
                 <a href="#" class="collection-card"
                     style="display: block; text-decoration: none; position: relative; overflow: hidden;">
                     <div style="position: relative; height: 400px; overflow: hidden;">
-                        <img src="https://images.unsplash.com/photo-1558769132-cb1f3f5d5c75?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
+                        <img src="{{ asset('images/placeholder-product.jpg') }}"
                             alt="Symmetry Series"
                             style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s;">
                         <div
@@ -509,7 +497,7 @@
                 <a href="#" class="collection-card"
                     style="display: block; text-decoration: none; position: relative; overflow: hidden;">
                     <div style="position: relative; height: 400px; overflow: hidden;">
-                        <img src="https://images.unsplash.com/photo-1539109136881-3be0616acf4b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
+                        <img src="{{ asset('images/placeholder-product.jpg') }}"
                             alt="Architectural Lines"
                             style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s;">
                         <div
@@ -533,7 +521,7 @@
                 <a href="#" class="collection-card"
                     style="display: block; text-decoration: none; position: relative; overflow: hidden;">
                     <div style="position: relative; height: 400px; overflow: hidden;">
-                        <img src="https://images.unsplash.com/photo-1595777457583-95e059d581b8?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
+                        <img src="{{ asset('images/placeholder-product.jpg') }}"
                             alt="Geometric Minimalism"
                             style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s;">
                         <div
@@ -691,121 +679,93 @@
 
 @push('styles')
     <style>
-        /* Collection navigation active state */
         .collection-nav-btn.active {
             background: var(--accent) !important;
             color: var(--bg) !important;
             border-color: var(--accent) !important;
         }
-
         .collection-nav-btn:hover:not(.active) {
             border-color: var(--accent);
             color: var(--accent);
         }
-
-        /* Collection card hover */
         .collection-card:hover img {
             transform: scale(1.05);
         }
-
-        /* Category card hover */
         .category-card:hover {
             transform: translateY(-10px);
             border-color: var(--accent) !important;
             box-shadow: var(--shadow);
         }
-
         .category-card:hover i {
             transform: scale(1.2);
             transition: transform 0.3s;
         }
-
-        /* Collection section transitions */
         .collection-section {
             transition: opacity 0.3s ease;
         }
-
-        /* Featured collection hover animation */
         .featured-collections a:hover div[style*="color: var(--accent); text-decoration: none;"] {
             padding-left: 10px;
             transition: padding-left 0.3s;
         }
-
-        /* Responsive adjustments */
         @media (max-width: 1024px) {
             .collections-nav {
                 overflow-x: auto;
                 padding-bottom: 1.5rem;
             }
-
             .collections-nav div[style*="display: flex; justify-content: center;"] {
                 justify-content: flex-start;
                 flex-wrap: nowrap;
                 padding-bottom: 0.5rem;
             }
-
             .collection-categories div[style*="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr))"] {
                 grid-template-columns: repeat(3, 1fr);
             }
         }
-
         @media (max-width: 768px) {
             .collections-hero h1.section-title {
                 font-size: 2.5rem;
             }
-
             .collections-grid div[style*="display: flex; justify-content: space-between;"] {
                 flex-direction: column;
                 align-items: flex-start;
                 gap: 1.5rem;
             }
-
             .featured-collections div[style*="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr))"] {
                 grid-template-columns: 1fr;
             }
-
             .collection-categories div[style*="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr))"] {
                 grid-template-columns: repeat(2, 1fr);
             }
-
             .collections-newsletter div[style*="display: flex; gap: 1rem; justify-content: center;"] {
                 flex-direction: column;
                 align-items: center;
             }
-
             .collections-newsletter div[style*="flex: 1; max-width: 400px;"] {
                 max-width: 100% !important;
                 width: 100%;
             }
-
             .collections-cta div[style*="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr))"] {
                 grid-template-columns: 1fr;
                 text-align: center;
             }
         }
-
         @media (max-width: 480px) {
             .collections-hero h1.section-title {
                 font-size: 2rem;
             }
-
             .collection-nav-btn {
                 padding: 0.75rem 1.5rem !important;
                 font-size: 0.8rem !important;
             }
-
             .collection-categories div[style*="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr))"] {
                 grid-template-columns: 1fr;
             }
-
             .category-card {
                 padding: 1.5rem !important;
             }
-
             .featured-collections div[style*="position: relative; height: 400px;"] {
                 height: 300px !important;
             }
-
             .collections-cta .btn {
                 width: 100%;
                 max-width: 300px;
@@ -816,37 +776,24 @@
 
 @push('scripts')
     <script>
-        // Collection navigation functionality
         document.addEventListener('DOMContentLoaded', function() {
             const navButtons = document.querySelectorAll('.collection-nav-btn');
             const collectionSections = document.querySelectorAll('.collection-section');
             const loadMoreBtn = document.getElementById('loadMoreProducts');
             const sortSelect = document.getElementById('sortAll');
 
-            // Navigation functionality
             navButtons.forEach(button => {
                 button.addEventListener('click', function(e) {
                     e.preventDefault();
-
-                    // Remove active class from all buttons
                     navButtons.forEach(btn => btn.classList.remove('active'));
-                    // Add active class to clicked button
                     this.classList.add('active');
-
-                    // Get target section ID
                     const targetId = this.getAttribute('href').substring(1);
-
-                    // Hide all sections
                     collectionSections.forEach(section => {
                         section.style.display = 'none';
                     });
-
-                    // Show target section
                     const targetSection = document.getElementById(targetId);
                     if (targetSection) {
                         targetSection.style.display = 'block';
-
-                        // Smooth scroll to section
                         window.scrollTo({
                             top: targetSection.offsetTop - 100,
                             behavior: 'smooth'
@@ -855,20 +802,14 @@
                 });
             });
 
-            // Load more functionality
             loadMoreBtn.addEventListener('click', function() {
                 const button = this;
                 button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Loading...';
                 button.disabled = true;
-
-                // Simulate loading delay
                 setTimeout(function() {
-                    // In a real implementation, this would load more products via AJAX
                     button.innerHTML = 'All Products Loaded';
                     button.style.opacity = '0.5';
                     button.style.cursor = 'not-allowed';
-
-                    // Show a message
                     const message = document.createElement('div');
                     message.style.textAlign = 'center';
                     message.style.marginTop = '1rem';
@@ -878,41 +819,28 @@
                 }, 1500);
             });
 
-            // Sort functionality
             sortSelect.addEventListener('change', function() {
                 const sortValue = this.value;
-                const activeSection = document.querySelector(
-                '.collection-section[style*="display: block"]');
-
+                const activeSection = document.querySelector('.collection-section[style*="display: block"]');
                 if (!activeSection) return;
-
                 const container = activeSection.querySelector('.products-grid');
                 const cards = Array.from(container.querySelectorAll('.product-card'));
-
-                // Sort based on selected value
                 cards.sort((a, b) => {
                     if (sortValue === 'featured') {
-                        // Featured items might have badges
                         const aBadge = a.querySelector('.product-badge');
                         const bBadge = b.querySelector('.product-badge');
-
                         if (aBadge && !bBadge) return -1;
                         if (!aBadge && bBadge) return 1;
                         return 0;
                     } else if (sortValue === 'newest') {
-                        // In a real implementation, this would use actual date data
                         return 0;
                     } else if (sortValue === 'price-low') {
-                        const priceA = parseFloat(a.querySelector('.product-price').textContent
-                            .replace('$', '').replace(',', ''));
-                        const priceB = parseFloat(b.querySelector('.product-price').textContent
-                            .replace('$', '').replace(',', ''));
+                        const priceA = parseFloat(a.querySelector('.product-price').textContent.replace('$', '').replace(',', ''));
+                        const priceB = parseFloat(b.querySelector('.product-price').textContent.replace('$', '').replace(',', ''));
                         return priceA - priceB;
                     } else if (sortValue === 'price-high') {
-                        const priceA = parseFloat(a.querySelector('.product-price').textContent
-                            .replace('$', '').replace(',', ''));
-                        const priceB = parseFloat(b.querySelector('.product-price').textContent
-                            .replace('$', '').replace(',', ''));
+                        const priceA = parseFloat(a.querySelector('.product-price').textContent.replace('$', '').replace(',', ''));
+                        const priceB = parseFloat(b.querySelector('.product-price').textContent.replace('$', '').replace(',', ''));
                         return priceB - priceA;
                     } else if (sortValue === 'name') {
                         const nameA = a.querySelector('.product-name').textContent.toLowerCase();
@@ -921,79 +849,55 @@
                     }
                     return 0;
                 });
-
-                // Reorder the DOM
-                cards.forEach(card => {
-                    container.appendChild(card);
-                });
-
-                // Show notification
+                cards.forEach(card => container.appendChild(card));
                 showNotification(`Sorted by: ${this.options[this.selectedIndex].text}`);
             });
 
-            // Collection card hover effects
             const collectionCards = document.querySelectorAll('.collection-card');
             collectionCards.forEach(card => {
                 card.addEventListener('mouseenter', function() {
                     const img = this.querySelector('img');
                     const arrow = this.querySelector('.fa-arrow-right');
-
                     if (img) img.style.transform = 'scale(1.05)';
                     if (arrow) arrow.style.transform = 'translateX(5px)';
                 });
-
                 card.addEventListener('mouseleave', function() {
                     const img = this.querySelector('img');
                     const arrow = this.querySelector('.fa-arrow-right');
-
                     if (img) img.style.transform = 'scale(1)';
                     if (arrow) arrow.style.transform = 'translateX(0)';
                 });
             });
 
-            // Category card hover effects
             const categoryCards = document.querySelectorAll('.category-card');
             categoryCards.forEach(card => {
                 card.addEventListener('mouseenter', function() {
                     const icon = this.querySelector('i');
-                    if (icon) {
-                        icon.style.transform = 'scale(1.2)';
-                    }
+                    if (icon) icon.style.transform = 'scale(1.2)';
                 });
-
                 card.addEventListener('mouseleave', function() {
                     const icon = this.querySelector('i');
-                    if (icon) {
-                        icon.style.transform = 'scale(1)';
-                    }
+                    if (icon) icon.style.transform = 'scale(1)';
                 });
             });
 
-            // Newsletter subscription
             const newsletterInput = document.querySelector('.collections-newsletter input[type="email"]');
             const newsletterBtn = document.querySelector('.collections-newsletter .btn');
-
             newsletterBtn.addEventListener('click', function() {
                 const email = newsletterInput.value.trim();
-
                 if (!email || !isValidEmail(email)) {
                     newsletterInput.style.borderColor = '#ff4444';
                     newsletterInput.focus();
                     return;
                 }
-
-                // In a real implementation, this would submit to your backend
                 const originalText = this.innerHTML;
                 this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Subscribing...';
                 this.disabled = true;
-
                 setTimeout(() => {
                     this.innerHTML = '<i class="fas fa-check"></i> Subscribed!';
                     this.style.background = '#4CAF50';
                     newsletterInput.value = '';
                     newsletterInput.style.borderColor = 'var(--border)';
-
-                    // Reset after 3 seconds
                     setTimeout(() => {
                         this.innerHTML = originalText;
                         this.disabled = false;
@@ -1002,9 +906,7 @@
                 }, 1500);
             });
 
-            // Helper functions
             function showNotification(message) {
-                // Create notification
                 const notification = document.createElement('div');
                 notification.style.position = 'fixed';
                 notification.style.top = '100px';
@@ -1018,15 +920,10 @@
                 notification.style.transform = 'translateX(100%)';
                 notification.style.transition = 'transform 0.3s';
                 notification.innerHTML = message;
-
                 document.body.appendChild(notification);
-
-                // Animate in
                 setTimeout(() => {
                     notification.style.transform = 'translateX(0)';
                 }, 10);
-
-                // Remove after 3 seconds
                 setTimeout(() => {
                     notification.style.transform = 'translateX(100%)';
                     setTimeout(() => {
@@ -1040,39 +937,27 @@
                 return re.test(email);
             }
 
-            // Add to cart functionality
             const addToCartBtns = document.querySelectorAll('.product-card .btn:not(.btn-outline)');
-
             addToCartBtns.forEach(btn => {
                 btn.addEventListener('click', function() {
                     const productCard = this.closest('.product-card');
                     const productName = productCard.querySelector('.product-name').textContent;
                     const productPrice = productCard.querySelector('.product-price').textContent;
-
-                    // Update cart count
                     const cartCount = document.querySelector('.cart-count');
                     let currentCount = parseInt(cartCount.textContent);
                     cartCount.textContent = currentCount + 1;
-
-                    // Show success message
                     const message = `Added "${productName}" (${productPrice}) to cart`;
                     showNotification(message);
-
-                    // In a real implementation, you would make an AJAX request to add to cart
                 });
             });
 
-            // Wishlist functionality
             const wishlistBtns = document.querySelectorAll('.btn-outline .fa-heart');
             wishlistBtns.forEach(btn => {
                 btn.addEventListener('click', function(e) {
                     e.preventDefault();
                     e.stopPropagation();
-
                     const productCard = this.closest('.product-card');
                     const productName = productCard.querySelector('.product-name').textContent;
-
-                    // Toggle heart icon
                     if (this.classList.contains('far')) {
                         this.classList.remove('far');
                         this.classList.add('fas');

@@ -6,6 +6,42 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Support\Str;
 
+/**
+ * @property string $id
+ * @property string|null $title
+ * @property string|null $headline
+ * @property string|null $subheading
+ * @property string $image_path
+ * @property string|null $alt_text
+ * @property string|null $cta_text
+ * @property string|null $cta_url
+ * @property int $sort_order
+ * @property bool $is_active
+ * @property string|null $deleted_at
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read string|null $image_api_url
+ * @property-read \App\Models\Image|null $image
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|HeroSlide active()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|HeroSlide newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|HeroSlide newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|HeroSlide ordered()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|HeroSlide query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|HeroSlide whereAltText($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|HeroSlide whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|HeroSlide whereCtaText($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|HeroSlide whereCtaUrl($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|HeroSlide whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|HeroSlide whereHeadline($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|HeroSlide whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|HeroSlide whereImagePath($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|HeroSlide whereIsActive($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|HeroSlide whereSortOrder($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|HeroSlide whereSubheading($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|HeroSlide whereTitle($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|HeroSlide whereUpdatedAt($value)
+ * @mixin \Eloquent
+ */
 class HeroSlide extends Model
 {
     // Use UUID primary key
