@@ -81,6 +81,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
 
 class Dress extends Model
@@ -183,6 +184,10 @@ class Dress extends Model
      */
     public function getMainImageUrlAttribute(): string
     {
+        if (! Schema::hasTable('images')) {
+            return asset('logo.webp');
+        }
+
         $mainImage = $this->mainImage;
 
         if ($mainImage && !empty($mainImage->image_data)) {
@@ -197,6 +202,10 @@ class Dress extends Model
      */
     public function getGalleryImageUrlsAttribute(): array
     {
+        if (! Schema::hasTable('images')) {
+            return [];
+        }
+
         return $this->galleryImages->map(fn($img) => route('api.image.show', $img->id))->toArray();
     }
 
