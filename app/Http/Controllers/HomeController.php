@@ -5,11 +5,23 @@ namespace App\Http\Controllers;
 use App\Models\Dress;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Schema;
 
 class HomeController extends Controller
 {
     public function index()
     {
+        if (! Schema::hasTable('dresses')) {
+            $featuredDresses = collect();
+            $newArrivals = collect();
+            $activeCategories = collect();
+
+            return view('pages.landing', compact(
+                'featuredDresses',
+                'newArrivals',
+                'activeCategories'
+            ));
+        }
         // 1. Featured dresses (max 4), with their categories loaded
         $featuredDresses = Dress::with('categories')
             ->where('is_featured', true)

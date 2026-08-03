@@ -16,9 +16,11 @@
     {{-- Preload the first active hero slide image (LCP) --}}
     @if(Route::is('home'))
         @php
-            $heroSlidesForPreload = \App\Models\HeroSlide::where('is_active', true)
-                                    ->orderBy('sort_order')
-                                    ->get();
+            $heroSlidesForPreload = \Illuminate\Support\Facades\Schema::hasTable('hero_slides')
+                ? \App\Models\HeroSlide::where('is_active', true)
+                    ->orderBy('sort_order')
+                    ->get()
+                : collect();
         @endphp
         @if($heroSlidesForPreload->isNotEmpty() && $heroSlidesForPreload->first()->image_api_url)
             <link rel="preload" href="{{ $heroSlidesForPreload->first()->image_api_url }}" as="image" fetchpriority="high">

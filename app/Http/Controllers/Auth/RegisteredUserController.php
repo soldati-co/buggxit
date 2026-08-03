@@ -43,8 +43,8 @@ class RegisteredUserController extends Controller
 
         event(new Registered($user));
 
-        return redirect()
-        ->route('signin')             
-        ->with('status', 'Account created successfully! Please sign in.');
+        Auth::login($user);
+
+        return redirect()->intended(route('dashboard', absolute: false));
     }
 }

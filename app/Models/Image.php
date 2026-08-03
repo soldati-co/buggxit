@@ -38,7 +38,6 @@ class Image extends Model
 
     public function getImageApiUrlAttribute(): ?string
     {
-        return $this->image ? $this->image->url : null;
-        // or directly: route('api.image.show', $this->image->id) but using model's accessor is cleaner
+        return $this->url;
     }
 }

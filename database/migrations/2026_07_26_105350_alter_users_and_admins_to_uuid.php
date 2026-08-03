@@ -12,6 +12,15 @@ return new class extends Migration
      */
     public function up(): void
     {
+        if (! $this->usingPostgres()) {
+            return;
+        }
+
+        // Only run UUID conversion on PostgreSQL to avoid breaking SQLite tests
+        if (! $this->usingPostgres()) {
+            return;
+        }
+
         // Convert users.id to UUID (if not already)
         $this->convertTableToUuid('users');
 
@@ -101,7 +110,11 @@ return new class extends Migration
      */
     private function isColumnUuid(string $table, string $column): bool
     {
-        // Use Doctrine DBAL or raw query – safest for PostgreSQL
+        // Only check column types on PostgreSQL
+        if (! $this->usingPostgres()) {
+            return false;
+        }
+
         $type = DB::selectOne("
             SELECT data_type
             FROM information_schema.columns
@@ -109,5 +122,17 @@ return new class extends Migration
         ", [$table, $column]);
 
         return $type && $type->data_type === 'uuid';
+    }
+
+    /**
+     * Determine if the current connection is PostgreSQL.
+     */
+    private function usingPostgres(): bool
+    {
+        try {
+            return DB::getDriverName() === 'pgsql';
+        } catch (\Throwable $e) {
+            return false;
+        }
     }
 };

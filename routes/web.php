@@ -7,6 +7,7 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\PageController;
 use App\Http\Controllers\Api\CartApiController;
 use App\Http\Controllers\Api\CheckoutApiController;
 use App\Http\Controllers\Api\ContactApiController;
@@ -22,13 +23,13 @@ require __DIR__.'/admin.php';
 
 // ================== PUBLIC ROUTES ================== //
 
-Route::get('/about', function () { return view('pages.about'); })->name('about');
+Route::get('/about', [PageController::class, 'about'])->name('about');
 
 Route::prefix('cart')->name('cart.')->group(function () {
     Route::get('/', [CartController::class, 'index'])->name('index');
 });
 
-Route::get('/contact', function () { return view('pages.contact'); })->name('contact');
+Route::get('/contact', [PageController::class, 'contact'])->name('contact');
 
 Route::get('/new-arrivals', [ProductController::class, 'newArrivals'])->name('newarrival');
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -44,7 +45,7 @@ Route::prefix('checkout')->name('checkout.')->middleware('web')->group(function 
 });
 
 Route::middleware('auth')->group(function () {
-    Route::get('/dashboard', function () { return view('pages.dashboard'); })->name('dashboard');
+    Route::get('/dashboard', [PageController::class, 'dashboard'])->name('dashboard');
     Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
     Route::get('/orders/{order}', [OrderController::class, 'show'])->name('orders.show');
 });
@@ -84,6 +85,5 @@ Route::prefix('api')->name('api.')->middleware(['web', 'throttle:60,1'])->group(
 });
 
 // ================== HEALTH CHECKER ROUTE ================== //
-Route::get('/health', function () {
-    return response('ok', 200);
-});
+Route::get('/health', [PageController::class, 'health'])->name('health');
+Route::get('/up', [PageController::class, 'health'])->name('health.up');

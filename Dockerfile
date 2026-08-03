@@ -16,6 +16,9 @@ WORKDIR /var/www/html
 # Copy application code
 COPY --chown=www-data:www-data . /var/www/html
 
+# Remove any stale cached bootstrap artifacts from the source before installing
+RUN rm -f bootstrap/cache/config.php bootstrap/cache/routes-v7.php bootstrap/cache/packages.php bootstrap/cache/services.php bootstrap/cache/events.php
+
 # Install PHP dependencies
 RUN composer install --no-dev --optimize-autoloader --no-interaction
 
