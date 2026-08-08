@@ -40,9 +40,20 @@ return [
                 // ("pdo_stmt_xxxx") randomly fail with:
                 //   SQLSTATE[26000] prepared statement "pdo_stmt_xxxx" does not exist
                 //   SQLSTATE[42P05] prepared statement "pdo_stmt_xxxx" already exists
-                // Emulating prepares makes PDO build the final SQL client-side and send
-                // it as a single plain query, which is safe under connection pooling.
-                PDO::ATTR_EMULATE_PREPARES => true,
+                //
+                // NOTE: we deliberately do NOT use PDO::ATTR_EMULATE_PREPARES here.
+                // Emulated prepares splice bound values into the SQL text as raw,
+                // unquoted literals - which breaks boolean columns, since Laravel
+                // sends PHP true/false as integer 1/0 and Postgres has no
+                // "boolean = integer" operator (SQLSTATE 42883).
+                //
+                // PGSQL_ATTR_DISABLE_PREPARES is the correct, Postgres-specific fix:
+                // it skips naming/reusing a server-side prepared statement (the part
+                // that breaks under pooling) while still using the real extended
+                // protocol with proper parameter types, so booleans stay booleans.
+                (defined('Pdo\\Pgsql::ATTR_DISABLE_PREPARES')
+                    ? \Pdo\Pgsql::ATTR_DISABLE_PREPARES
+                    : PDO::PGSQL_ATTR_DISABLE_PREPARES) => true,
             ]) : [],
         ],
 
