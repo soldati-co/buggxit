@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', "Buggxit Couture"),
+    'name' => env('APP_NAME', "Buggxit Couture"), // APP NAME
 
     /*
     |--------------------------------------------------------------------------
@@ -26,8 +26,8 @@ return [
     |
     */
 
-    // 'env' => env('APP_ENV', 'production'),
-    'env' => env('APP_ENV', 'local'),
+    // 'env' => env('APP_ENV', 'production'), // FOR PRODUCTION
+    'env' => env('APP_ENV', 'local'), // FOR LOACL DEV
 
     /*
     |--------------------------------------------------------------------------
@@ -40,7 +40,8 @@ return [
     |
     */
 
-    'debug' => (bool) env('APP_DEBUG', true),
+    // 'debug' => (bool) env('APP_DEBUG', false), // FOR PRODUCTION
+    'debug' => (bool) env('APP_DEBUG', true), // FOR LOCAL DEV
 
     /*
     |--------------------------------------------------------------------------
@@ -53,7 +54,8 @@ return [
     |
     */
 
-    'url' => env('APP_URL', 'http://localhost'),
+    'url' => env('APP_URL', 'http://localhost'), // FOR LOCAL DEV
+    // 'url' => env('APP_URL', 'http://localhost'), // FOR PRODUCTION (DOMAIN)
 
     /*
     |--------------------------------------------------------------------------
@@ -123,5 +125,5 @@ return [
         'driver' => env('APP_MAINTENANCE_DRIVER', 'file'),
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
-    
+
 ];
