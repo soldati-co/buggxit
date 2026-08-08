@@ -34,6 +34,15 @@ return [
 
             'options' => extension_loaded('pdo_pgsql') ? array_filter([
                 PDO::ATTR_PERSISTENT => false,
+                // REQUIRED for Supabase's Supavisor pooler in "transaction" mode (port 6543).
+                // Transaction pooling can hand each query to a different backend Postgres
+                // connection, so PDO's native server-side prepared statements
+                // ("pdo_stmt_xxxx") randomly fail with:
+                //   SQLSTATE[26000] prepared statement "pdo_stmt_xxxx" does not exist
+                //   SQLSTATE[42P05] prepared statement "pdo_stmt_xxxx" already exists
+                // Emulating prepares makes PDO build the final SQL client-side and send
+                // it as a single plain query, which is safe under connection pooling.
+                PDO::ATTR_EMULATE_PREPARES => true,
             ]) : [],
         ],
 
