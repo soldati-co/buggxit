@@ -177,7 +177,7 @@ class DressApiController extends Controller
         }
 
         $dress->images()->create([
-            'image_data' => file_get_contents($file->getRealPath()),
+            'image_data' => base64_encode(file_get_contents($file->getRealPath())),
             'image_mime' => $mime,
             'collection' => 'main',
             'sort_order' => 0,
@@ -197,7 +197,7 @@ class DressApiController extends Controller
             }
 
             $dress->images()->create([
-                'image_data' => file_get_contents($file->getRealPath()),
+                'image_data' => base64_encode(file_get_contents($file->getRealPath())),
                 'image_mime' => $mime,
                 'collection' => 'gallery',
                 'sort_order' => $index + 1,

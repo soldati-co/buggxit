@@ -15,7 +15,7 @@ class ImageController extends Controller
             abort(404);
         }
 
-        return response($image->image_data)
+        return response(base64_decode($image->image_data))
             ->header('Content-Type', $image->image_mime)
             ->header('X-Content-Type-Options', 'nosniff')
             ->header('Content-Disposition', 'inline')
