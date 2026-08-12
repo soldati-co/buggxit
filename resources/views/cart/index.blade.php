@@ -6,23 +6,23 @@
     <div class="container-wide px-4 sm:px-6 lg:px-8 mx-auto py-12">
         {{-- Header --}}
         <div class="mb-10">
-            <h1 class="text-3xl md:text-4xl font-bold text-white">
-                Your <span class="text-yellow-500">Collection</span>
+            <h1 class="text-3xl md:text-4xl font-bold text-bone">
+                Your <span class="text-gold">Collection</span>
             </h1>
-            <p class="text-gray-400 mt-2">Review and adjust your selections before checkout.</p>
+            <p class="text-bone-dim mt-2">Review and adjust your selections before checkout.</p>
         </div>
 
         @if (empty($items))
             {{-- Empty cart --}}
-            <div class="text-center py-16 bg-black/90 backdrop-blur-sm border border-gray-800 rounded-2xl">
-                <svg class="w-20 h-20 mx-auto text-gray-700 mb-4" fill="currentColor" viewBox="0 0 24 24">
+            <div class="text-center py-16 bg-ink-raised/90 backdrop-blur-sm border border-line rounded-2xl">
+                <svg class="w-20 h-20 mx-auto text-bone-faint mb-4" fill="currentColor" viewBox="0 0 24 24">
                     <path
                         d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
                 </svg>
-                <h2 class="text-2xl font-bold text-white mb-2">Your cart is empty</h2>
-                <p class="text-gray-400 mb-6">Looks like you haven't added any dresses yet.</p>
+                <h2 class="text-2xl font-bold text-bone mb-2">Your cart is empty</h2>
+                <p class="text-bone-dim mb-6">Looks like you haven't added any dresses yet.</p>
                 <a href="{{ route('products.index') }}"
-                    class="inline-flex items-center px-6 py-3 bg-gradient-to-r from-yellow-500 to-yellow-600 text-gray-900 font-semibold rounded-lg hover:from-yellow-400 hover:to-yellow-500 transition-all duration-300">
+                    class="inline-flex items-center px-6 py-3 bg-gradient-to-r from-gold to-gold-dim text-ink font-semibold rounded-lg hover:from-gold-bright hover:to-gold transition-all duration-300">
                     <i class="fas fa-tshirt mr-2"></i>
                     Explore Collections
                 </a>
@@ -33,16 +33,16 @@
                 <div class="lg:col-span-2 space-y-4">
                     @foreach ($items as $item)
                         @php $dress = $item['dress']; @endphp
-                        <div class="cart-item bg-black/90 backdrop-blur-sm border border-gray-800 rounded-xl p-4 flex flex-col sm:flex-row gap-4 hover:border-yellow-500/30 transition-colors"
+                        <div class="cart-item bg-ink-raised/90 backdrop-blur-sm border border-line rounded-xl p-4 flex flex-col sm:flex-row gap-4 hover:border-gold/30 transition-colors"
                             data-product-id="{{ $dress->id }}">
                             {{-- Image --}}
-                            <div class="w-20 h-20 sm:w-24 sm:h-24 rounded-lg overflow-hidden border border-gray-800 flex-shrink-0">
+                            <div class="w-20 h-20 sm:w-24 sm:h-24 rounded-lg overflow-hidden border border-line flex-shrink-0">
                                 @if ($dress->main_image_url)
                                     <img src="{{ $dress->main_image_url }}" alt="{{ $dress->name }}"
                                         class="w-full h-full object-cover">
                                 @else
-                                    <div class="w-full h-full bg-gray-800 flex items-center justify-center">
-                                        <svg class="w-8 h-8 text-gray-600" fill="currentColor" viewBox="0 0 24 24">
+                                    <div class="w-full h-full bg-ink-raised2 flex items-center justify-center">
+                                        <svg class="w-8 h-8 text-bone-faint" fill="currentColor" viewBox="0 0 24 24">
                                             <path
                                                 d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2z" />
                                         </svg>
@@ -53,30 +53,30 @@
                             {{-- Details --}}
                             <div class="flex-1 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                                 <div>
-                                    <div class="text-xs text-yellow-500 uppercase tracking-wider">
+                                    <div class="text-xs text-gold uppercase tracking-wider">
                                         Traditional Dress
                                     </div>
                                     <a href="{{ route('products.show', $dress) }}"
-                                        class="text-white font-semibold hover:text-yellow-500 transition-colors">
+                                        class="text-bone font-display font-medium text-lg hover:text-gold transition-colors">
                                         {{ $dress->name }}
                                     </a>
-                                    <div class="text-sm text-gray-400 mt-1">
+                                    <div class="text-sm text-bone-dim font-numeric mt-1">
                                         R{{ number_format($dress->price, 0) }} each
                                     </div>
                                 </div>
 
                                 <div class="flex items-center gap-4">
                                     {{-- Quantity control --}}
-                                    <div class="flex items-center border border-gray-700 rounded-lg bg-gray-800/30">
+                                    <div class="flex items-center border border-line rounded-lg bg-ink-raised2/30">
                                         <button
-                                            class="quantity-decrease px-3 py-2 text-gray-400 hover:text-yellow-500 transition-colors disabled:opacity-50"
+                                            class="quantity-decrease px-3 py-2 text-bone-dim hover:text-gold transition-colors disabled:opacity-50"
                                             {{ $item['quantity'] <= 1 ? 'disabled' : '' }}>
                                             <i class="fas fa-minus"></i>
                                         </button>
                                         <span
-                                            class="quantity-value w-8 text-center text-white font-medium">{{ $item['quantity'] }}</span>
+                                            class="quantity-value w-8 text-center text-bone font-medium">{{ $item['quantity'] }}</span>
                                         <button
-                                            class="quantity-increase px-3 py-2 text-gray-400 hover:text-yellow-500 transition-colors"
+                                            class="quantity-increase px-3 py-2 text-bone-dim hover:text-gold transition-colors"
                                             {{ $item['quantity'] >= 10 ? 'disabled' : '' }}>
                                             <i class="fas fa-plus"></i>
                                         </button>
@@ -84,11 +84,11 @@
 
                                     {{-- Subtotal & remove --}}
                                     <div class="text-right min-w-[80px]">
-                                        <div class="text-yellow-500 font-bold subtotal">
+                                        <div class="text-gold font-bold font-numeric subtotal">
                                             R{{ number_format($item['subtotal'], 0) }}
                                         </div>
                                         <button
-                                            class="remove-item text-xs text-gray-500 hover:text-red-400 transition-colors mt-1">
+                                            class="remove-item text-xs text-bone-faint hover:text-bad transition-colors mt-1">
                                             <i class="fas fa-trash-alt mr-1"></i> Remove
                                         </button>
                                     </div>
@@ -100,35 +100,35 @@
 
                 {{-- Order Summary --}}
                 <div class="lg:col-span-1">
-                    <div class="bg-black/90 backdrop-blur-sm border border-gray-800 rounded-xl p-6 sticky top-24">
-                        <h3 class="text-lg font-semibold text-white mb-4 flex items-center">
-                            <i class="fas fa-receipt text-yellow-500 mr-2"></i>
+                    <div class="bg-ink-raised/90 backdrop-blur-sm border border-line rounded-xl p-6 sticky top-24">
+                        <h3 class="text-lg font-semibold text-bone mb-4 flex items-center">
+                            <i class="fas fa-receipt text-gold mr-2"></i>
                             Order Summary
                         </h3>
 
-                        <div class="space-y-3 text-sm border-b border-gray-800/50 pb-4 mb-4">
+                        <div class="space-y-3 text-sm border-b border-line/50 pb-4 mb-4">
                             <div class="flex justify-between">
-                                <span class="text-gray-400">Subtotal</span>
-                                <span class="text-white font-medium"
+                                <span class="text-bone-dim">Subtotal</span>
+                                <span class="text-bone font-medium font-numeric"
                                     id="cart-subtotal">R{{ number_format($subtotal, 0) }}</span>
                             </div>
                             <div class="flex justify-between">
-                                <span class="text-gray-400">Shipping</span>
-                                <span class="text-gray-300">Calculated at checkout</span>
+                                <span class="text-bone-dim">Shipping</span>
+                                <span class="text-bone-dim">Calculated at checkout</span>
                             </div>
                         </div>
 
                         <div class="flex justify-between text-base font-semibold mb-6">
-                            <span class="text-white">Estimated Total</span>
-                            <span class="text-yellow-500" id="cart-total">R{{ number_format($subtotal, 0) }}</span>
+                            <span class="text-bone">Estimated Total</span>
+                            <span class="text-gold font-numeric" id="cart-total">R{{ number_format($subtotal, 0) }}</span>
                         </div>
 
                         <a href="{{ route('checkout.index') }}"
-                            class="block w-full py-3.5 text-center bg-gradient-to-r from-yellow-500 to-yellow-600 text-gray-900 font-bold rounded-lg hover:from-yellow-400 hover:to-yellow-500 transition-all duration-300 shadow-lg shadow-yellow-500/20">
+                            class="block w-full py-3.5 text-center bg-gradient-to-r from-gold to-gold-dim text-ink font-bold rounded-lg hover:from-gold-bright hover:to-gold transition-all duration-300 shadow-lg shadow-gold/20">
                             Proceed to Checkout
                         </a>
 
-                        <p class="text-xs text-gray-500 text-center mt-4">
+                        <p class="text-xs text-bone-faint text-center mt-4">
                             <i class="fas fa-lock mr-1"></i> Secure checkout
                         </p>
                     </div>
@@ -138,7 +138,7 @@
             {{-- Continue shopping link --}}
             <div class="mt-8 text-center lg:text-left">
                 <a href="{{ route('products.index') }}"
-                    class="inline-flex items-center text-gray-400 hover:text-yellow-500 transition-colors group">
+                    class="inline-flex items-center text-bone-dim hover:text-gold transition-colors group">
                     <svg class="w-4 h-4 mr-2 group-hover:-translate-x-1 transition-transform" fill="none"
                         stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"

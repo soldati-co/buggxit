@@ -2,9 +2,9 @@
 
 @section('content')
     <div class="min-h-screen flex items-center justify-center px-4 py-8 bg-[#0a0a0a]">
-        <div class="w-full max-w-md bg-black/90 border border-gray-800 rounded-xl p-8">
-            <h2 class="text-2xl font-bold text-white mb-4">{{ __('Confirm Password') }}</h2>
-            <p class="text-sm text-gray-400 mb-6">
+        <div class="w-full max-w-md bg-ink-raised/90 border border-line rounded-xl p-8">
+            <h2 class="text-2xl font-bold text-bone mb-4">{{ __('Confirm Password') }}</h2>
+            <p class="text-sm text-bone-dim mb-6">
                 {{ __('This is a secure area of the application. Please confirm your password before continuing.') }}
             </p>
 

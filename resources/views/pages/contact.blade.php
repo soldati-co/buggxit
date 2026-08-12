@@ -5,24 +5,24 @@
 @section('content')
     {{-- Hero Section --}}
     <section class="relative mb-20 overflow-hidden">
-        <div class="absolute -top-40 -right-40 w-96 h-96 bg-yellow-500/10 rounded-full blur-3xl"></div>
-        <div class="absolute -bottom-40 -left-40 w-96 h-96 bg-yellow-500/5 rounded-full blur-3xl"></div>
+        <div class="absolute -top-40 -right-40 w-96 h-96 bg-gold/10 rounded-full blur-3xl"></div>
+        <div class="absolute -bottom-40 -left-40 w-96 h-96 bg-gold/5 rounded-full blur-3xl"></div>
 
         <div
-            class="relative z-10 bg-gradient-to-br from-black via-gray-900 to-black border-y border-gray-800/50 py-16 md:py-24">
+            class="relative z-10 bg-gradient-to-br from-ink-raised via-ink-raised2 to-ink-raised border-y border-line/50 py-16 md:py-24">
             <div class="container-wide px-4 sm:px-6 lg:px-8 mx-auto">
                 <div class="max-w-4xl mx-auto text-center">
                     <span
-                        class="inline-flex items-center px-4 py-2 rounded-full text-xs font-medium bg-yellow-500/10 text-yellow-500 border border-yellow-500/30 mb-6 backdrop-blur-sm">
-                        <span class="w-2 h-2 bg-yellow-500 rounded-full mr-2 animate-pulse"></span>
+                        class="inline-flex items-center px-4 py-2 rounded-full text-xs font-medium bg-gold/10 text-gold border border-gold/30 mb-6 backdrop-blur-sm">
+                        <span class="w-2 h-2 bg-gold rounded-full mr-2 animate-pulse"></span>
                         Get in Touch
                     </span>
 
-                    <h1 class="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight">
-                        Connect with <span class="text-yellow-500 block mt-2">Precision</span>
+                    <h1 class="text-4xl md:text-6xl lg:text-7xl font-bold text-bone mb-6 leading-tight">
+                        Connect with <span class="text-gold block mt-2">Precision</span>
                     </h1>
 
-                    <p class="text-xl text-gray-300 mb-10 max-w-2xl mx-auto">
+                    <p class="text-xl text-bone-dim mb-10 max-w-2xl mx-auto">
                         Our geometric approach extends to customer service. Reach out for inquiries,
                         consultations, or collaborations. We respond with the same precision we design with.
                     </p>
@@ -30,7 +30,7 @@
             </div>
         </div>
 
-        <div class="absolute bottom-0 left-0 right-0 h-12 bg-gradient-to-t from-black to-transparent pointer-events-none">
+        <div class="absolute bottom-0 left-0 right-0 h-12 bg-gradient-to-t from-ink-raised to-transparent pointer-events-none">
         </div>
     </section>
 
@@ -39,31 +39,31 @@
         <div class="grid md:grid-cols-2 gap-12">
             {{-- Contact Form --}}
             <div>
-                <h2 class="text-3xl md:text-4xl font-bold text-white mb-6">
-                    Send a <span class="text-yellow-500">Message</span>
+                <h2 class="text-3xl md:text-4xl font-bold text-bone mb-6">
+                    Send a <span class="text-gold">Message</span>
                 </h2>
 
-                <form id="contactForm" class="bg-black/90 backdrop-blur-sm border border-gray-800 rounded-2xl p-6 md:p-8">
+                <form id="contactForm" class="bg-ink-raised/90 backdrop-blur-sm border border-line rounded-2xl p-6 md:p-8">
                     @csrf
 
                     <div class="mb-5">
-                        <label class="block text-gray-400 text-sm uppercase tracking-wider mb-2">Name *</label>
+                        <label class="block text-bone-dim text-sm uppercase tracking-wider mb-2">Name *</label>
                         <input type="text" name="name" required
-                            class="w-full px-4 py-3 bg-black/50 border border-gray-700 rounded-lg text-white focus:border-yellow-500 focus:ring-1 focus:ring-yellow-500/30 transition-all"
+                            class="w-full px-4 py-3 bg-ink-raised/50 border border-line rounded-lg text-bone focus:border-gold focus:ring-1 focus:ring-gold/30 transition-all"
                             placeholder="Your full name">
                     </div>
 
                     <div class="mb-5">
-                        <label class="block text-gray-400 text-sm uppercase tracking-wider mb-2">Email *</label>
+                        <label class="block text-bone-dim text-sm uppercase tracking-wider mb-2">Email *</label>
                         <input type="email" name="email" required
-                            class="w-full px-4 py-3 bg-black/50 border border-gray-700 rounded-lg text-white focus:border-yellow-500 focus:ring-1 focus:ring-yellow-500/30 transition-all"
+                            class="w-full px-4 py-3 bg-ink-raised/50 border border-line rounded-lg text-bone focus:border-gold focus:ring-1 focus:ring-gold/30 transition-all"
                             placeholder="your.email@example.com">
                     </div>
 
                     <div class="mb-5">
-                        <label class="block text-gray-400 text-sm uppercase tracking-wider mb-2">Subject *</label>
+                        <label class="block text-bone-dim text-sm uppercase tracking-wider mb-2">Subject *</label>
                         <select name="subject" required
-                            class="w-full px-4 py-3 bg-black/50 border border-gray-700 rounded-lg text-white focus:border-yellow-500 focus:ring-1 focus:ring-yellow-500/30 transition-all appearance-none cursor-pointer">
+                            class="w-full px-4 py-3 bg-ink-raised/50 border border-line rounded-lg text-bone focus:border-gold focus:ring-1 focus:ring-gold/30 transition-all appearance-none cursor-pointer">
                             <option value="" disabled selected>Select a subject</option>
                             <option value="general">General Inquiry</option>
                             <option value="order">Order Support</option>
@@ -76,22 +76,22 @@
                     </div>
 
                     <div class="mb-5">
-                        <label class="block text-gray-400 text-sm uppercase tracking-wider mb-2">Message *</label>
+                        <label class="block text-bone-dim text-sm uppercase tracking-wider mb-2">Message *</label>
                         <textarea name="message" required rows="6"
-                            class="w-full px-4 py-3 bg-black/50 border border-gray-700 rounded-lg text-white focus:border-yellow-500 focus:ring-1 focus:ring-yellow-500/30 transition-all resize-vertical"
+                            class="w-full px-4 py-3 bg-ink-raised/50 border border-line rounded-lg text-bone focus:border-gold focus:ring-1 focus:ring-gold/30 transition-all resize-vertical"
                             placeholder="Your message..."></textarea>
                     </div>
 
                     <div class="mb-6">
-                        <label class="flex items-start gap-3 text-gray-400 text-sm">
-                            <input type="checkbox" name="newsletter" class="mt-1 accent-yellow-500">
+                        <label class="flex items-start gap-3 text-bone-dim text-sm">
+                            <input type="checkbox" name="newsletter" class="mt-1 accent-gold">
                             <span>Subscribe to our newsletter for updates on new collections, exclusive offers, and
                                 geometric design insights.</span>
                         </label>
                     </div>
 
                     <button type="submit"
-                        class="w-full bg-gradient-to-r from-yellow-500 to-yellow-600 text-gray-900 font-bold py-3 rounded-full hover:from-yellow-400 hover:to-yellow-500 transition-all duration-300 flex items-center justify-center gap-2">
+                        class="w-full bg-gradient-to-r from-gold to-gold-dim text-ink font-bold py-3 rounded-full hover:from-gold-bright hover:to-gold transition-all duration-300 flex items-center justify-center gap-2">
                         <i class="fas fa-paper-plane"></i> Send Message
                     </button>
                 </form>
@@ -99,21 +99,21 @@
 
             {{-- Contact Information --}}
             <div>
-                <h2 class="text-3xl md:text-4xl font-bold text-white mb-6">
-                    Contact <span class="text-yellow-500">Information</span>
+                <h2 class="text-3xl md:text-4xl font-bold text-bone mb-6">
+                    Contact <span class="text-gold">Information</span>
                 </h2>
 
-                <div class="bg-black/90 backdrop-blur-sm border border-gray-800 rounded-2xl p-6 md:p-8 mb-8">
+                <div class="bg-ink-raised/90 backdrop-blur-sm border border-line rounded-2xl p-6 md:p-8 mb-8">
                     <div class="space-y-6">
                         {{-- Address --}}
                         <div class="flex items-start gap-4">
                             <div
-                                class="w-12 h-12 bg-yellow-500/10 rounded-full flex items-center justify-center flex-shrink-0">
-                                <i class="fas fa-map-marker-alt text-yellow-500 text-lg"></i>
+                                class="w-12 h-12 bg-gold/10 rounded-full flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-map-marker-alt text-gold text-lg"></i>
                             </div>
                             <div>
-                                <h3 class="text-white font-semibold text-lg">Physical Address</h3>
-                                <p class="text-gray-400 leading-relaxed">
+                                <h3 class="text-bone font-semibold text-lg">Physical Address</h3>
+                                <p class="text-bone-dim leading-relaxed">
                                     [approx. location],[building number]<br>
                                     [street name], South Africa
                                 </p>
@@ -123,12 +123,12 @@
                         {{-- Phone --}}
                         <div class="flex items-start gap-4">
                             <div
-                                class="w-12 h-12 bg-yellow-500/10 rounded-full flex items-center justify-center flex-shrink-0">
-                                <i class="fas fa-phone text-yellow-500 text-lg"></i>
+                                class="w-12 h-12 bg-gold/10 rounded-full flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-phone text-gold text-lg"></i>
                             </div>
                             <div>
-                                <h3 class="text-white font-semibold text-lg">Phone & WhatsApp</h3>
-                                <p class="text-gray-400 leading-relaxed">
+                                <h3 class="text-bone font-semibold text-lg">Phone & WhatsApp</h3>
+                                <p class="text-bone-dim leading-relaxed">
                                     +27 31 234 5678<br>
                                     <span class="text-xs">Mon-Fri: 9AM-6PM CET</span>
                                 </p>
@@ -138,12 +138,12 @@
                         {{-- Email --}}
                         <div class="flex items-start gap-4">
                             <div
-                                class="w-12 h-12 bg-yellow-500/10 rounded-full flex items-center justify-center flex-shrink-0">
-                                <i class="fas fa-envelope text-yellow-500 text-lg"></i>
+                                class="w-12 h-12 bg-gold/10 rounded-full flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-envelope text-gold text-lg"></i>
                             </div>
                             <div>
-                                <h3 class="text-white font-semibold text-lg">Email</h3>
-                                <p class="text-gray-400 leading-relaxed">
+                                <h3 class="text-bone font-semibold text-lg">Email</h3>
+                                <p class="text-bone-dim leading-relaxed">
                                     info@buggxit.com<br>
                                     clientservices@buggxit.com
                                 </p>
@@ -151,20 +151,20 @@
                         </div>
 
                         {{-- Response Times --}}
-                        <div class="mt-8 pt-6 border-t border-gray-800">
-                            <h3 class="text-yellow-500 font-semibold text-xl mb-4">Response Time</h3>
-                            <div class="bg-black/50 border border-gray-800 rounded-xl p-5 space-y-3">
+                        <div class="mt-8 pt-6 border-t border-line">
+                            <h3 class="text-gold font-semibold text-xl mb-4">Response Time</h3>
+                            <div class="bg-ink-raised/50 border border-line rounded-xl p-5 space-y-3">
                                 <div class="flex justify-between items-center">
-                                    <span class="text-gray-400">General Inquiries</span>
-                                    <span class="text-yellow-500 font-semibold">24-48 hours</span>
+                                    <span class="text-bone-dim">General Inquiries</span>
+                                    <span class="text-gold font-semibold">24-48 hours</span>
                                 </div>
                                 <div class="flex justify-between items-center">
-                                    <span class="text-gray-400">Order Support</span>
-                                    <span class="text-yellow-500 font-semibold">12-24 hours</span>
+                                    <span class="text-bone-dim">Order Support</span>
+                                    <span class="text-gold font-semibold">12-24 hours</span>
                                 </div>
                                 <div class="flex justify-between items-center">
-                                    <span class="text-gray-400">Custom Design</span>
-                                    <span class="text-yellow-500 font-semibold">3-5 business days</span>
+                                    <span class="text-bone-dim">Custom Design</span>
+                                    <span class="text-gold font-semibold">3-5 business days</span>
                                 </div>
                             </div>
                         </div>
@@ -172,13 +172,13 @@
 
                     {{-- Social Media --}}
                     <div>
-                        <h3 class="text-white font-semibold text-xl mb-4">Connect Socially</h3>
+                        <h3 class="text-bone font-semibold text-xl mb-4">Connect Socially</h3>
                         <div class="flex gap-4">
                             @foreach (['instagram', 'facebook-f', 'twitter', 'tiktok'] as $icon)
                                 <a href="https://www.{{ $icon == 'instagram' ? 'instagram.com/buggxit_couture/' : ($icon == 'facebook-f' ? 'facebook.com/p/Buggxit-Couture-Clothing-Accessories-100053004263016/' : ($icon == 'twitter' ? 'twitter.com/' : ($icon == 'tiktok' ? 'tiktok.com/' : ''))) }}"
-                                    class="w-12 h-12 bg-black/50 border border-gray-700 rounded-full flex items-center justify-center hover:border-yellow-500 hover:bg-yellow-500/10 transition-all duration-300 group">
+                                    class="w-12 h-12 bg-ink-raised/50 border border-line rounded-full flex items-center justify-center hover:border-gold hover:bg-gold/10 transition-all duration-300 group">
                                     <i
-                                        class="fab fa-{{ $icon }} text-gray-400 group-hover:text-yellow-500 text-lg"></i>
+                                        class="fab fa-{{ $icon }} text-bone-dim group-hover:text-gold text-lg"></i>
                                 </a>
                             @endforeach
                         </div>
@@ -188,10 +188,10 @@
     </section>
 
     {{-- FAQ Section (Accordion) --}}
-    <section class="bg-black/90 backdrop-blur-sm border-y border-gray-800 py-20 mb-20">
+    <section class="bg-ink-raised/90 backdrop-blur-sm border-y border-line py-20 mb-20">
         <div class="container-wide px-4 sm:px-6 lg:px-8 mx-auto">
-            <h2 class="text-3xl md:text-4xl font-bold text-white text-center mb-12">
-                Frequently Asked <span class="text-yellow-500">Questions</span>
+            <h2 class="text-3xl md:text-4xl font-bold text-bone text-center mb-12">
+                Frequently Asked <span class="text-gold">Questions</span>
             </h2>
 
             <div class="max-w-3xl mx-auto space-y-4">
@@ -226,13 +226,13 @@
                 @endphp
 
                 @foreach ($faqs as $index => $faq)
-                    <div class="faq-item border-b border-gray-800">
+                    <div class="faq-item border-b border-line">
                         <button
-                            class="faq-question w-full text-left py-5 text-white font-semibold text-lg flex justify-between items-center hover:text-yellow-500 transition-colors">
+                            class="faq-question w-full text-left py-5 text-bone font-semibold text-lg flex justify-between items-center hover:text-gold transition-colors">
                             <span>{{ $faq['q'] }}</span>
-                            <i class="fas fa-chevron-down text-yellow-500 transition-transform duration-300"></i>
+                            <i class="fas fa-chevron-down text-gold transition-transform duration-300"></i>
                         </button>
-                        <div class="faq-answer hidden pb-5 text-gray-400 leading-relaxed">
+                        <div class="faq-answer hidden pb-5 text-bone-dim leading-relaxed">
                             <p>{{ $faq['a'] }}</p>
                         </div>
                     </div>
@@ -243,15 +243,15 @@
 
     {{-- Map Section --}}
     <section class="container-wide px-4 sm:px-6 lg:px-8 mx-auto mb-20">
-        <div class="relative h-96 md:h-[500px] rounded-2xl overflow-hidden border border-gray-800 bg-black/50">
-            <div class="absolute inset-0 flex flex-col items-center justify-center z-10 bg-black/60 backdrop-blur-sm">
-                <i class="fas fa-map-marked-alt text-6xl text-yellow-500 mb-4"></i>
-                <h3 class="text-2xl font-bold text-white text-center">Via Monte Napoleone, 23<br>20121 Milano MI, Italy
+        <div class="relative h-96 md:h-[500px] rounded-2xl overflow-hidden border border-line bg-ink-raised/50">
+            <div class="absolute inset-0 flex flex-col items-center justify-center z-10 bg-ink-raised/60 backdrop-blur-sm">
+                <i class="fas fa-map-marked-alt text-6xl text-gold mb-4"></i>
+                <h3 class="text-2xl font-bold text-bone text-center">Via Monte Napoleone, 23<br>20121 Milano MI, Italy
                 </h3>
-                <p class="text-gray-300 text-center max-w-md mt-3">Our Milan atelier is open by appointment only. Please
+                <p class="text-bone-dim text-center max-w-md mt-3">Our Milan atelier is open by appointment only. Please
                     contact us to schedule a private viewing of our collections.</p>
                 <button id="getDirections"
-                    class="mt-6 bg-yellow-500 hover:bg-yellow-400 text-gray-900 font-bold px-6 py-3 rounded-full transition-all">
+                    class="mt-6 bg-gold hover:bg-gold-bright text-ink font-bold px-6 py-3 rounded-full transition-all">
                     <i class="fas fa-directions mr-2"></i> Get Directions
                 </button>
             </div>
@@ -263,10 +263,10 @@
     </section>
 
     {{-- Departments Section --}}
-    <section class="bg-black/90 backdrop-blur-sm border-y border-gray-800 py-20 mb-20">
+    <section class="bg-ink-raised/90 backdrop-blur-sm border-y border-line py-20 mb-20">
         <div class="container-wide px-4 sm:px-6 lg:px-8 mx-auto">
-            <h2 class="text-3xl md:text-4xl font-bold text-white text-center mb-12">
-                Contact by <span class="text-yellow-500">Department</span>
+            <h2 class="text-3xl md:text-4xl font-bold text-bone text-center mb-12">
+                Contact by <span class="text-gold">Department</span>
             </h2>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -300,14 +300,14 @@
                 @endphp
                 @foreach ($depts as $dept)
                     <div
-                        class="text-center p-6 bg-black/50 border border-gray-800 rounded-2xl hover:border-yellow-500/50 transition-all duration-300 hover:-translate-y-1">
-                        <div class="w-16 h-16 mx-auto bg-yellow-500/10 rounded-full flex items-center justify-center mb-4">
-                            <i class="fas fa-{{ $dept['icon'] }} text-2xl text-yellow-500"></i>
+                        class="text-center p-6 bg-ink-raised/50 border border-line rounded-2xl hover:border-gold/50 transition-all duration-300 hover:-translate-y-1">
+                        <div class="w-16 h-16 mx-auto bg-gold/10 rounded-full flex items-center justify-center mb-4">
+                            <i class="fas fa-{{ $dept['icon'] }} text-2xl text-gold"></i>
                         </div>
-                        <h3 class="text-white font-semibold text-xl mb-2">{{ $dept['title'] }}</h3>
-                        <p class="text-gray-400 text-sm mb-3">{{ $dept['desc'] }}</p>
+                        <h3 class="text-bone font-semibold text-xl mb-2">{{ $dept['title'] }}</h3>
+                        <p class="text-bone-dim text-sm mb-3">{{ $dept['desc'] }}</p>
                         <a href="mailto:{{ $dept['email'] }}"
-                            class="text-yellow-500 hover:text-yellow-400 font-semibold text-sm transition-colors">
+                            class="text-gold hover:text-gold-bright font-semibold text-sm transition-colors">
                             {{ $dept['email'] }}
                         </a>
                     </div>
@@ -319,21 +319,21 @@
     {{-- CTA Section --}}
     <section class="container-wide px-4 sm:px-6 lg:px-8 mx-auto mb-20">
         <div
-            class="relative bg-gradient-to-br from-gray-900 to-black border border-gray-800 rounded-3xl p-8 md:p-12 overflow-hidden text-center">
-            <div class="absolute -top-24 -right-24 w-64 h-64 bg-yellow-500/10 rounded-full blur-3xl"></div>
-            <div class="absolute -bottom-24 -left-24 w-64 h-64 bg-yellow-500/5 rounded-full blur-3xl"></div>
+            class="relative bg-gradient-to-br from-ink-raised2 to-ink-raised border border-line rounded-3xl p-8 md:p-12 overflow-hidden text-center">
+            <div class="absolute -top-24 -right-24 w-64 h-64 bg-gold/10 rounded-full blur-3xl"></div>
+            <div class="absolute -bottom-24 -left-24 w-64 h-64 bg-gold/5 rounded-full blur-3xl"></div>
 
             <div class="relative z-10 max-w-3xl mx-auto">
-                <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-6">
-                    Still Have <span class="text-yellow-500">Questions</span>?
+                <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-bone mb-6">
+                    Still Have <span class="text-gold">Questions</span>?
                 </h2>
-                <p class="text-gray-300 text-lg mb-10">
+                <p class="text-bone-dim text-lg mb-10">
                     Our geometric approach ensures precise and thoughtful responses.
                     We're committed to providing exceptional service that matches the quality of our designs.
                 </p>
                 <div class="flex flex-col sm:flex-row gap-5 justify-center">
                     <a href="tel:+390212345678"
-                        class="group inline-flex items-center justify-center px-8 py-4 bg-gradient-to-r from-yellow-500 to-yellow-600 text-gray-900 font-bold rounded-full hover:from-yellow-400 hover:to-yellow-500 transition-all duration-300 shadow-2xl shadow-yellow-500/25">
+                        class="group inline-flex items-center justify-center px-8 py-4 bg-gradient-to-r from-gold to-gold-dim text-ink font-bold rounded-full hover:from-gold-bright hover:to-gold transition-all duration-300 shadow-2xl shadow-gold/25">
                         <i class="fas fa-phone mr-2"></i> Call Us
                     </a>
                 </div>

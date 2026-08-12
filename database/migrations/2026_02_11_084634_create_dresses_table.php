@@ -3,13 +3,21 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\DB;
 
 return new class extends Migration
 {
     public function up()
     {
         Schema::create('dresses', function (Blueprint $table) {
-            $table->id();
+            // Use string primary key for SQLite (tests) to allow UUIDs, integer id otherwise
+            // (matches the same pattern used by create_users_table; see
+            // 2026_08_12_020002_convert_dresses_to_uuid for the Postgres-side conversion).
+            if (DB::getDriverName() === 'sqlite') {
+                $table->string('id')->primary();
+            } else {
+                $table->id();
+            }
             $table->string('name');
             $table->string('sku_prefix'); // SLMK, ZMBN, etc.
             $table->string('custom_sku')->nullable(); // For "Other" category

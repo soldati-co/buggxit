@@ -8,11 +8,6 @@ use Illuminate\Http\Request;
 
 class AdminOrderController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth:admin');
-    }
-
     public function index()
     {
         $orders = Order::with('user')->latest()->paginate(20);

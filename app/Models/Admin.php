@@ -8,6 +8,7 @@ use Illuminate\Contracts\Auth\CanResetPassword;
 use Illuminate\Auth\Passwords\CanResetPassword as CanResetPasswordTrait;
 use App\Notifications\AdminResetPasswordNotification;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 
 /**
@@ -44,7 +45,7 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
  */
 class Admin extends Authenticatable implements CanResetPassword
 {
-    use Notifiable, HasUuids, CanResetPasswordTrait;
+    use Notifiable, HasFactory, HasUuids, CanResetPasswordTrait;
 
     public $incrementing = false;
 

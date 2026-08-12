@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -30,10 +31,16 @@ use Illuminate\Database\Eloquent\Model;
  */
 class OrderItem extends Model
 {
-    protected $fillable = ['order_id', 'dress_id', 'quantity', 'price'];
+    use HasUuids;
+
+    public $incrementing = false;
+    protected $keyType = 'string';
+
+    protected $fillable = ['order_id', 'dress_id', 'quantity', 'price', 'attributes'];
 
     protected $casts = [
         'price' => 'decimal:2',
+        'attributes' => 'array',
     ];
 
     public function order()

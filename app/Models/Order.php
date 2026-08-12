@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * @property int $id
+ * @property string $id
  * @property string|null $order_number
  * @property string $user_id
  * @property string|null $shipping_address_id
@@ -47,15 +49,21 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Order extends Model
 {
+    use HasFactory, HasUuids;
+
+    public $incrementing = false;
+    protected $keyType = 'string';
+
     protected $fillable = [
         'order_number', 'user_id', 'shipping_address_id', 'billing_address_id',
-        'subtotal', 'shipping_cost', 'total', 'status', 'payment_method',
+        'subtotal', 'shipping_cost', 'discount_amount', 'total', 'status', 'payment_method',
         'payment_status', 'notes'
     ];
 
     protected $casts = [
         'subtotal' => 'decimal:2',
         'shipping_cost' => 'decimal:2',
+        'discount_amount' => 'decimal:2',
         'total' => 'decimal:2',
     ];
 

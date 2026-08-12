@@ -5,43 +5,28 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Dress;
 use App\Models\Category;
+use App\Services\ImageStorageService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Illuminate\Http\UploadedFile;
 
 class AdminDressController extends Controller
 {
-    private const ALLOWED_IMAGE_MIMETYPES = [
-        'image/jpeg',
-        'image/png',
-        'image/gif',
-        'image/webp',
-        'image/bmp',
-        'image/avif',
-    ];
-
     private $availableSizes = [32, 34, 36, 38, 40, 42];
 
-    private function checkAuth()
+    public function __construct(private ImageStorageService $images)
     {
-        if (!Auth::guard('admin')->check()) {
-            return redirect()->route('admin.login');
-        }
-        return null;
     }
 
     public function index()
     {
-        if ($redirect = $this->checkAuth()) return $redirect;
         $dresses = Dress::with('categories')->withImageUrls()->latest()->paginate(10);
         return view('admin.dresses.index', ['dresses' => $dresses]);
     }
 
     public function create()
     {
-        if ($redirect = $this->checkAuth()) return $redirect;
         $categories = Category::orderBy('sort_order', 'asc')->get();
         return view('admin.dresses.create', [
             'categories'      => $categories,
@@ -52,8 +37,6 @@ class AdminDressController extends Controller
 
     public function store(Request $request)
     {
-        if ($redirect = $this->checkAuth()) return $redirect;
-
         try {
             $validated = $this->validateDress($request);
 
@@ -98,14 +81,12 @@ class AdminDressController extends Controller
 
     public function show(Dress $dress)
     {
-        if ($redirect = $this->checkAuth()) return $redirect;
         $dress->load('categories');
         return view('admin.dresses.show', ['dress' => $dress]);
     }
 
     public function edit(Dress $dress)
     {
-        if ($redirect = $this->checkAuth()) return $redirect;
         $categories = Category::orderBy('sort_order', 'asc')->get();
         $selectedCategories = $dress->categories->pluck('id')->toArray();
         return view('admin.dresses.edit', [
@@ -119,8 +100,6 @@ class AdminDressController extends Controller
 
     public function update(Request $request, Dress $dress)
     {
-        if ($redirect = $this->checkAuth()) return $redirect;
-
         try {
             $validated = $this->validateDress($request, $dress);
 
@@ -166,7 +145,6 @@ class AdminDressController extends Controller
 
     public function destroy(Dress $dress)
     {
-        if ($redirect = $this->checkAuth()) return $redirect;
         // Delete all associated images (delete each model)
         foreach ($dress->images()->get() as $img) {
             $img->delete();
@@ -178,7 +156,6 @@ class AdminDressController extends Controller
 
     public function toggleFeatured(Dress $dress)
     {
-        if ($redirect = $this->checkAuth()) return $redirect;
         $dress->update(['is_featured' => !$dress->is_featured]);
         $status = $dress->is_featured ? 'featured' : 'unfeatured';
         return back()->with('success', "Dress {$status} successfully!");
@@ -186,7 +163,6 @@ class AdminDressController extends Controller
 
     public function updateStatus(Request $request, Dress $dress)
     {
-        if ($redirect = $this->checkAuth()) return $redirect;
         $request->validate(['status' => 'required|in:draft,active,out_of_stock']);
         $dress->update(['status' => $request->status]);
         return back()->with('success', 'Status updated successfully!');
@@ -241,17 +217,7 @@ class AdminDressController extends Controller
      */
     private function storeMainImage(UploadedFile $file, Dress $dress): void
     {
-        $mime = $file->getMimeType();
-        if (!in_array($mime, self::ALLOWED_IMAGE_MIMETYPES)) {
-            throw new \Exception('Unsupported image type: ' . $mime);
-        }
-
-        $dress->images()->create([
-            'image_data' => base64_encode(file_get_contents($file->getRealPath())),
-            'image_mime' => $mime,
-            'collection' => 'main',
-            'sort_order' => 0,
-        ]);
+        $this->images->store($dress, $file, 'main');
     }
 
     /**
@@ -264,16 +230,11 @@ class AdminDressController extends Controller
         }
 
         foreach ($files as $index => $file) {
-            $mime = $file->getMimeType();
-            if (!in_array($mime, self::ALLOWED_IMAGE_MIMETYPES)) {
+            try {
+                $this->images->store($dress, $file, 'gallery', $index + 1);
+            } catch (\InvalidArgumentException $e) {
                 continue; // skip invalid files
             }
-            $dress->images()->create([
-                'image_data' => base64_encode(file_get_contents($file->getRealPath())),
-                'image_mime' => $mime,
-                'collection' => 'gallery',
-                'sort_order' => $index + 1,
-            ]);
         }
     }
 }

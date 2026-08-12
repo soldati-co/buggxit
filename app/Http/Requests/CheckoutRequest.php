@@ -22,7 +22,7 @@ class CheckoutRequest extends FormRequest
             'postal_code' => 'required_without:shipping_address_id|string|max:20',
             'country' => 'required_without:shipping_address_id|string|max:255',
             'phone' => 'required_without:shipping_address_id|string|max:50',
-            'payment_method' => 'required|in:eft,cash_on_delivery',
+            'payment_method' => 'required|in:eft,cash_on_delivery,payfast',
             'same_as_shipping' => 'nullable|boolean',
             'email' => 'required_if:guest,true|email|max:255',
             'notes' => 'nullable|string|max:2000',

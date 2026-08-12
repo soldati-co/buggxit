@@ -7,7 +7,7 @@
 @section('header-actions')
     <div class="mt-4 md:mt-0">
         <a href="{{ route('admin.dresses.create') }}"
-            class="inline-flex items-center px-4 py-2.5 bg-gradient-to-r from-yellow-500 to-yellow-600 text-gray-900 font-semibold rounded-lg hover:from-yellow-400 hover:to-yellow-500 transition-all duration-300 text-sm shadow-lg shadow-yellow-500/20">
+            class="inline-flex items-center px-4 py-2.5 bg-gradient-to-r from-gold to-gold-dim text-ink font-semibold rounded-lg hover:from-gold-bright hover:to-gold transition-all duration-300 text-sm shadow-lg shadow-gold/20">
             <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M12 4v16m8-8H4" />
             </svg>
@@ -20,7 +20,7 @@
     <!-- Back Button -->
     <div class="mb-4">
         <a href="{{ route('admin.dashboard') }}"
-            class="text-gray-400 hover:text-yellow-500 transition-colors inline-flex items-center text-sm group">
+            class="text-bone-dim hover:text-gold transition-colors inline-flex items-center text-sm group">
             <svg class="w-4 h-4 mr-1 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
             </svg>
@@ -33,14 +33,14 @@
 
         <!-- Total Dresses -->
         <div
-            class="bg-black/90 backdrop-blur-sm border border-gray-800 rounded-xl p-6 hover:border-yellow-500/30 transition-all duration-300 group">
+            class="bg-ink-raised/90 backdrop-blur-sm border border-line rounded-xl p-6 hover:border-gold/30 transition-all duration-300 group">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-sm font-medium text-gray-400 mb-1">Total Dresses</p>
-                    <p class="text-3xl font-bold text-white">{{ $dresses->total() }}</p>
+                    <p class="text-sm font-medium text-bone-dim mb-1">Total Dresses</p>
+                    <p class="text-3xl font-bold text-bone">{{ $dresses->total() }}</p>
                 </div>
-                <div class="p-3 bg-yellow-500/10 rounded-lg group-hover:bg-yellow-500/20 transition-colors">
-                    <svg class="w-6 h-6 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="p-3 bg-gold/10 rounded-lg group-hover:bg-gold/20 transition-colors">
+                    <svg class="w-6 h-6 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                             d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
                     </svg>
@@ -50,14 +50,14 @@
 
         <!-- Active Dresses -->
         <div
-            class="bg-black/90 backdrop-blur-sm border border-gray-800 rounded-xl p-6 hover:border-green-500/30 transition-all duration-300 group">
+            class="bg-ink-raised/90 backdrop-blur-sm border border-line rounded-xl p-6 hover:border-good/30 transition-all duration-300 group">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-sm font-medium text-gray-400 mb-1">Active</p>
-                    <p class="text-3xl font-bold text-white">{{ \App\Models\Dress::where('status', 'active')->count() }}</p>
+                    <p class="text-sm font-medium text-bone-dim mb-1">Active</p>
+                    <p class="text-3xl font-bold text-bone">{{ \App\Models\Dress::where('status', 'active')->count() }}</p>
                 </div>
-                <div class="p-3 bg-green-500/10 rounded-lg group-hover:bg-green-500/20 transition-colors">
-                    <svg class="w-6 h-6 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="p-3 bg-good/10 rounded-lg group-hover:bg-good/20 transition-colors">
+                    <svg class="w-6 h-6 text-good" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 13l4 4L19 7" />
                     </svg>
                 </div>
@@ -66,15 +66,15 @@
 
         <!-- Featured Dresses -->
         <div
-            class="bg-black/90 backdrop-blur-sm border border-gray-800 rounded-xl p-6 hover:border-yellow-500/30 transition-all duration-300 group">
+            class="bg-ink-raised/90 backdrop-blur-sm border border-line rounded-xl p-6 hover:border-gold/30 transition-all duration-300 group">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-sm font-medium text-gray-400 mb-1">Featured</p>
-                    <p class="text-3xl font-bold text-white">{{ \App\Models\Dress::where('is_featured', true)->count() }}
+                    <p class="text-sm font-medium text-bone-dim mb-1">Featured</p>
+                    <p class="text-3xl font-bold text-bone">{{ \App\Models\Dress::where('is_featured', true)->count() }}
                     </p>
                 </div>
-                <div class="p-3 bg-yellow-500/10 rounded-lg group-hover:bg-yellow-500/20 transition-colors">
-                    <svg class="w-6 h-6 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="p-3 bg-gold/10 rounded-lg group-hover:bg-gold/20 transition-colors">
+                    <svg class="w-6 h-6 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                             d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
                     </svg>
@@ -84,14 +84,14 @@
 
         <!-- Draft Dresses -->
         <div
-            class="bg-black/90 backdrop-blur-sm border border-gray-800 rounded-xl p-6 hover:border-gray-500/30 transition-all duration-300 group">
+            class="bg-ink-raised/90 backdrop-blur-sm border border-line rounded-xl p-6 hover:border-bone-faint/30 transition-all duration-300 group">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-sm font-medium text-gray-400 mb-1">Drafts</p>
-                    <p class="text-3xl font-bold text-white">{{ \App\Models\Dress::where('status', 'draft')->count() }}</p>
+                    <p class="text-sm font-medium text-bone-dim mb-1">Drafts</p>
+                    <p class="text-3xl font-bold text-bone">{{ \App\Models\Dress::where('status', 'draft')->count() }}</p>
                 </div>
-                <div class="p-3 bg-gray-500/10 rounded-lg group-hover:bg-gray-500/20 transition-colors">
-                    <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="p-3 bg-bone-faint/10 rounded-lg group-hover:bg-bone-faint/20 transition-colors">
+                    <svg class="w-6 h-6 text-bone-dim" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                             d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                     </svg>
@@ -101,66 +101,66 @@
     </div>
 
     <!-- Dresses Table -->
-    <div class="bg-black/90 backdrop-blur-sm border border-gray-800 rounded-xl overflow-hidden">
+    <div class="bg-ink-raised/90 backdrop-blur-sm border border-line rounded-xl overflow-hidden">
         <div class="overflow-x-auto">
-            <table class="min-w-full divide-y divide-gray-800/50">
-                <thead class="bg-gray-900/50">
+            <table class="min-w-full divide-y divide-line/50">
+                <thead class="bg-ink-raised2/50">
                     <tr>
-                        <th class="px-6 py-4 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Dress
+                        <th class="px-6 py-4 text-left text-xs font-medium text-bone-dim uppercase tracking-wider">Dress
                         </th>
-                        <th class="px-6 py-4 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                        <th class="px-6 py-4 text-left text-xs font-medium text-bone-dim uppercase tracking-wider">
                             Categories / SKU</th>
-                        <th class="px-6 py-4 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Price
+                        <th class="px-6 py-4 text-left text-xs font-medium text-bone-dim uppercase tracking-wider">Price
                         </th>
-                        <th class="px-6 py-4 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Sizes
+                        <th class="px-6 py-4 text-left text-xs font-medium text-bone-dim uppercase tracking-wider">Sizes
                         </th>
-                        <th class="px-6 py-4 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Status
+                        <th class="px-6 py-4 text-left text-xs font-medium text-bone-dim uppercase tracking-wider">Status
                         </th>
-                        <th class="px-6 py-4 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Actions
+                        <th class="px-6 py-4 text-left text-xs font-medium text-bone-dim uppercase tracking-wider">Actions
                         </th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-gray-800/50">
+                <tbody class="divide-y divide-line/50">
                     @forelse($dresses as $dress)
-                        <tr class="hover:bg-gray-800/30 transition-colors">
+                        <tr class="hover:bg-ink-raised2/30 transition-colors">
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <div class="flex items-center">
                                     @if ($dress->main_image_url)
-                                        <div class="flex-shrink-0 h-10 w-10 rounded-lg border border-gray-700 overflow-hidden">
+                                        <div class="flex-shrink-0 h-10 w-10 rounded-lg border border-line overflow-hidden">
                                             <img src="{{ $dress->main_image_url }}?t={{ time() }}"
                                                 alt="{{ $dress->name }}"
                                                 class="h-10 w-10 object-cover">
                                         </div>
                                     @else
-                                        <div class="flex-shrink-0 h-10 w-10 rounded-lg bg-gray-800/50 border border-gray-700 flex items-center justify-center">
-                                            <svg class="w-5 h-5 text-gray-500" fill="currentColor" viewBox="0 0 24 24">
+                                        <div class="flex-shrink-0 h-10 w-10 rounded-lg bg-ink-raised2/50 border border-line flex items-center justify-center">
+                                            <svg class="w-5 h-5 text-bone-faint" fill="currentColor" viewBox="0 0 24 24">
                                                 <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2z" />
                                             </svg>
                                         </div>
                                     @endif
                                     <div class="ml-4">
-                                        <a href="{{ route('admin.dresses.show', $dress) }}" class="text-sm font-medium text-white hover:text-yellow-500 transition-colors">
+                                        <a href="{{ route('admin.dresses.show', $dress) }}" class="text-sm font-medium text-bone hover:text-gold transition-colors">
                                             {{ $dress->name }}
                                         </a>
-                                        <div class="text-xs text-gray-500 mt-0.5">{{ Str::limit($dress->description, 40) }}</div>
+                                        <div class="text-xs text-bone-faint mt-0.5">{{ Str::limit($dress->description, 40) }}</div>
                                     </div>
                                 </div>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="text-sm text-gray-300">
+                                <div class="text-sm text-bone-dim">
                                     {{ $dress->categories->pluck('name')->join(', ') ?: 'No category' }}
                                 </div>
-                                <div class="text-xs text-gray-500">{{ $dress->display_sku }}</div>
+                                <div class="text-xs text-bone-faint font-numeric">{{ $dress->display_sku }}</div>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="text-sm font-semibold text-yellow-500">R{{ number_format($dress->price, 2) }}
+                                <div class="text-sm font-semibold text-gold font-numeric">R{{ number_format($dress->price, 2) }}
                                 </div>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <div class="flex flex-wrap gap-1">
                                     @foreach ($dress->sizes ?? [] as $size)
                                         <span
-                                            class="px-2 py-1 text-xs bg-gray-800 text-gray-300 rounded border border-gray-700">{{ $size }}</span>
+                                            class="px-2 py-1 text-xs bg-ink-raised2 text-bone-dim rounded border border-line">{{ $size }}</span>
                                     @endforeach
                                 </div>
                             </td>
@@ -171,17 +171,17 @@
                                     @method('PATCH')
                                     <select name="status"
                                         onchange="document.getElementById('status-form-{{ $dress->id }}').submit()"
-                                        class="text-xs rounded-lg border-0 bg-gray-800/50 text-gray-300 px-3 py-1.5 focus:ring-2 focus:ring-yellow-500/30 focus:outline-none
-                                    @if ($dress->status == 'active') text-green-400
-                                    @elseif($dress->status == 'draft') text-yellow-400
-                                    @else text-red-400 @endif">
+                                        class="text-xs rounded-lg border-0 bg-ink-raised2/50 text-bone-dim px-3 py-1.5 focus:ring-2 focus:ring-gold/30 focus:outline-none
+                                    @if ($dress->status == 'active') text-good
+                                    @elseif($dress->status == 'draft') text-gold-bright
+                                    @else text-bad @endif">
                                         <option value="draft" {{ $dress->status == 'draft' ? 'selected' : '' }}
-                                            class="text-gray-900">Draft</option>
+                                            class="text-ink">Draft</option>
                                         <option value="active" {{ $dress->status == 'active' ? 'selected' : '' }}
-                                            class="text-gray-900">Active</option>
+                                            class="text-ink">Active</option>
                                         <option value="out_of_stock"
                                             {{ $dress->status == 'out_of_stock' ? 'selected' : '' }}
-                                            class="text-gray-900">Out of Stock</option>
+                                            class="text-ink">Out of Stock</option>
                                     </select>
                                 </form>
 
@@ -190,8 +190,8 @@
                                     @csrf
                                     @method('PATCH')
                                     <button type="submit"
-                                        class="p-1.5 rounded-lg hover:bg-gray-800/50 transition-colors">
-                                        <svg class="w-4 h-4 {{ $dress->is_featured ? 'text-yellow-500' : 'text-gray-500' }}"
+                                        class="p-1.5 rounded-lg hover:bg-ink-raised2/50 transition-colors">
+                                        <svg class="w-4 h-4 {{ $dress->is_featured ? 'text-gold' : 'text-bone-faint' }}"
                                             fill="currentColor" viewBox="0 0 24 24">
                                             <path
                                                 d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
@@ -202,7 +202,7 @@
                             <td class="px-6 py-4 whitespace-nowrap text-sm">
                                 <div class="flex items-center space-x-3">
                                     <a href="{{ route('admin.dresses.show', $dress) }}"
-                                        class="text-gray-400 hover:text-yellow-500 transition-colors" title="View">
+                                        class="text-bone-dim hover:text-gold transition-colors" title="View">
                                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                                                 d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -211,7 +211,7 @@
                                         </svg>
                                     </a>
                                     <a href="{{ route('admin.dresses.edit', $dress) }}"
-                                        class="text-gray-400 hover:text-yellow-500 transition-colors" title="Edit">
+                                        class="text-bone-dim hover:text-gold transition-colors" title="Edit">
                                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                                                 d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
@@ -222,7 +222,7 @@
                                         onsubmit="return confirm('Are you sure you want to delete this dress?')">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="text-gray-400 hover:text-red-500 transition-colors"
+                                        <button type="submit" class="text-bone-dim hover:text-bad transition-colors"
                                             title="Delete">
                                             <svg class="w-5 h-5" fill="none" stroke="currentColor"
                                                 viewBox="0 0 24 24">
@@ -237,14 +237,14 @@
                     @empty
                         <tr>
                             <td colspan="6" class="px-6 py-12 text-center">
-                                <svg class="w-16 h-16 mx-auto text-gray-700" fill="currentColor" viewBox="0 0 24 24">
+                                <svg class="w-16 h-16 mx-auto text-bone-faint" fill="currentColor" viewBox="0 0 24 24">
                                     <path
                                         d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2z" />
                                 </svg>
-                                <p class="mt-4 text-gray-400 text-lg">No dresses found</p>
-                                <p class="text-gray-500 text-sm mt-1">Create your first dress to get started</p>
+                                <p class="mt-4 text-bone-dim text-lg">No dresses found</p>
+                                <p class="text-bone-faint text-sm mt-1">Create your first dress to get started</p>
                                 <a href="{{ route('admin.dresses.create') }}"
-                                    class="mt-6 inline-flex items-center px-4 py-2 bg-gradient-to-r from-yellow-500 to-yellow-600 text-gray-900 font-semibold rounded-lg hover:from-yellow-400 hover:to-yellow-500 transition-all duration-300">
+                                    class="mt-6 inline-flex items-center px-4 py-2 bg-gradient-to-r from-gold to-gold-dim text-ink font-semibold rounded-lg hover:from-gold-bright hover:to-gold transition-all duration-300">
                                     <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 24 24">
                                         <path d="M12 4v16m8-8H4" />
                                     </svg>
@@ -259,7 +259,7 @@
 
         <!-- Pagination -->
         @if ($dresses->hasPages())
-            <div class="px-6 py-4 border-t border-gray-800/50">
+            <div class="px-6 py-4 border-t border-line/50">
                 {{ $dresses->links() }}
             </div>
         @endif

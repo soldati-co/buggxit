@@ -6,10 +6,8 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\OrderController;
-use App\Http\Controllers\ContactController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\Api\CartApiController;
-use App\Http\Controllers\Api\CheckoutApiController;
 use App\Http\Controllers\Api\ContactApiController;
 use App\Http\Controllers\Api\DressApiController;
 use App\Http\Controllers\Api\HomeApiController;
@@ -17,6 +15,8 @@ use App\Http\Controllers\Api\OrderApiController;
 use App\Http\Controllers\Api\ProductApiController;
 use App\Http\Controllers\Admin\HeroSlideController;
 use App\Http\Controllers\ImageController;
+use App\Http\Controllers\PayfastController;
+use App\Http\Controllers\PayfastWebhookController;
 
 require __DIR__.'/auth.php';
 require __DIR__.'/admin.php';
@@ -41,7 +41,21 @@ Route::prefix('products')->name('products.')->group(function () {
 
 Route::prefix('checkout')->name('checkout.')->middleware('web')->group(function () {
     Route::get('/', [CheckoutController::class, 'index'])->name('index');
+    Route::post('/', [CheckoutController::class, 'store'])->name('store');
+    // No route-level 'signed' middleware: an authenticated owner must still be
+    // able to revisit this page later (e.g. from order history) after the
+    // signature has expired. The signature-or-ownership check happens inside
+    // CheckoutController::success() instead.
     Route::get('/success/{order}', [CheckoutController::class, 'success'])->name('success');
+});
+
+Route::prefix('payfast')->name('payfast.')->middleware('web')->group(function () {
+    // Same signature-or-ownership pattern as checkout.success — see PayfastController.
+    Route::get('/redirect/{order}', [PayfastController::class, 'redirect'])->name('redirect');
+    // Server-to-server ITN callback: no session/CSRF token, verified via
+    // PayfastService's signature + source-domain + confirmation checks
+    // instead (see the 'except' list in bootstrap/app.php).
+    Route::post('/notify', [PayfastWebhookController::class, 'handleItn'])->name('notify');
 });
 
 Route::middleware('auth')->group(function () {
@@ -54,8 +68,6 @@ Route::middleware('auth')->group(function () {
 
 
 // ================== API ROUTES ================== //
-
-Route::get('/api/dresses/{id}/image', [App\Http\Controllers\Admin\AdminDressController::class, 'getImage'])->name('api.dresses.image');
 
 Route::get('/images/{id}', [ImageController::class, 'show'])->name('api.image.show');
 
@@ -71,7 +83,6 @@ Route::prefix('api')->name('api.')->middleware(['web', 'throttle:60,1'])->group(
     Route::post('/cart/update', [CartApiController::class, 'update'])->name('cart.update');
     Route::post('/cart/remove', [CartApiController::class, 'remove'])->name('cart.remove');
 
-    Route::post('/checkout', [CheckoutApiController::class, 'store'])->name('checkout.store');
     Route::post('/contact', [ContactApiController::class, 'submit'])->name('contact.submit')->middleware('throttle:10,1');
 
     Route::get('/orders', [OrderApiController::class, 'index'])->name('orders.index')->middleware('auth');
@@ -79,12 +90,6 @@ Route::prefix('api')->name('api.')->middleware(['web', 'throttle:60,1'])->group(
 
     Route::get('/dresses', [DressApiController::class, 'index'])->name('dresses.index');
     Route::get('/dresses/{dress}', [DressApiController::class, 'show'])->name('dresses.show');
-
-    Route::middleware('admin.auth')->group(function () {
-        Route::post('/dresses', [DressApiController::class, 'store'])->name('dresses.store');
-        Route::put('/dresses/{dress}', [DressApiController::class, 'update'])->name('dresses.update');
-        Route::delete('/dresses/{dress}', [DressApiController::class, 'destroy'])->name('dresses.destroy');
-    });
 });
 
 // ================== HEALTH CHECKER ROUTE ================== //

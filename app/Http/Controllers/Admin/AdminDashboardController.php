@@ -18,6 +18,7 @@ class AdminDashboardController extends Controller
     public function index()
     {
         // Safety net: if the stored admin ID is not a valid UUID, force logout and redirect to login
+        // (the admin.auth middleware already guarantees a check() pass by this point)
         $adminId = Auth::guard('admin')->id();
         if ($adminId && !Str::isUuid($adminId)) {
             Auth::guard('admin')->logout();
@@ -25,11 +26,6 @@ class AdminDashboardController extends Controller
             session()->regenerateToken();
             return redirect()->route('admin.login')
                 ->withErrors('Your session was invalid. Please log in again.');
-        }
-
-        // Regular authentication check
-        if (!Auth::guard('admin')->check()) {
-            return redirect()->route('admin.login');
         }
 
         // Cache overall stats (5 minutes)
@@ -91,10 +87,6 @@ class AdminDashboardController extends Controller
      */
     public function clearCache()
     {
-        if (!Auth::guard('admin')->check()) {
-            return redirect()->route('admin.login');
-        }
-
         Cache::forget('admin_dashboard_stats');
         
         return back()->with('success', 'Dashboard cache cleared successfully!');

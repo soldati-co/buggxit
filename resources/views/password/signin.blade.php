@@ -5,35 +5,35 @@
         style="contain: layout paint;">
         <!-- Decorative elements (same as admin) -->
         <div class="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
-            <div class="absolute -top-40 -right-40 w-80 h-80 bg-yellow-500/5 rounded-full blur-3xl"></div>
-            <div class="absolute -bottom-40 -left-40 w-80 h-80 bg-yellow-500/3 rounded-full blur-3xl"></div>
+            <div class="absolute -top-40 -right-40 w-80 h-80 bg-gold/5 rounded-full blur-3xl"></div>
+            <div class="absolute -bottom-40 -left-40 w-80 h-80 bg-gold/3 rounded-full blur-3xl"></div>
         </div>
-        <div class="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-yellow-500/30 to-transparent">
+        <div class="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-gold/30 to-transparent">
         </div>
 
         <div class="w-full max-w-md relative z-10" style="contain: layout style;">
             <!-- Card -->
-            <div class="bg-black/90 backdrop-blur-sm border border-gray-800 rounded-xl shadow-lg overflow-hidden">
+            <div class="bg-ink-raised/90 backdrop-blur-sm border border-line rounded-xl shadow-lg overflow-hidden">
                 <!-- Card Header -->
                 <div
-                    class="px-8 pt-8 pb-6 text-center border-b border-gray-800/50 bg-gradient-to-b from-gray-900/20 to-transparent">
+                    class="px-8 pt-8 pb-6 text-center border-b border-line/50 bg-gradient-to-b from-ink-raised2/20 to-transparent">
                     <div class="relative inline-block mb-4">
-                        <div class="absolute inset-0 bg-yellow-500/20 rounded-full blur-md"></div>
+                        <div class="absolute inset-0 bg-gold/20 rounded-full blur-md"></div>
                         <div
-                            class="relative p-4 bg-gradient-to-br from-gray-900 to-black border border-gray-800 rounded-full">
+                            class="relative p-4 bg-gradient-to-br from-ink-raised2 to-ink-raised border border-line rounded-full">
                             <!-- User icon (inline SVG) -->
-                            <svg class="w-6 h-6 text-yellow-500" fill="currentColor" viewBox="0 0 24 24">
+                            <svg class="w-6 h-6 text-gold" fill="currentColor" viewBox="0 0 24 24">
                                 <path
                                     d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v1.2c0 .66.54 1.2 1.2 1.2h16.8c.66 0 1.2-.54 1.2-1.2v-1.2c0-3.2-6.4-4.8-9.6-4.8z" />
                             </svg>
                         </div>
                     </div>
-                    <h2 class="text-2xl font-bold text-white mb-2">Welcome Back</h2>
-                    <p class="text-sm text-gray-400">Sign in to your BUGGXIT account</p>
+                    <h2 class="text-2xl font-bold text-bone mb-2">Welcome Back</h2>
+                    <p class="text-sm text-bone-dim">Sign in to your BUGGXIT account</p>
 
                     @if (session('status'))
-                        <div class="mt-4 p-3 bg-green-500/10 border border-green-500/30 rounded-lg">
-                            <p class="text-sm text-green-400">{{ session('status') }}</p>
+                        <div class="mt-4 p-3 bg-good/10 border border-good/30 rounded-lg">
+                            <p class="text-sm text-good">{{ session('status') }}</p>
                         </div>
                     @endif
                 </div>
@@ -44,8 +44,8 @@
 
                     <!-- Email -->
                     <div class="mb-6">
-                        <label for="email" class="block text-sm font-medium text-gray-300 mb-2 flex items-center">
-                            <svg class="w-4 h-4 mr-2 text-yellow-500" fill="currentColor" viewBox="0 0 24 24">
+                        <label for="email" class="block text-sm font-medium text-bone-dim mb-2 flex items-center">
+                            <svg class="w-4 h-4 mr-2 text-gold" fill="currentColor" viewBox="0 0 24 24">
                                 <path
                                     d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" />
                             </svg>
@@ -54,9 +54,9 @@
                         <div class="relative">
                             <input id="email" type="email" name="email" value="{{ old('email') }}" required
                                 autofocus autocomplete="email"
-                                class="w-full px-4 py-3 pl-12 bg-gray-800/50 border border-gray-700 rounded-lg text-white text-sm focus:outline-none focus:border-yellow-500 focus:ring-1 focus:ring-yellow-500/30 transition-all duration-200"
+                                class="w-full px-4 py-3 pl-12 bg-ink-raised2/50 border border-line rounded-lg text-bone text-sm focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold/30 transition-all duration-200"
                                 placeholder="your.email@example.com">
-                            <div class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
+                            <div class="absolute left-4 top-1/2 -translate-y-1/2 text-bone-dim">
                                 <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
                                     <path
                                         d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5s2.5 1.12 2.5 2.5S13.38 11.5 12 11.5z" />
@@ -64,7 +64,7 @@
                             </div>
                         </div>
                         @error('email')
-                            <p class="mt-2 text-sm text-red-400 flex items-center">
+                            <p class="mt-2 text-sm text-bad flex items-center">
                                 <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 24 24">
                                     <path
                                         d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" />
@@ -76,8 +76,8 @@
 
                     <!-- Password -->
                     <div class="mb-6">
-                        <label for="password" class="block text-sm font-medium text-gray-300 mb-2 flex items-center">
-                            <svg class="w-4 h-4 mr-2 text-yellow-500" fill="currentColor" viewBox="0 0 24 24">
+                        <label for="password" class="block text-sm font-medium text-bone-dim mb-2 flex items-center">
+                            <svg class="w-4 h-4 mr-2 text-gold" fill="currentColor" viewBox="0 0 24 24">
                                 <path
                                     d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z" />
                             </svg>
@@ -85,16 +85,16 @@
                         </label>
                         <div class="relative">
                             <input id="password" type="password" name="password" required autocomplete="current-password"
-                                class="w-full px-4 py-3 pl-12 bg-gray-800/50 border border-gray-700 rounded-lg text-white text-sm focus:outline-none focus:border-yellow-500 focus:ring-1 focus:ring-yellow-500/30 transition-all duration-200 pr-12"
+                                class="w-full px-4 py-3 pl-12 bg-ink-raised2/50 border border-line rounded-lg text-bone text-sm focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold/30 transition-all duration-200 pr-12"
                                 placeholder="••••••••">
-                            <div class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
+                            <div class="absolute left-4 top-1/2 -translate-y-1/2 text-bone-dim">
                                 <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
                                     <path
                                         d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2z" />
                                 </svg>
                             </div>
                             <button type="button" onclick="togglePassword()"
-                                class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-yellow-500 transition-colors duration-200"
+                                class="absolute right-4 top-1/2 -translate-y-1/2 text-bone-dim hover:text-gold transition-colors duration-200"
                                 aria-label="Toggle password visibility">
                                 <svg id="toggleIcon" class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
                                     <path
@@ -103,7 +103,7 @@
                             </button>
                         </div>
                         @error('password')
-                            <p class="mt-2 text-sm text-red-400 flex items-center">
+                            <p class="mt-2 text-sm text-bad flex items-center">
                                 <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 24 24">
                                     <path
                                         d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" />
@@ -119,19 +119,19 @@
                             <input type="checkbox" name="remember" id="remember" class="sr-only"
                                 {{ old('remember') ? 'checked' : '' }}>
                             <div id="checkbox-visual"
-                                class="w-5 h-5 border border-gray-700 rounded-md bg-gray-800/50 group-hover:border-yellow-500 transition-colors duration-200 flex items-center justify-center mr-3">
-                                <svg class="w-3 h-3 text-yellow-500 opacity-0 transition-opacity duration-200"
+                                class="w-5 h-5 border border-line rounded-md bg-ink-raised2/50 group-hover:border-gold transition-colors duration-200 flex items-center justify-center mr-3">
+                                <svg class="w-3 h-3 text-gold opacity-0 transition-opacity duration-200"
                                     fill="currentColor" viewBox="0 0 24 24">
                                     <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
                                 </svg>
                             </div>
-                            <span class="text-sm text-gray-400 group-hover:text-gray-300 transition-colors duration-200">
+                            <span class="text-sm text-bone-dim group-hover:text-bone-dim transition-colors duration-200">
                                 Remember me for 30 days
                             </span>
                         </label>
 
                         <a href="{{ route('password.forgot') }}"
-                            class="text-sm text-gray-400 hover:text-yellow-500 transition-colors duration-200 flex items-center group">
+                            class="text-sm text-bone-dim hover:text-gold transition-colors duration-200 flex items-center group">
                             <svg class="w-4 h-4 mr-2 group-hover:scale-110 transition-transform duration-200"
                                 fill="currentColor" viewBox="0 0 24 24">
                                 <path
@@ -143,7 +143,7 @@
 
                     <!-- Submit Button -->
                     <button type="submit"
-                        class="w-full px-6 py-3.5 bg-gradient-to-r from-yellow-500 to-yellow-600 text-gray-900 font-semibold rounded-lg hover:from-yellow-400 hover:to-yellow-500 transition-all duration-300 flex items-center justify-center group">
+                        class="w-full px-6 py-3.5 bg-gradient-to-r from-gold to-gold-dim text-ink font-semibold rounded-lg hover:from-gold-bright hover:to-gold transition-all duration-300 flex items-center justify-center group">
                         <span class="mr-3">Sign In</span>
                         <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" fill="currentColor"
                             viewBox="0 0 24 24">
@@ -152,24 +152,24 @@
                     </button>
 
                     @if ($errors->any())
-                        <div class="mt-6 p-4 bg-red-500/10 border border-red-500/30 rounded-lg">
+                        <div class="mt-6 p-4 bg-bad/10 border border-bad/30 rounded-lg">
                             <div class="flex items-center">
-                                <svg class="w-5 h-5 text-red-400 mr-3" fill="currentColor" viewBox="0 0 24 24">
+                                <svg class="w-5 h-5 text-bad mr-3" fill="currentColor" viewBox="0 0 24 24">
                                     <path
                                         d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" />
                                 </svg>
                                 <div>
-                                    <p class="text-sm text-red-400 font-medium">Authentication failed</p>
-                                    <p class="text-xs text-red-300 mt-1">Please check your credentials and try again.</p>
+                                    <p class="text-sm text-bad font-medium">Authentication failed</p>
+                                    <p class="text-xs text-bad mt-1">Please check your credentials and try again.</p>
                                 </div>
                             </div>
                         </div>
                     @endif
 
                     <!-- Back to store -->
-                    <div class="mt-8 pt-6 border-t border-gray-800/50 text-center">
+                    <div class="mt-8 pt-6 border-t border-line/50 text-center">
                         <a href="{{ route('home') }}"
-                            class="inline-flex items-center text-sm text-gray-400 hover:text-yellow-500 transition-colors duration-200 group">
+                            class="inline-flex items-center text-sm text-bone-dim hover:text-gold transition-colors duration-200 group">
                             <svg class="w-4 h-4 mr-2 group-hover:-translate-x-1 transition-transform duration-300"
                                 fill="currentColor" viewBox="0 0 24 24">
                                 <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z" />
@@ -181,14 +181,14 @@
 
                 <!-- Security Note (optional) -->
                 <div class="px-8 pb-6">
-                    <div class="bg-gray-900/30 border border-gray-800/50 rounded-lg p-4">
+                    <div class="bg-ink-raised2/30 border border-line/50 rounded-lg p-4">
                         <div class="flex items-start">
-                            <svg class="w-5 h-5 text-yellow-500 mt-1 mr-3" fill="currentColor" viewBox="0 0 24 24">
+                            <svg class="w-5 h-5 text-gold mt-1 mr-3" fill="currentColor" viewBox="0 0 24 24">
                                 <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z" />
                             </svg>
                             <div>
-                                <p class="text-sm text-gray-300 font-medium mb-1">Secure Access</p>
-                                <p class="text-xs text-gray-400">Your personal data is protected with industry‑standard
+                                <p class="text-sm text-bone-dim font-medium mb-1">Secure Access</p>
+                                <p class="text-xs text-bone-dim">Your personal data is protected with industry‑standard
                                     encryption.</p>
                             </div>
                         </div>
@@ -198,9 +198,9 @@
 
             <!-- Create Account Link -->
             <div class="mt-6 text-center">
-                <p class="text-sm text-gray-400">
+                <p class="text-sm text-bone-dim">
                     Don't have an account?
-                    <a href="{{ route('register') }}" class="text-yellow-500 hover:text-yellow-400 font-medium">Create one
+                    <a href="{{ route('register') }}" class="text-gold hover:text-gold-bright font-medium">Create one
                         here</a>
                 </p>
             </div>
@@ -230,16 +230,16 @@
 
             if (checkbox.checked) {
                 checkIcon.style.opacity = '1';
-                checkboxVisual.classList.add('border-yellow-500');
+                checkboxVisual.classList.add('border-gold');
             }
 
             checkbox.addEventListener('change', function() {
                 if (this.checked) {
                     checkIcon.style.opacity = '1';
-                    checkboxVisual.classList.add('border-yellow-500');
+                    checkboxVisual.classList.add('border-gold');
                 } else {
                     checkIcon.style.opacity = '0';
-                    checkboxVisual.classList.remove('border-yellow-500');
+                    checkboxVisual.classList.remove('border-gold');
                 }
             });
 

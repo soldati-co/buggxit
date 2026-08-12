@@ -2,8 +2,8 @@
 
 @section('content')
     <div class="min-h-screen flex items-center justify-center px-4 py-8 bg-[#0a0a0a]">
-        <div class="w-full max-w-md bg-black/90 border border-gray-800 rounded-xl p-8">
-            <h2 class="text-2xl font-bold text-white mb-6">{{ __('Reset Password') }}</h2>
+        <div class="w-full max-w-md bg-ink-raised/90 border border-line rounded-xl p-8">
+            <h2 class="text-2xl font-bold text-bone mb-6">{{ __('Reset Password') }}</h2>
 
             <form method="POST" action="{{ route('password.store') }}">
                 @csrf

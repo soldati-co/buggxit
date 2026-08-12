@@ -22,14 +22,14 @@
 @endphp
 
 <a href="{{ route('cart.index') }}"
-    {{ $attributes->merge(['class' => 'flex items-center text-gray-300 hover:text-yellow-500 transition-colors duration-200']) }}>
+    {{ $attributes->merge(['class' => 'flex items-center text-bone-dim hover:text-gold transition-colors duration-200']) }}>
     <div class="relative">
         <i class="fas fa-shopping-bag {{ $iconSizeClasses }}"></i>
 
         <!-- Cart Counter Badge -->
         @if ($count > 0)
             <span
-                class="absolute {{ $counterSizeClasses }} bg-yellow-500 text-gray-900 rounded-full flex items-center justify-center font-bold transform hover:scale-110 transition-transform duration-200">
+                class="absolute {{ $counterSizeClasses }} bg-gold text-ink rounded-full flex items-center justify-center font-bold transform hover:scale-110 transition-transform duration-200">
                 {{ $count > 99 ? '99+' : $count }}
             </span>
         @endif

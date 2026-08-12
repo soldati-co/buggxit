@@ -33,65 +33,67 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::post('/password/reset', [AdminPasswordResetController::class, 'reset'])
         ->name('password.update');
 
-    // Protected routes - manually check auth in controllers
-    Route::get('/dashboard', [AdminDashboardController::class, 'index'])
-        ->name('dashboard');
+    // Protected routes - enforced by the admin.auth middleware group below
+    Route::middleware('admin.auth')->group(function () {
+        Route::get('/dashboard', [AdminDashboardController::class, 'index'])
+            ->name('dashboard');
 
-    Route::post('/dashboard/clear-cache', [AdminDashboardController::class, 'clearCache'])
-        ->name('dashboard.clear-cache');
+        Route::post('/dashboard/clear-cache', [AdminDashboardController::class, 'clearCache'])
+            ->name('dashboard.clear-cache');
 
-    // ===== Category Management (fully dynamic) =====
-    Route::resource('categories', AdminCategoryController::class)->except(['show']);
+        // ===== Category Management (fully dynamic) =====
+        Route::resource('categories', AdminCategoryController::class)->except(['show']);
 
-    // ===== Dress Management =====
-    Route::prefix('dresses')->name('dresses.')->group(function () {
-        Route::get('/', [AdminDressController::class, 'index'])
-            ->name('index');
-        
-        Route::get('/create', [AdminDressController::class, 'create'])
-            ->name('create');
-        
-        Route::post('/', [AdminDressController::class, 'store'])
-            ->name('store');
-        
-        Route::get('/{dress}', [AdminDressController::class, 'show'])
-            ->name('show');
-        
-        Route::get('/{dress}/edit', [AdminDressController::class, 'edit'])
-            ->name('edit');
-        
-        Route::put('/{dress}', [AdminDressController::class, 'update'])
-            ->name('update');
-        
-        Route::delete('/{dress}', [AdminDressController::class, 'destroy'])
-            ->name('destroy');
-        
-        Route::patch('/{dress}/toggle-featured', [AdminDressController::class, 'toggleFeatured'])
-            ->name('toggle-featured');
-        
-        Route::patch('/{dress}/update-status', [AdminDressController::class, 'updateStatus'])
-            ->name('update-status');
+        // ===== Dress Management =====
+        Route::prefix('dresses')->name('dresses.')->group(function () {
+            Route::get('/', [AdminDressController::class, 'index'])
+                ->name('index');
+
+            Route::get('/create', [AdminDressController::class, 'create'])
+                ->name('create');
+
+            Route::post('/', [AdminDressController::class, 'store'])
+                ->name('store');
+
+            Route::get('/{dress}', [AdminDressController::class, 'show'])
+                ->name('show');
+
+            Route::get('/{dress}/edit', [AdminDressController::class, 'edit'])
+                ->name('edit');
+
+            Route::put('/{dress}', [AdminDressController::class, 'update'])
+                ->name('update');
+
+            Route::delete('/{dress}', [AdminDressController::class, 'destroy'])
+                ->name('destroy');
+
+            Route::patch('/{dress}/toggle-featured', [AdminDressController::class, 'toggleFeatured'])
+                ->name('toggle-featured');
+
+            Route::patch('/{dress}/update-status', [AdminDressController::class, 'updateStatus'])
+                ->name('update-status');
+        });
+
+        // ===== Order Management =====
+        Route::prefix('orders')->name('orders.')->group(function () {
+            Route::get('/', [AdminOrderController::class, 'index'])->name('index');
+            Route::get('/{order}', [AdminOrderController::class, 'show'])->name('show');
+            Route::patch('/{order}/status', [AdminOrderController::class, 'updateStatus'])->name('update-status');
+        });
+
+        // ===== Hero Slides =====
+        Route::prefix('hero-slides')->name('hero-slides.')->group(function () {
+            Route::get('/', [HeroSlideController::class, 'index'])->name('index');
+            Route::get('/create', [HeroSlideController::class, 'create'])->name('create');
+            Route::post('/', [HeroSlideController::class, 'store'])->name('store');
+            Route::get('/{heroSlide}/edit', [HeroSlideController::class, 'edit'])->name('edit');
+            Route::put('/{heroSlide}', [HeroSlideController::class, 'update'])->name('update');
+            Route::delete('/{heroSlide}', [HeroSlideController::class, 'destroy'])->name('destroy');
+            Route::post('/update-order', [HeroSlideController::class, 'updateOrder'])->name('update-order');
+        });
+
+        // ===== Logout =====
+        Route::post('/logout', [AdminAuthController::class, 'logout'])
+            ->name('logout');
     });
-
-    // ===== Order Management =====
-    Route::prefix('orders')->name('orders.')->group(function () {
-        Route::get('/', [AdminOrderController::class, 'index'])->name('index');
-        Route::get('/{order}', [AdminOrderController::class, 'show'])->name('show');
-        Route::patch('/{order}/status', [AdminOrderController::class, 'updateStatus'])->name('update-status');
-    });
-
-    // ===== Hero Slides =====
-    Route::prefix('hero-slides')->name('hero-slides.')->group(function () {
-        Route::get('/', [HeroSlideController::class, 'index'])->name('index');
-        Route::get('/create', [HeroSlideController::class, 'create'])->name('create');
-        Route::post('/', [HeroSlideController::class, 'store'])->name('store');
-        Route::get('/{heroSlide}/edit', [HeroSlideController::class, 'edit'])->name('edit');
-        Route::put('/{heroSlide}', [HeroSlideController::class, 'update'])->name('update');
-        Route::delete('/{heroSlide}', [HeroSlideController::class, 'destroy'])->name('destroy');
-        Route::post('/update-order', [HeroSlideController::class, 'updateOrder'])->name('update-order');
-    });
-
-    // ===== Logout =====
-    Route::post('/logout', [AdminAuthController::class, 'logout'])
-        ->name('logout');
 });

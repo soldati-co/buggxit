@@ -2,7 +2,10 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * @property int $id
@@ -41,8 +44,13 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Address extends Model
 {
+    use HasFactory, HasUuids, SoftDeletes;
+
+    public $incrementing = false;
+    protected $keyType = 'string';
+
     protected $fillable = [
-        'user_id', 'address_line1', 'address_line2', 'city',
+        'user_id', 'address_type', 'address_line1', 'address_line2', 'city',
         'state', 'postal_code', 'country', 'phone', 'is_default'
     ];
 

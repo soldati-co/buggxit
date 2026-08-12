@@ -145,15 +145,15 @@
             <div class="container-wide">
                 <!-- THE BANNER DESIGN YOU LIKED -->
                 <div class="flex flex-col items-center justify-center text-center">
-                    <h1 class="text-3xl md:text-4xl font-bold text-white mb-2 header-glow">
-                        <span class="text-yellow-500">Admin</span> Portal Access
+                    <h1 class="text-3xl md:text-4xl font-bold text-bone mb-2 header-glow">
+                        <span class="text-gold">Admin</span> Portal Access
                     </h1>
-                    <p class="text-gray-400 text-sm md:text-base">
+                    <p class="text-bone-dim text-sm md:text-base">
                         Secure access to BUGGXIT admin dashboard
                     </p>
 
                     <!-- Optional: Add a subtle decorative line -->
-                    <div class="mt-4 w-24 h-px bg-gradient-to-r from-transparent via-yellow-500/50 to-transparent">
+                    <div class="mt-4 w-24 h-px bg-gradient-to-r from-transparent via-gold/50 to-transparent">
                     </div>
                 </div>
             </div>

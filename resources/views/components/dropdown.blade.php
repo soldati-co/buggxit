@@ -1,7 +1,7 @@
 @props([
     'align' => 'right',
     'width' => '48',
-    'contentClasses' => 'py-1 bg-gray-900 border border-gray-800',
+    'contentClasses' => 'py-1 bg-ink-raised2 border border-line',
     'triggerType' => 'click', // 'click' or 'hover'
 ])
 
@@ -41,7 +41,7 @@
             x-transition:leave-end="transform opacity-0 scale-95" @endif
         class="absolute z-50 mt-2 {{ $width }} rounded-md shadow-lg {{ $alignmentClasses }}" style="display: none;"
         @if ($triggerType === 'click') @click="open = false" @endif>
-        <div class="rounded-md ring-1 ring-black ring-opacity-5 {{ $contentClasses }}">
+        <div class="rounded-md ring-1 ring-ink-raised ring-opacity-5 {{ $contentClasses }}">
             {{ $content }}
         </div>
     </div>

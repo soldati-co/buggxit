@@ -76,6 +76,7 @@ namespace App\Models;
  * @method static Builder<static>|Dress withoutTrashed()
  * @mixin \Eloquent
  */
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
@@ -86,7 +87,7 @@ use Illuminate\Support\Str;
 
 class Dress extends Model
 {
-    use SoftDeletes;
+    use HasFactory, SoftDeletes;
 
     // ---------- UUID Primary Key ----------
     public $incrementing = false;

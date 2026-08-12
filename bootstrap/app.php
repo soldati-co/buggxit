@@ -28,6 +28,13 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'admin.auth' => AdminAuthenticate::class,
         ]);
+
+        // PayFast's ITN webhook is a server-to-server POST with no Laravel
+        // session/CSRF token — verified instead via PayfastService's
+        // signature + source-domain + confirmation checks (see routes/web.php).
+        $middleware->validateCsrfTokens(except: [
+            'payfast/notify',
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
 
 /**
@@ -44,6 +45,8 @@ use Illuminate\Support\Str;
  */
 class HeroSlide extends Model
 {
+    use SoftDeletes;
+
     // Use UUID primary key
     public $incrementing = false;
     protected $keyType = 'string';

@@ -33,14 +33,14 @@
     <!-- Custom Styles for Consistent Theme -->
     <style>
         :root {
-            --primary-bg: #0a0a0a;
-            --secondary-bg: #111111;
-            --accent-gold: #D4AF37;
-            --accent-gold-light: #F4E4A6;
-            --text-primary: #ffffff;
-            --text-secondary: #d1d5db;
-            --text-muted: #9ca3af;
-            --border-dark: #1f2937;
+            --primary-bg: #0b0908;
+            --secondary-bg: #17130f;
+            --accent-gold: #b8873f;
+            --accent-gold-light: #e3b968;
+            --text-primary: #f3ede3;
+            --text-secondary: #a89a87;
+            --text-muted: #6f6455;
+            --border-dark: #2e2620;
         }
 
         html,
@@ -53,11 +53,24 @@
 
         body {
             font-family: 'Manrope', sans-serif;
-            background: linear-gradient(135deg, #0a0a0a 0%, #111111 100%);
+            background: linear-gradient(160deg, #0b0908 0%, #17130f 100%);
             color: var(--text-primary);
             display: flex;
             flex-direction: column;
             min-height: 100vh;
+        }
+
+        /* Fraunces carries every heading and anything styled as a product/brand
+           name — the single highest-leverage move for the couture-editorial
+           feel. Individual pages can still opt out with font-sans if needed. */
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Fraunces Variable', Georgia, serif;
+            font-weight: 600;
+        }
+
+        .font-numeric {
+            font-family: 'JetBrains Mono', ui-monospace, monospace;
+            font-variant-numeric: tabular-nums;
         }
 
         /* Main content wrapper that pushes footer down */
@@ -130,7 +143,7 @@
 
         <!-- Page Heading -->
         @hasSection('header')
-            <header class="bg-gradient-to-r from-gray-900 to-black border-b border-yellow-900/30 w-full">
+            <header class="bg-gradient-to-r from-ink-raised to-ink border-b border-gold/20 w-full">
                 <div class="container-wide py-8">
                     @yield('header')
                 </div>

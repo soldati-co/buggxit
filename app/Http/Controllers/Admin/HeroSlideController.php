@@ -4,40 +4,32 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\HeroSlide;
+use App\Services\ImageStorageService;
 use Illuminate\Http\Request;
 use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Gd\Driver;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class HeroSlideController extends Controller
 {
-    private function checkAuth()
+    public function __construct(private ImageStorageService $images)
     {
-        if (!Auth::guard('admin')->check()) {
-            return redirect()->route('admin.login');
-        }
-        return null;
     }
 
     public function index()
     {
-        if ($redirect = $this->checkAuth()) return $redirect;
         $slides = HeroSlide::ordered()->get();
         return view('admin.hero-slides.index', compact('slides'));
     }
 
     public function create()
     {
-        if ($redirect = $this->checkAuth()) return $redirect;
         return view('admin.hero-slides.create');
     }
 
     public function store(Request $request)
     {
-        if ($redirect = $this->checkAuth()) return $redirect;
-
         $validated = $request->validate([
             'title'      => 'nullable|string|max:255',
             'headline'   => 'nullable|string|max:255',
@@ -53,10 +45,9 @@ class HeroSlideController extends Controller
         try {
             // Process image using Intervention v4
             $manager = new ImageManager(new Driver());
-            $image = $manager->read($request->file('image'))
+            $binary = (string) $manager->read($request->file('image'))
                 ->cover(1920, 1080)
                 ->toWebp(80);                    // quality 80
-            $encoded = (string) $image;           // get binary string
 
             // Create slide
             $slide = HeroSlide::create([
@@ -70,13 +61,11 @@ class HeroSlideController extends Controller
                 'is_active'  => $request->boolean('is_active', true),
             ]);
 
-            // Save image binary in polymorphic table
-            $slide->image()->create([
-                'image_data' => $encoded,
-                'image_mime' => 'image/webp',
-                'collection' => 'hero',
-                'sort_order' => 0,
-            ]);
+            // Save image binary in polymorphic table (base64-encoded via
+            // ImageStorageService, matching what ImageController::show()
+            // expects to base64_decode() — see AdminDressController for the
+            // same invariant on the dress-image write path)
+            $this->images->storeFromBinary($slide, $binary, 'image/webp', 'hero');
 
             Log::info('HeroSlide created with DB image', ['id' => $slide->id]);
 
@@ -90,14 +79,11 @@ class HeroSlideController extends Controller
 
     public function edit(HeroSlide $heroSlide)
     {
-        if ($redirect = $this->checkAuth()) return $redirect;
         return view('admin.hero-slides.edit', compact('heroSlide'));
     }
 
     public function update(Request $request, HeroSlide $heroSlide)
     {
-        if ($redirect = $this->checkAuth()) return $redirect;
-
         $validated = $request->validate([
             'title'      => 'nullable|string|max:255',
             'headline'   => 'nullable|string|max:255',
@@ -123,17 +109,11 @@ class HeroSlideController extends Controller
 
                 // Process new image
                 $manager = new ImageManager(new Driver());
-                $newImage = $manager->read($request->file('image'))
+                $binary = (string) $manager->read($request->file('image'))
                     ->cover(1920, 1080)
                     ->toWebp(80);
-                $encoded = (string) $newImage;
 
-                $heroSlide->image()->create([
-                    'image_data' => $encoded,
-                    'image_mime' => 'image/webp',
-                    'collection' => 'hero',
-                    'sort_order' => 0,
-                ]);
+                $this->images->storeFromBinary($heroSlide, $binary, 'image/webp', 'hero');
             }
 
             $heroSlide->update($data);
@@ -149,8 +129,6 @@ class HeroSlideController extends Controller
 
     public function destroy(HeroSlide $heroSlide)
     {
-        if ($redirect = $this->checkAuth()) return $redirect;
-
         try {
             // Delete image record (binary removed from DB)
             $heroSlide->image()->delete();
@@ -171,10 +149,6 @@ class HeroSlideController extends Controller
      */
     public function updateOrder(Request $request)
     {
-        if (!Auth::guard('admin')->check()) {
-            return response()->json(['message' => 'Unauthenticated.'], 401);
-        }
-
         $validated = $request->validate([
             'order' => 'required|array',
             'order.*.id' => 'required|exists:hero_slides,id',

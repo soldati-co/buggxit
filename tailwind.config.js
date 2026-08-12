@@ -12,7 +12,34 @@ export default {
     theme: {
         extend: {
             fontFamily: {
-                sans: ['Figtree', ...defaultTheme.fontFamily.sans],
+                sans: ['Manrope', ...defaultTheme.fontFamily.sans],
+                display: ['"Fraunces Variable"', 'Georgia', 'serif'],
+                mono: ['"JetBrains Mono"', ...defaultTheme.fontFamily.mono],
+            },
+            colors: {
+                ink: {
+                    DEFAULT: '#0b0908',
+                    raised: '#17130f',
+                    raised2: '#1e1811',
+                },
+                line: {
+                    DEFAULT: '#2e2620',
+                    soft: '#211b16',
+                },
+                gold: {
+                    dim: '#8a6530',
+                    DEFAULT: '#b8873f',
+                    bright: '#e3b968',
+                },
+                bone: {
+                    DEFAULT: '#f3ede3',
+                    dim: '#a89a87',
+                    faint: '#6f6455',
+                },
+                good: '#7c9473',
+                warn: '#c99a4a',
+                bad: '#b0503a',
+                info: '#6b8299',
             },
             screens: {
                 'sm': '640px',

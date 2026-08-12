@@ -1,13 +1,13 @@
 <nav x-data="{ mobileMenuOpen: false, accountOpen: false }"
-    class="fixed z-50 w-full select-none top-0 bg-black/90 backdrop-blur-sm border-b border-gray-800">
+    class="fixed z-50 w-full select-none top-0 bg-ink-raised/90 backdrop-blur-sm border-b border-line">
 
     <!-- Decorative gradient line -->
     <div
-        class="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-yellow-500/30 to-transparent pointer-events-none">
+        class="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-gold/30 to-transparent pointer-events-none">
     </div>
 
     <!-- Glowing orb - fixed with pointer-events-none -->
-    <div class="absolute -top-10 left-1/4 w-40 h-40 bg-yellow-500/5 rounded-full blur-3xl pointer-events-none"></div>
+    <div class="absolute -top-10 left-1/4 w-40 h-40 bg-gold/5 rounded-full blur-3xl pointer-events-none"></div>
 
     <div class="container-wide px-4 sm:px-6 lg:px-8 relative z-10">
         <div class="flex items-center justify-between h-16">
@@ -24,8 +24,8 @@
                     <a href="{{ route($item['route']) }}"
                         class="px-3 py-2.5 text-sm font-medium whitespace-nowrap transition-all duration-300 relative z-30
                               {{ request()->routeIs($item['route'])
-                                  ? 'text-yellow-500 hover:text-yellow-300 hover:bg-gray-800/50'
-                                  : 'text-gray-400 hover:text-yellow-500 hover:bg-gray-800/50' }}
+                                  ? 'text-gold hover:text-gold-bright hover:bg-ink-raised2/50'
+                                  : 'text-bone-dim hover:text-gold hover:bg-ink-raised2/50' }}
                               rounded-lg">
                         {{ $item['label'] }}
                     </a>
@@ -36,20 +36,20 @@
             <div class="flex items-center justify-end flex-1 space-x-3 relative z-20">
                 <!-- Search Icon -->
                 <button
-                    class="p-2.5 text-gray-400 hover:text-yellow-500 hover:bg-gray-800/50 rounded-full transition-all duration-300 group">
+                    class="p-2.5 text-bone-dim hover:text-gold hover:bg-ink-raised2/50 rounded-full transition-all duration-300 group">
                     <i class="fas fa-search text-lg group-hover:scale-110"></i>
                 </button>
 
                 <!-- Cart Icon -->
                 <div class="relative">
                     <x-cart-icon :count="$cartCount ?? 0" size="md"
-                        class="p-2.5 text-gray-400 hover:text-yellow-500 hover:bg-gray-800/50 rounded-full transition-all duration-300 group" />
+                        class="p-2.5 text-bone-dim hover:text-gold hover:bg-ink-raised2/50 rounded-full transition-all duration-300 group" />
                 </div>
 
                 <!-- Desktop Account Dropdown -->
                 <div class="hidden md:block relative" x-data="{ open: false }">
                     <button @click="open = !open"
-                        class="p-2.5 text-gray-400 hover:text-yellow-500 hover:bg-gray-800/50 transition-all duration-300 rounded-full group relative z-30">
+                        class="p-2.5 text-bone-dim hover:text-gold hover:bg-ink-raised2/50 transition-all duration-300 rounded-full group relative z-30">
                         <x-account-icon class="group-hover:scale-110 transition-transform duration-300" />
                     </button>
 
@@ -59,36 +59,36 @@
                         x-transition:leave="transition ease-in duration-150"
                         x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-95"
                         @click.away="open = false"
-                        class="absolute right-0 mt-2 w-56 rounded-lg shadow-xl bg-black/90 backdrop-blur-sm border border-gray-800 z-50 overflow-hidden">
+                        class="absolute right-0 mt-2 w-56 rounded-lg shadow-xl bg-ink-raised/90 backdrop-blur-sm border border-line z-50 overflow-hidden">
                         <!-- Decorative gradient line -->
                         <div
-                            class="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-yellow-500/30 to-transparent pointer-events-none">
+                            class="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-gold/30 to-transparent pointer-events-none">
                         </div>
 
                         @auth
                             <div
-                                class="px-4 py-3 border-b border-gray-800/50 bg-gradient-to-r from-gray-900/50 to-black/50">
-                                <p class="text-sm font-semibold text-white">{{ Auth::user()->name }}</p>
-                                <p class="text-xs text-gray-400">{{ Auth::user()->email }}</p>
+                                class="px-4 py-3 border-b border-line/50 bg-gradient-to-r from-ink-raised2/50 to-ink-raised/50">
+                                <p class="text-sm font-semibold text-bone">{{ Auth::user()->name }}</p>
+                                <p class="text-xs text-bone-dim">{{ Auth::user()->email }}</p>
                             </div>
                             <a href="{{ route('dashboard') }}"
-                                class="flex items-center px-4 py-3 text-sm text-gray-400 hover:text-yellow-500 hover:bg-gray-800/50 transition-all duration-200 group">
+                                class="flex items-center px-4 py-3 text-sm text-bone-dim hover:text-gold hover:bg-ink-raised2/50 transition-all duration-200 group">
                                 <i
-                                    class="fas fa-tachometer-alt mr-3 text-yellow-500 group-hover:scale-110 transition-transform duration-300"></i>
+                                    class="fas fa-tachometer-alt mr-3 text-gold group-hover:scale-110 transition-transform duration-300"></i>
                                 Dashboard
                             </a>
                             <a href="{{ route('profile.edit') }}"
-                                class="flex items-center px-4 py-3 text-sm text-gray-400 hover:text-yellow-500 hover:bg-gray-800/50 transition-all duration-200 group">
+                                class="flex items-center px-4 py-3 text-sm text-bone-dim hover:text-gold hover:bg-ink-raised2/50 transition-all duration-200 group">
                                 <i
-                                    class="fas fa-user-edit mr-3 text-yellow-500 group-hover:scale-110 transition-transform duration-300"></i>
+                                    class="fas fa-user-edit mr-3 text-gold group-hover:scale-110 transition-transform duration-300"></i>
                                 Profile
                             </a>
-                            <div class="border-t border-gray-800/50">
+                            <div class="border-t border-line/50">
                                 <form method="POST" action="{{ route('logout') }}">
                                     @csrf
                                     <button type="submit" class="w-full text-left">
                                         <div
-                                            class="flex items-center px-4 py-3 text-sm text-gray-400 hover:bg-red-900/20 hover:text-red-400 transition-all duration-200 group">
+                                            class="flex items-center px-4 py-3 text-sm text-bone-dim hover:bg-bad/20 hover:text-bad transition-all duration-200 group">
                                             <i
                                                 class="fas fa-sign-out-alt mr-3 group-hover:scale-110 transition-transform duration-300"></i>
                                             Log Out
@@ -98,15 +98,15 @@
                             </div>
                         @else
                             <a href="{{ route('login') }}"
-                                class="flex items-center px-4 py-3 text-sm text-gray-400 hover:text-yellow-500 hover:bg-gray-800/50 border-b border-gray-800/50 transition-all duration-200 group">
+                                class="flex items-center px-4 py-3 text-sm text-bone-dim hover:text-gold hover:bg-ink-raised2/50 border-b border-line/50 transition-all duration-200 group">
                                 <i
-                                    class="fas fa-sign-in-alt mr-3 text-yellow-500 group-hover:scale-110 transition-transform duration-300"></i>
+                                    class="fas fa-sign-in-alt mr-3 text-gold group-hover:scale-110 transition-transform duration-300"></i>
                                 Sign In
                             </a>
                             <a href="{{ route('register') }}"
-                                class="flex items-center px-4 py-3 text-sm text-gray-400 hover:text-yellow-500 hover:bg-gray-800/50 transition-all duration-200 group">
+                                class="flex items-center px-4 py-3 text-sm text-bone-dim hover:text-gold hover:bg-ink-raised2/50 transition-all duration-200 group">
                                 <i
-                                    class="fas fa-user-plus mr-3 text-yellow-500 group-hover:scale-110 transition-transform duration-300"></i>
+                                    class="fas fa-user-plus mr-3 text-gold group-hover:scale-110 transition-transform duration-300"></i>
                                 Register
                             </a>
                         @endauth
@@ -115,7 +115,7 @@
 
                 <!-- Mobile Menu Button -->
                 <button @click="mobileMenuOpen = !mobileMenuOpen"
-                    class="md:hidden p-2.5 text-gray-400 hover:text-yellow-500 hover:bg-gray-800/50 rounded-full transition-all duration-300 relative z-30">
+                    class="md:hidden p-2.5 text-bone-dim hover:text-gold hover:bg-ink-raised2/50 rounded-full transition-all duration-300 relative z-30">
                     <!-- Hamburger Icon -->
                     <svg x-show="!mobileMenuOpen" x-cloak class="w-6 h-6" fill="none" viewBox="0 0 24 24"
                         stroke="currentColor">
@@ -137,10 +137,10 @@
         x-transition:enter-start="opacity-0 -translate-y-2" x-transition:enter-end="opacity-100 translate-y-0"
         x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 translate-y-0"
         x-transition:leave-end="opacity-0 -translate-y-2"
-        class="md:hidden bg-black/90 backdrop-blur-sm border-t border-gray-800 relative z-40">
+        class="md:hidden bg-ink-raised/90 backdrop-blur-sm border-t border-line relative z-40">
         <!-- Decorative gradient line -->
         <div
-            class="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-yellow-500/30 to-transparent pointer-events-none">
+            class="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-gold/30 to-transparent pointer-events-none">
         </div>
 
         <!-- Mobile Menu Content with vertical scroll -->
@@ -151,46 +151,46 @@
                     <a href="{{ route($item['route']) }}" @click="mobileMenuOpen = false"
                         class="flex items-center px-4 py-3 text-base font-medium rounded-lg transition-all duration-300 relative z-10
                               {{ request()->routeIs($item['route'])
-                                  ? 'bg-gray-800/30 text-yellow-500 hover:text-yellow-300 hover:bg-gray-800/50'
-                                  : 'text-gray-400 hover:text-yellow-500 hover:bg-gray-800/50' }}">
+                                  ? 'bg-ink-raised2/30 text-gold hover:text-gold-bright hover:bg-ink-raised2/50'
+                                  : 'text-bone-dim hover:text-gold hover:bg-ink-raised2/50' }}">
                         <i
                             class="fas fa-{{ $item['icon'] }} mr-3 w-5 text-center 
-                           {{ request()->routeIs($item['route']) ? 'text-yellow-500' : '' }}"></i>
+                           {{ request()->routeIs($item['route']) ? 'text-gold' : '' }}"></i>
                         {{ $item['label'] }}
                     </a>
                 @endforeach
 
                 <!-- Divider -->
-                <div class="border-t border-gray-800/50 pt-3"></div>
+                <div class="border-t border-line/50 pt-3"></div>
 
                 <!-- Mobile Cart -->
                 <div class="px-4 py-3">
                     <x-cart-icon :count="$cartCount ?? 0" size="lg" showText="true"
-                        class="w-full justify-between text-gray-400 hover:text-yellow-500 hover:bg-gray-800/50 rounded-lg px-4 py-3 transition-all duration-300" />
+                        class="w-full justify-between text-bone-dim hover:text-gold hover:bg-ink-raised2/50 rounded-lg px-4 py-3 transition-all duration-300" />
                 </div>
 
                 <!-- Mobile Search -->
                 <div class="px-4 py-3">
                     <div class="relative">
                         <input type="search" placeholder="Search products..."
-                            class="w-full px-4 py-3 bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-full text-white text-sm focus:outline-none focus:border-yellow-500 focus:ring-1 focus:ring-yellow-500/30 transition-all duration-300 pl-12">
-                        <div class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
+                            class="w-full px-4 py-3 bg-ink-raised2/50 backdrop-blur-sm border border-line rounded-full text-bone text-sm focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold/30 transition-all duration-300 pl-12">
+                        <div class="absolute left-4 top-1/2 -translate-y-1/2 text-bone-dim">
                             <i class="fas fa-search"></i>
                         </div>
                     </div>
                 </div>
 
                 <!-- Mobile Account Section -->
-                <div class="border-t border-gray-800/50 pt-3">
+                <div class="border-t border-line/50 pt-3">
                     <div x-data="{ accountOpen: false }">
                         <button @click="accountOpen = !accountOpen"
-                            class="w-full flex items-center justify-between py-3 px-4 text-gray-400 hover:text-yellow-500 hover:bg-gray-800/50 transition-all duration-300 rounded-lg">
+                            class="w-full flex items-center justify-between py-3 px-4 text-bone-dim hover:text-gold hover:bg-ink-raised2/50 transition-all duration-300 rounded-lg">
                             <div class="flex items-center">
-                                <i class="fas fa-user-circle mr-3 text-lg text-yellow-500"></i>
+                                <i class="fas fa-user-circle mr-3 text-lg text-gold"></i>
                                 <span class="font-medium">Account</span>
                             </div>
                             <svg :class="accountOpen ? 'rotate-180' : ''"
-                                class="w-5 h-5 text-gray-400 transition-transform duration-300" fill="none"
+                                class="w-5 h-5 text-bone-dim transition-transform duration-300" fill="none"
                                 viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M19 9l-7 7-7-7" />
@@ -203,32 +203,32 @@
                             x-transition:leave="transition ease-in duration-150"
                             x-transition:leave-start="opacity-100 translate-y-0"
                             x-transition:leave-end="opacity-0 -translate-y-2"
-                            class="mt-2 ml-11 mr-4 space-y-2 rounded-lg bg-black/90 backdrop-blur-sm border border-gray-800 p-3">
+                            class="mt-2 ml-11 mr-4 space-y-2 rounded-lg bg-ink-raised/90 backdrop-blur-sm border border-line p-3">
                             @auth
                                 <div
-                                    class="px-4 py-3 border-b border-gray-800/50 bg-gradient-to-r from-gray-900/50 to-black/50">
-                                    <p class="text-sm font-semibold text-white">{{ Auth::user()->name }}</p>
-                                    <p class="text-xs text-gray-400">{{ Auth::user()->email }}</p>
+                                    class="px-4 py-3 border-b border-line/50 bg-gradient-to-r from-ink-raised2/50 to-ink-raised/50">
+                                    <p class="text-sm font-semibold text-bone">{{ Auth::user()->name }}</p>
+                                    <p class="text-xs text-bone-dim">{{ Auth::user()->email }}</p>
                                 </div>
                                 <a href="{{ route('dashboard') }}" @click="mobileMenuOpen = false; accountOpen = false"
-                                    class="flex items-center py-3 text-sm text-gray-400 hover:text-yellow-500 hover:bg-gray-800/50 transition-all duration-200 group px-3 rounded-lg">
+                                    class="flex items-center py-3 text-sm text-bone-dim hover:text-gold hover:bg-ink-raised2/50 transition-all duration-200 group px-3 rounded-lg">
                                     <i
                                         class="fas fa-tachometer-alt mr-3 w-5 text-center group-hover:scale-110 transition-transform duration-300"></i>
                                     Dashboard
                                 </a>
                                 <a href="{{ route('profile.edit') }}"
                                     @click="mobileMenuOpen = false; accountOpen = false"
-                                    class="flex items-center py-3 text-sm text-gray-400 hover:text-yellow-500 hover:bg-gray-800/50 transition-all duration-200 group px-3 rounded-lg">
+                                    class="flex items-center py-3 text-sm text-bone-dim hover:text-gold hover:bg-ink-raised2/50 transition-all duration-200 group px-3 rounded-lg">
                                     <i
                                         class="fas fa-user-edit mr-3 w-5 text-center group-hover:scale-110 transition-transform duration-300"></i>
                                     Profile
                                 </a>
-                                <div class="border-t border-gray-800/50 pt-2">
+                                <div class="border-t border-line/50 pt-2">
                                     <form method="POST" action="{{ route('logout') }}">
                                         @csrf
                                         <button type="submit" class="w-full text-left">
                                             <div
-                                                class="flex items-center py-3 text-sm text-gray-400 hover:bg-red-900/20 hover:text-red-400 transition-all duration-200 group px-3 rounded-lg">
+                                                class="flex items-center py-3 text-sm text-bone-dim hover:bg-bad/20 hover:text-bad transition-all duration-200 group px-3 rounded-lg">
                                                 <i
                                                     class="fas fa-sign-out-alt mr-3 w-5 text-center group-hover:scale-110 transition-transform duration-300"></i>
                                                 Log Out
@@ -238,15 +238,15 @@
                                 </div>
                             @else
                                 <a href="{{ route('login') }}" @click="mobileMenuOpen = false; accountOpen = false"
-                                    class="flex items-center py-3 text-sm text-gray-400 hover:text-yellow-500 hover:bg-gray-800/50 transition-all duration-200 group px-3 rounded-lg">
+                                    class="flex items-center py-3 text-sm text-bone-dim hover:text-gold hover:bg-ink-raised2/50 transition-all duration-200 group px-3 rounded-lg">
                                     <i
-                                        class="fas fa-sign-in-alt mr-3 w-5 text-center text-yellow-500 group-hover:scale-110 transition-transform duration-300"></i>
+                                        class="fas fa-sign-in-alt mr-3 w-5 text-center text-gold group-hover:scale-110 transition-transform duration-300"></i>
                                     Sign In
                                 </a>
                                 <a href="{{ route('register') }}" @click="mobileMenuOpen = false; accountOpen = false"
-                                    class="flex items-center py-3 text-sm text-gray-400 hover:text-yellow-500 hover:bg-gray-800/50 transition-all duration-200 group px-3 rounded-lg">
+                                    class="flex items-center py-3 text-sm text-bone-dim hover:text-gold hover:bg-ink-raised2/50 transition-all duration-200 group px-3 rounded-lg">
                                     <i
-                                        class="fas fa-user-plus mr-3 w-5 text-center text-yellow-500 group-hover:scale-110 transition-transform duration-300"></i>
+                                        class="fas fa-user-plus mr-3 w-5 text-center text-gold group-hover:scale-110 transition-transform duration-300"></i>
                                     Register
                                 </a>
                             @endauth
@@ -258,7 +258,7 @@
 
         <!-- Scroll indicator -->
         <div
-            class="sticky bottom-0 left-0 right-0 h-6 bg-gradient-to-t from-black/90 to-transparent pointer-events-none">
+            class="sticky bottom-0 left-0 right-0 h-6 bg-gradient-to-t from-ink-raised/90 to-transparent pointer-events-none">
         </div>
     </div>
 </nav>

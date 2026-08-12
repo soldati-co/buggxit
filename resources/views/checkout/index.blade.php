@@ -4,26 +4,26 @@
 
 @section('content')
     <div class="container-wide px-4 sm:px-6 lg:px-8 py-12 mx-auto">
-        <h1 class="text-3xl md:text-4xl font-bold text-white mb-8">Checkout</h1>
+        <h1 class="text-3xl md:text-4xl font-bold text-bone mb-8">Checkout</h1>
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {{-- Checkout Form (left column) --}}
             <div class="lg:col-span-2">
-                <form method="POST" action="{{ route('api.checkout.store') }}" id="checkout-form">
+                <form method="POST" action="{{ route('checkout.store') }}" id="checkout-form">
                     @csrf
 
                     {{-- Shipping Address --}}
-                    <div class="bg-black/90 backdrop-blur-sm border border-gray-800 rounded-xl p-6 mb-6">
-                        <h2 class="text-xl font-semibold text-white mb-4 flex items-center">
-                            <i class="fas fa-truck text-yellow-500 mr-2"></i>
+                    <div class="bg-ink-raised/90 backdrop-blur-sm border border-line rounded-xl p-6 mb-6">
+                        <h2 class="text-xl font-semibold text-bone mb-4 flex items-center">
+                            <i class="fas fa-truck text-gold mr-2"></i>
                             Shipping Address
                         </h2>
 
                         @if (auth()->check() && $addresses->count() > 0)
                             <div class="mb-4">
-                                <label class="block text-sm font-medium text-gray-400 mb-2">Select saved address</label>
+                                <label class="block text-sm font-medium text-bone-dim mb-2">Select saved address</label>
                                 <select name="shipping_address_id"
-                                    class="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white">
+                                    class="w-full px-4 py-3 bg-ink-raised2/50 border border-line rounded-lg text-bone">
                                     <option value="">Use a new address</option>
                                     @foreach ($addresses as $address)
                                         <option value="{{ $address->id }}" @selected(old('shipping_address_id') == $address->id)>
@@ -32,140 +32,146 @@
                                     @endforeach
                                 </select>
                             </div>
-                            <div class="border-t border-gray-800/50 my-4"></div>
+                            <div class="border-t border-line/50 my-4"></div>
                         @endif
 
                         <div id="new-address-fields">
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div class="md:col-span-2">
-                                    <label class="block text-sm font-medium text-gray-400 mb-1">Address Line 1 *</label>
+                                    <label class="block text-sm font-medium text-bone-dim mb-1">Address Line 1 *</label>
                                     <input type="text" name="address_line1" value="{{ old('address_line1') }}"
-                                        class="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white focus:border-yellow-500">
+                                        class="w-full px-4 py-3 bg-ink-raised2/50 border border-line rounded-lg text-bone focus:border-gold">
                                 </div>
                                 <div class="md:col-span-2">
-                                    <label class="block text-sm font-medium text-gray-400 mb-1">Address Line 2
+                                    <label class="block text-sm font-medium text-bone-dim mb-1">Address Line 2
                                         (optional)</label>
                                     <input type="text" name="address_line2" value="{{ old('address_line2') }}"
-                                        class="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white">
+                                        class="w-full px-4 py-3 bg-ink-raised2/50 border border-line rounded-lg text-bone">
                                 </div>
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-400 mb-1">City *</label>
+                                    <label class="block text-sm font-medium text-bone-dim mb-1">City *</label>
                                     <input type="text" name="city" value="{{ old('city') }}"
-                                        class="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white">
+                                        class="w-full px-4 py-3 bg-ink-raised2/50 border border-line rounded-lg text-bone">
                                 </div>
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-400 mb-1">State/Province</label>
+                                    <label class="block text-sm font-medium text-bone-dim mb-1">State/Province</label>
                                     <input type="text" name="state" value="{{ old('state') }}"
-                                        class="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white">
+                                        class="w-full px-4 py-3 bg-ink-raised2/50 border border-line rounded-lg text-bone">
                                 </div>
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-400 mb-1">Postal Code *</label>
+                                    <label class="block text-sm font-medium text-bone-dim mb-1">Postal Code *</label>
                                     <input type="text" name="postal_code" value="{{ old('postal_code') }}"
-                                        class="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white">
+                                        class="w-full px-4 py-3 bg-ink-raised2/50 border border-line rounded-lg text-bone">
                                 </div>
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-400 mb-1">Country *</label>
+                                    <label class="block text-sm font-medium text-bone-dim mb-1">Country *</label>
                                     <input type="text" name="country" value="{{ old('country', 'South Africa') }}"
-                                        class="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white">
+                                        class="w-full px-4 py-3 bg-ink-raised2/50 border border-line rounded-lg text-bone">
                                 </div>
                                 <div class="md:col-span-2">
-                                    <label class="block text-sm font-medium text-gray-400 mb-1">Phone *</label>
+                                    <label class="block text-sm font-medium text-bone-dim mb-1">Phone *</label>
                                     <input type="text" name="phone" value="{{ old('phone') }}"
-                                        class="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white">
+                                        class="w-full px-4 py-3 bg-ink-raised2/50 border border-line rounded-lg text-bone">
                                 </div>
                             </div>
                         </div>
                     </div>
 
                     {{-- Payment Method --}}
-                    <div class="bg-black/90 backdrop-blur-sm border border-gray-800 rounded-xl p-6 mb-6">
-                        <h2 class="text-xl font-semibold text-white mb-4 flex items-center">
-                            <i class="fas fa-credit-card text-yellow-500 mr-2"></i>
+                    <div class="bg-ink-raised/90 backdrop-blur-sm border border-line rounded-xl p-6 mb-6">
+                        <h2 class="text-xl font-semibold text-bone mb-4 flex items-center">
+                            <i class="fas fa-credit-card text-gold mr-2"></i>
                             Payment Method
                         </h2>
                         <div class="space-y-3">
                             <label
-                                class="flex items-center p-3 border border-gray-700 rounded-lg cursor-pointer hover:border-yellow-500/50 transition-colors">
+                                class="flex items-center p-3 border border-line rounded-lg cursor-pointer hover:border-gold/50 transition-colors">
                                 <input type="radio" name="payment_method" value="eft"
-                                    class="h-4 w-4 text-yellow-500 focus:ring-yellow-500" checked>
-                                <span class="ml-3 text-white">Bank Transfer (EFT)</span>
+                                    class="h-4 w-4 text-gold focus:ring-gold" checked>
+                                <span class="ml-3 text-bone">Bank Transfer (EFT)</span>
                             </label>
                             <label
-                                class="flex items-center p-3 border border-gray-700 rounded-lg cursor-pointer hover:border-yellow-500/50 transition-colors">
+                                class="flex items-center p-3 border border-line rounded-lg cursor-pointer hover:border-gold/50 transition-colors">
                                 <input type="radio" name="payment_method" value="cash_on_delivery"
-                                    class="h-4 w-4 text-yellow-500 focus:ring-yellow-500">
-                                <span class="ml-3 text-white">Cash on Delivery</span>
+                                    class="h-4 w-4 text-gold focus:ring-gold">
+                                <span class="ml-3 text-bone">Cash on Delivery</span>
+                            </label>
+                            <label
+                                class="flex items-center p-3 border border-line rounded-lg cursor-pointer hover:border-gold/50 transition-colors">
+                                <input type="radio" name="payment_method" value="payfast"
+                                    class="h-4 w-4 text-gold focus:ring-gold">
+                                <span class="ml-3 text-bone">Pay Now (Card / PayFast)</span>
                             </label>
                         </div>
                     </div>
 
                     {{-- Billing Address --}}
-                    <div class="bg-black/90 backdrop-blur-sm border border-gray-800 rounded-xl p-6 mb-6">
-                        <h2 class="text-xl font-semibold text-white mb-4 flex items-center">
-                            <i class="fas fa-file-invoice text-yellow-500 mr-2"></i>
+                    <div class="bg-ink-raised/90 backdrop-blur-sm border border-line rounded-xl p-6 mb-6">
+                        <h2 class="text-xl font-semibold text-bone mb-4 flex items-center">
+                            <i class="fas fa-file-invoice text-gold mr-2"></i>
                             Billing Address
                         </h2>
                         <label
-                            class="flex items-center p-3 border border-gray-700 rounded-lg cursor-pointer hover:border-yellow-500/50 transition-colors">
+                            class="flex items-center p-3 border border-line rounded-lg cursor-pointer hover:border-gold/50 transition-colors">
                             <input type="checkbox" name="same_as_shipping" value="1"
-                                class="h-4 w-4 text-yellow-500 rounded" checked>
-                            <span class="ml-3 text-white">Same as shipping address</span>
+                                class="h-4 w-4 text-gold rounded" checked>
+                            <span class="ml-3 text-bone">Same as shipping address</span>
                         </label>
                         {{-- You could add separate billing address fields here if needed --}}
                     </div>
 
                     {{-- Order Notes --}}
-                    <div class="bg-black/90 backdrop-blur-sm border border-gray-800 rounded-xl p-6">
-                        <h2 class="text-xl font-semibold text-white mb-4 flex items-center">
-                            <i class="fas fa-pen text-yellow-500 mr-2"></i>
+                    <div class="bg-ink-raised/90 backdrop-blur-sm border border-line rounded-xl p-6">
+                        <h2 class="text-xl font-semibold text-bone mb-4 flex items-center">
+                            <i class="fas fa-pen text-gold mr-2"></i>
                             Additional Notes (Optional)
                         </h2>
                         <textarea name="notes" rows="3"
-                            class="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white">{{ old('notes') }}</textarea>
+                            class="w-full px-4 py-3 bg-ink-raised2/50 border border-line rounded-lg text-bone">{{ old('notes') }}</textarea>
                     </div>
                 </form>
             </div>
 
             {{-- Order Summary (right column) --}}
             <div class="lg:col-span-1">
-                <div class="bg-black/90 backdrop-blur-sm border border-gray-800 rounded-xl p-6 sticky top-24">
-                    <h3 class="text-lg font-semibold text-white mb-4 flex items-center">
-                        <i class="fas fa-shopping-bag text-yellow-500 mr-2"></i>
+                <div class="bg-ink-raised/90 backdrop-blur-sm border border-line rounded-xl p-6 sticky top-24">
+                    <h3 class="text-lg font-semibold text-bone mb-4 flex items-center">
+                        <i class="fas fa-shopping-bag text-gold mr-2"></i>
                         Your Order
                     </h3>
 
                     <div class="space-y-3 max-h-80 overflow-y-auto mb-4 pr-2">
                         @foreach ($items as $item)
                             <div class="flex justify-between text-sm">
-                                <span class="text-gray-300">{{ $item['dress']->name }} <span
-                                        class="text-gray-500">x{{ $item['quantity'] }}</span></span>
-                                <span class="text-white font-medium">R{{ number_format($item['subtotal'], 0) }}</span>
+                                <span class="text-bone-dim">{{ $item['dress']->name }} <span
+                                        class="text-bone-faint">x{{ $item['quantity'] }}</span></span>
+                                <span class="text-bone font-medium font-numeric">R{{ number_format($item['subtotal'], 0) }}</span>
                             </div>
                         @endforeach
                     </div>
 
-                    <div class="border-t border-gray-800/50 pt-4 space-y-2">
+                    <div class="border-t border-line/50 pt-4 space-y-2">
                         <div class="flex justify-between">
-                            <span class="text-gray-400">Subtotal</span>
-                            <span class="text-white">R{{ number_format($subtotal, 0) }}</span>
+                            <span class="text-bone-dim">Subtotal</span>
+                            <span class="text-bone font-numeric">R{{ number_format($subtotal, 0) }}</span>
                         </div>
                         <div class="flex justify-between">
-                            <span class="text-gray-400">Shipping</span>
-                            <span class="text-white">Calculated at delivery</span>
+                            <span class="text-bone-dim">Shipping</span>
+                            <span class="text-bone-dim">Calculated at delivery</span>
                         </div>
                     </div>
 
-                    <div class="border-t border-gray-800/50 mt-4 pt-4 flex justify-between text-lg font-bold">
-                        <span class="text-white">Total</span>
-                        <span class="text-yellow-500">R{{ number_format($subtotal, 0) }}</span>
+                    <div class="border-t border-line/50 mt-4 pt-4 flex justify-between text-lg font-bold">
+                        <span class="text-bone">Total</span>
+                        <span class="text-gold font-numeric">R{{ number_format($subtotal, 0) }}</span>
                     </div>
 
                     <button type="submit" form="checkout-form"
-                        class="w-full mt-6 py-3.5 bg-gradient-to-r from-yellow-500 to-yellow-600 text-gray-900 font-bold rounded-lg hover:from-yellow-400 hover:to-yellow-500 transition-all duration-300">
+                        class="w-full mt-6 py-3.5 bg-gradient-to-r from-gold to-gold-dim text-ink font-bold rounded-lg hover:from-gold-bright hover:to-gold transition-all duration-300">
                         Place Order
                     </button>
 
-                    <p class="text-xs text-gray-500 text-center mt-4">
+                    <p class="text-xs text-bone-faint text-center mt-4">
                         <i class="fas fa-lock mr-1"></i> Your information is secure
                     </p>
                 </div>
