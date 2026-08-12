@@ -205,10 +205,13 @@ class Dress extends Model
             return asset('logo.webp');
         }
 
-        $mainImage = $this->mainImage;
+        $mainImageId = $this->mainImage()
+            ->whereNotNull('image_data')
+            ->where('image_data', '!=', '')
+            ->value('id');
 
-        if ($mainImage && !empty($mainImage->image_data)) {
-            return route('api.image.show', $mainImage->id);
+        if ($mainImageId) {
+            return route('api.image.show', $mainImageId);
         }
 
         return asset('logo.webp');
@@ -223,7 +226,10 @@ class Dress extends Model
             return [];
         }
 
-        return $this->galleryImages->map(fn($img) => route('api.image.show', $img->id))->toArray();
+        return $this->galleryImages()
+            ->pluck('id')
+            ->map(fn($id) => route('api.image.show', $id))
+            ->toArray();
     }
 
     // ---------- Other Relationships ----------
