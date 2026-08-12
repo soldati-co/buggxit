@@ -17,6 +17,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         ->name('login');
     
     Route::post('/login', [AdminAuthController::class, 'login'])
+        ->middleware('throttle:5,1')
         ->name('login.post');
 
     // Password reset routes

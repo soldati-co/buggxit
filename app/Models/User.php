@@ -6,7 +6,6 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Support\Facades\DB;
 
 /**
  * @property string $id
@@ -48,22 +47,22 @@ class User extends Authenticatable
 {
     use HasUuids, Notifiable, HasFactory;
 
+    // NOTE: these are the properties HasUuids expects, but they're actually
+    // moot for this class: HasUuids pulls in HasUniqueStringIds, whose
+    // getKeyType()/getIncrementing() unconditionally return 'string'/false
+    // for any column in uniqueIds() (always ['id'] here) regardless of what
+    // $keyType/$incrementing are set to. A previous version of this
+    // constructor tried to flip these back to int/auto-increment on
+    // non-Postgres drivers, but that override was silently ineffective for
+    // exactly this reason — it never changed behavior on any driver. The
+    // `users` table migration already handles this correctly by creating a
+    // string primary key on sqlite (tests) and an integer one otherwise, so
+    // if this model is ever used against a non-Postgres, non-SQLite driver
+    // (e.g. MySQL) with an auto-increment `id` column, it will need a real
+    // fix (e.g. dropping HasUuids for that environment), not a property
+    // assignment here.
     public $incrementing = false;
     protected $keyType = 'string';
-
-    public function __construct(array $attributes = [])
-    {
-        parent::__construct($attributes);
-
-        try {
-            if (DB::getDriverName() !== 'pgsql') {
-                $this->incrementing = true;
-                $this->keyType = 'int';
-            }
-        } catch (\Throwable $e) {
-            // If DB not available, keep UUID settings (safe default for production)
-        }
-    }
 
     protected $fillable = [
         'name', 'email', 'password',

@@ -37,7 +37,7 @@
         <p><span class="label">Email:</span> {{ $data['email'] }}</p>
         <p><span class="label">Subject:</span> {{ $data['subject'] }}</p>
         <p><span class="label">Message:</span></p>
-        <p>{{ nl2br(e($data['message'])) }}</p>
+        <p>{!! nl2br(e($data['message'])) !!}</p>
         @if ($data['newsletter'] ?? false)
             <p>✅ Subscribed to newsletter</p>
         @endif

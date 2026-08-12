@@ -2,7 +2,7 @@
 
 namespace App\Helpers;
 
-use App\Models\Product;
+use App\Models\Dress;
 use App\Models\Discount;
 
 class StatsHelper
@@ -13,8 +13,8 @@ class StatsHelper
     public static function productCount(): int
     {
         try {
-            return Product::count();
-        } catch (\Exception $e) {
+            return Dress::count();
+        } catch (\Throwable $e) {
             return 0;
         }
     }
@@ -26,7 +26,7 @@ class StatsHelper
     {
         try {
             return Discount::where('active', true)->count();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             return 0;
         }
     }

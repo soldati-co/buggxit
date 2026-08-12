@@ -85,12 +85,9 @@ class CheckoutController extends Controller
                 ]);
             }
 
-            // Billing address (same or separate)
+            // Billing address: a separate billing-address form isn't implemented yet,
+            // so we always bill to the shipping address regardless of same_as_shipping.
             $billingAddress = $shippingAddress;
-            if (!$request->same_as_shipping) {
-                // For simplicity, we'll use same for now; you can extend with separate form later
-                $billingAddress = $shippingAddress;
-            }
 
             // 2. Calculate totals
             $subtotal = 0;

@@ -18,7 +18,6 @@ class AdminDressController extends Controller
         'image/png',
         'image/gif',
         'image/webp',
-        'image/svg+xml',
         'image/bmp',
         'image/avif',
     ];

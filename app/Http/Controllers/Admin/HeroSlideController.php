@@ -7,23 +7,37 @@ use App\Models\HeroSlide;
 use Illuminate\Http\Request;
 use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Gd\Driver;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class HeroSlideController extends Controller
 {
+    private function checkAuth()
+    {
+        if (!Auth::guard('admin')->check()) {
+            return redirect()->route('admin.login');
+        }
+        return null;
+    }
+
     public function index()
     {
+        if ($redirect = $this->checkAuth()) return $redirect;
         $slides = HeroSlide::ordered()->get();
         return view('admin.hero-slides.index', compact('slides'));
     }
 
     public function create()
     {
+        if ($redirect = $this->checkAuth()) return $redirect;
         return view('admin.hero-slides.create');
     }
 
     public function store(Request $request)
     {
+        if ($redirect = $this->checkAuth()) return $redirect;
+
         $validated = $request->validate([
             'title'      => 'nullable|string|max:255',
             'headline'   => 'nullable|string|max:255',
@@ -76,11 +90,14 @@ class HeroSlideController extends Controller
 
     public function edit(HeroSlide $heroSlide)
     {
+        if ($redirect = $this->checkAuth()) return $redirect;
         return view('admin.hero-slides.edit', compact('heroSlide'));
     }
 
     public function update(Request $request, HeroSlide $heroSlide)
     {
+        if ($redirect = $this->checkAuth()) return $redirect;
+
         $validated = $request->validate([
             'title'      => 'nullable|string|max:255',
             'headline'   => 'nullable|string|max:255',
@@ -132,6 +149,8 @@ class HeroSlideController extends Controller
 
     public function destroy(HeroSlide $heroSlide)
     {
+        if ($redirect = $this->checkAuth()) return $redirect;
+
         try {
             // Delete image record (binary removed from DB)
             $heroSlide->image()->delete();
@@ -146,5 +165,33 @@ class HeroSlideController extends Controller
         }
     }
 
-    // updateOrder unchanged
+    /**
+     * Persist the new drag-and-drop order for hero slides.
+     * Expects: { order: [{ id: string, sort_order: int }, ...] }
+     */
+    public function updateOrder(Request $request)
+    {
+        if (!Auth::guard('admin')->check()) {
+            return response()->json(['message' => 'Unauthenticated.'], 401);
+        }
+
+        $validated = $request->validate([
+            'order' => 'required|array',
+            'order.*.id' => 'required|exists:hero_slides,id',
+            'order.*.sort_order' => 'required|integer|min:0',
+        ]);
+
+        try {
+            DB::transaction(function () use ($validated) {
+                foreach ($validated['order'] as $entry) {
+                    HeroSlide::whereKey($entry['id'])->update(['sort_order' => $entry['sort_order']]);
+                }
+            });
+
+            return response()->json(['success' => true]);
+        } catch (\Exception $e) {
+            Log::error('HeroSlide updateOrder error: ' . $e->getMessage());
+            return response()->json(['message' => 'Failed to update order.'], 500);
+        }
+    }
 }

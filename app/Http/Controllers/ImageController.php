@@ -17,6 +17,8 @@ class ImageController extends Controller
 
         return response($image->image_data)
             ->header('Content-Type', $image->image_mime)
+            ->header('X-Content-Type-Options', 'nosniff')
+            ->header('Content-Disposition', 'inline')
             ->header('Cache-Control', 'public, max-age=31536000'); // 1 year
     }
 }

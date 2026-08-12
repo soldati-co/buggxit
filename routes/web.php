@@ -79,9 +79,12 @@ Route::prefix('api')->name('api.')->middleware(['web', 'throttle:60,1'])->group(
 
     Route::get('/dresses', [DressApiController::class, 'index'])->name('dresses.index');
     Route::get('/dresses/{dress}', [DressApiController::class, 'show'])->name('dresses.show');
-    Route::post('/dresses', [DressApiController::class, 'store'])->name('dresses.store');
-    Route::put('/dresses/{dress}', [DressApiController::class, 'update'])->name('dresses.update');
-    Route::delete('/dresses/{dress}', [DressApiController::class, 'destroy'])->name('dresses.destroy');
+
+    Route::middleware('admin.auth')->group(function () {
+        Route::post('/dresses', [DressApiController::class, 'store'])->name('dresses.store');
+        Route::put('/dresses/{dress}', [DressApiController::class, 'update'])->name('dresses.update');
+        Route::delete('/dresses/{dress}', [DressApiController::class, 'destroy'])->name('dresses.destroy');
+    });
 });
 
 // ================== HEALTH CHECKER ROUTE ================== //

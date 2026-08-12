@@ -92,6 +92,23 @@ class Dress extends Model
     public $incrementing = false;
     protected $keyType = 'string';
 
+    /**
+     * Resolve a bound value for route model binding by slug first, falling
+     * back to the UUID primary key. The storefront links to dresses using
+     * `dress.slug` (see DressResource / ProductApiController), but Laravel's
+     * default implicit binding only looks up by `id` since getRouteKeyName()
+     * isn't overridden — that made every slug-based product URL 404.
+     */
+    public function resolveRouteBinding($value, $field = null)
+    {
+        if ($field !== null) {
+            return parent::resolveRouteBinding($value, $field);
+        }
+
+        return $this->where('slug', $value)->first()
+            ?? $this->where('id', $value)->first();
+    }
+
     // ---------- Standard Color Palette ----------
     public const STANDARD_COLORS = [
         'red'    => 'red',
@@ -254,7 +271,11 @@ class Dress extends Model
         $allSizes = range(32, 42);
         $selectedSizes = $this->sizes ?? [];
         return array_values(array_filter($selectedSizes, function ($size) use ($allSizes) {
-            return in_array($size, $allSizes, true);
+            // $selectedSizes come from validated request input (form/JSON), so
+            // they may arrive as numeric strings (e.g. "32") while $allSizes is
+            // always an array of ints. Cast before the strict comparison so a
+            // valid size isn't filtered out just because of a type mismatch.
+            return in_array((int) $size, $allSizes, true);
         }));
     }
 
