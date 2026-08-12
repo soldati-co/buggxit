@@ -67,6 +67,7 @@ class HomeApiController extends Controller
 
         if ($tables['dresses']) {
             $featuredDresses = Dress::with('categories')
+                ->withImageUrls()
                 ->where('is_featured', true)
                 ->where('status', 'active')
                 ->latest()
@@ -74,6 +75,7 @@ class HomeApiController extends Controller
                 ->get();
 
             $newArrivals = Dress::with('categories')
+                ->withImageUrls()
                 ->where('status', 'active')
                 ->latest()
                 ->take(4)

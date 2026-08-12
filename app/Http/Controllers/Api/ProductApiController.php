@@ -13,7 +13,7 @@ class ProductApiController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Dress::with('categories')->where('status', 'active');
+        $query = Dress::with('categories')->withImageUrls()->where('status', 'active');
 
         if ($request->filled('category')) {
             $category = Category::where('slug', '=', $request->category, 'and')
@@ -41,6 +41,7 @@ class ProductApiController extends Controller
     public function newArrivals()
     {
         $dresses = Dress::with('categories')
+            ->withImageUrls()
             ->where('status', 'active')
             ->latest()
             ->take(12)

@@ -195,20 +195,39 @@ class Dress extends Model
             ->orderBy('sort_order');
     }
 
+    /**
+     * Eager-load main/gallery images with only the columns needed to
+     * build URLs (never pulls the multi-MB image_data column), so
+     * listing endpoints don't issue a query per dress per image.
+     */
+    public function scopeWithImageUrls($query)
+    {
+        return $query->with([
+            'mainImage' => fn($q) => $q->select('id', 'imageable_id', 'imageable_type', 'collection'),
+            'galleryImages' => fn($q) => $q->select('id', 'imageable_id', 'imageable_type', 'collection', 'sort_order'),
+        ]);
+    }
+
     // ---------- Image URL Helpers (use these in your views) ----------
     /**
      * API URL for the main image (null if none).
      */
+    protected static ?bool $imagesTableExists = null;
+
+    protected static function imagesTableExists(): bool
+    {
+        return static::$imagesTableExists ??= Schema::hasTable('images');
+    }
+
     public function getMainImageUrlAttribute(): string
     {
-        if (! Schema::hasTable('images')) {
+        if (! static::imagesTableExists()) {
             return asset('logo.webp');
         }
 
-        $mainImageId = $this->mainImage()
-            ->whereNotNull('image_data')
-            ->where('image_data', '!=', '')
-            ->value('id');
+        $mainImageId = $this->relationLoaded('mainImage')
+            ? $this->mainImage?->id
+            : $this->mainImage()->whereNotNull('image_data')->where('image_data', '!=', '')->value('id');
 
         if ($mainImageId) {
             return route('api.image.show', $mainImageId);
@@ -222,14 +241,15 @@ class Dress extends Model
      */
     public function getGalleryImageUrlsAttribute(): array
     {
-        if (! Schema::hasTable('images')) {
+        if (! static::imagesTableExists()) {
             return [];
         }
 
-        return $this->galleryImages()
-            ->pluck('id')
-            ->map(fn($id) => route('api.image.show', $id))
-            ->toArray();
+        $ids = $this->relationLoaded('galleryImages')
+            ? $this->galleryImages->pluck('id')
+            : $this->galleryImages()->pluck('id');
+
+        return $ids->map(fn($id) => route('api.image.show', $id))->toArray();
     }
 
     // ---------- Other Relationships ----------

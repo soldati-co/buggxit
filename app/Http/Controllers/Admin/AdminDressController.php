@@ -35,7 +35,7 @@ class AdminDressController extends Controller
     public function index()
     {
         if ($redirect = $this->checkAuth()) return $redirect;
-        $dresses = Dress::with('categories')->latest()->paginate(10);
+        $dresses = Dress::with('categories')->withImageUrls()->latest()->paginate(10);
         return view('admin.dresses.index', ['dresses' => $dresses]);
     }
 

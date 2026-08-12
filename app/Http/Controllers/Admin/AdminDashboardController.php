@@ -45,6 +45,7 @@ class AdminDashboardController extends Controller
 
         // Recent dresses with their categories (eager-loaded)
         $recentDresses = Dress::with('categories')
+            ->withImageUrls()
             ->latest()
             ->take(5)
             ->get();

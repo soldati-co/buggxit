@@ -24,6 +24,7 @@ class HomeController extends Controller
         }
         // 1. Featured dresses (max 4), with their categories loaded
         $featuredDresses = Dress::with('categories')
+            ->withImageUrls()
             ->where('is_featured', true)
             ->where('status', 'active')
             ->latest()
@@ -31,7 +32,8 @@ class HomeController extends Controller
             ->get();
 
         // 2. New arrivals (latest 4 active dresses)
-        $newArrivals = Dress::where('status', 'active')
+        $newArrivals = Dress::withImageUrls()
+            ->where('status', 'active')
             ->latest()
             ->take(4)
             ->get();
