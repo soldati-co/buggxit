@@ -43,7 +43,7 @@
                     @csrf
                     <input type="hidden" name="token" value="{{ $token }}">
 
-                    <div class="mb-4">
+                    <div class="mb-6">
                         <label for="email" class="block text-sm font-medium text-gray-300 mb-2 flex items-center">
                             <svg class="w-4 h-4 mr-2 text-yellow-500" fill="currentColor" viewBox="0 0 24 24">
                                 <path
@@ -58,7 +58,7 @@
                         @enderror
                     </div>
 
-                    <div class="mb-4">
+                    <div class="mb-6">
                         <label for="password" class="block text-sm font-medium text-gray-300 mb-2 flex items-center">
                             <svg class="w-4 h-4 mr-2 text-yellow-500" fill="currentColor" viewBox="0 0 24 24">
                                 <path

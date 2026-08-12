@@ -1,6 +1,8 @@
 @extends('layouts.admin')
 
 @section('title', 'Edit Hero Slide')
+@section('page-title', 'Edit Hero Slide')
+@section('page-description', 'Update this hero carousel slide')
 
 @section('content')
     <div class="max-w-2xl mx-auto">
@@ -15,9 +17,7 @@
             </a>
         </div>
 
-        <h2 class="text-2xl font-bold text-white mb-6">Edit Hero Slide</h2>
-
-        <div class="bg-black/90 backdrop-blur-sm border border-gray-800 rounded-xl p-6 md:p-8">
+        <div class="bg-black/90 backdrop-blur-sm border border-gray-800 rounded-xl p-6">
             <form action="{{ route('admin.hero-slides.update', $heroSlide) }}" method="POST" enctype="multipart/form-data">
                 @method('PUT')
                 @include('admin.hero-slides._form', ['slide' => $heroSlide])

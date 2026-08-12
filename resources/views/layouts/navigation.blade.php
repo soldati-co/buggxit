@@ -292,15 +292,6 @@
         }
     }
 
-    /* Wider container for navigation */
-    .container-wide {
-        max-width: 90rem;
-        /* 1440px */
-        width: 100%;
-        margin-left: auto;
-        margin-right: auto;
-    }
-
     /* Custom scrollbar for mobile menu */
     .overscroll-contain {
         overscroll-behavior: contain;

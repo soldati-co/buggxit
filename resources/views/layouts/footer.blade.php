@@ -196,17 +196,6 @@
         }
     }
 
-    /* Wider container */
-    .container-wide {
-        max-width: 90rem;
-        /* 1440px */
-        width: 100%;
-        margin-left: auto;
-        margin-right: auto;
-        padding-left: 1rem;
-        padding-right: 1rem;
-    }
-
     /* Responsive adjustments */
     @media (max-width: 640px) {
         .sm\:grid-cols-2 {

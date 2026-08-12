@@ -4,35 +4,35 @@
     <div>
         <label class="block text-sm font-medium text-gray-300 mb-1">Title (admin label)</label>
         <input type="text" name="title" value="{{ old('title', $slide->title ?? '') }}"
-            class="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-2.5 text-white focus:border-yellow-500 focus:ring-yellow-500">
+            class="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-3 text-white focus:border-yellow-500 focus:ring-yellow-500">
     </div>
 
     <!-- Headline -->
     <div>
         <label class="block text-sm font-medium text-gray-300 mb-1">Headline</label>
         <input type="text" name="headline" value="{{ old('headline', $slide->headline ?? '') }}"
-            class="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-2.5 text-white focus:border-yellow-500 focus:ring-yellow-500">
+            class="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-3 text-white focus:border-yellow-500 focus:ring-yellow-500">
     </div>
 
     <!-- Subheading -->
     <div>
         <label class="block text-sm font-medium text-gray-300 mb-1">Subheading</label>
         <textarea name="subheading" rows="3"
-            class="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-2.5 text-white focus:border-yellow-500 focus:ring-yellow-500">{{ old('subheading', $slide->subheading ?? '') }}</textarea>
+            class="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-3 text-white focus:border-yellow-500 focus:ring-yellow-500">{{ old('subheading', $slide->subheading ?? '') }}</textarea>
     </div>
 
     <!-- CTA Text -->
     <div>
         <label class="block text-sm font-medium text-gray-300 mb-1">CTA Button Text</label>
         <input type="text" name="cta_text" value="{{ old('cta_text', $slide->cta_text ?? '') }}"
-            class="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-2.5 text-white focus:border-yellow-500 focus:ring-yellow-500">
+            class="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-3 text-white focus:border-yellow-500 focus:ring-yellow-500">
     </div>
 
     <!-- CTA URL -->
     <div>
         <label class="block text-sm font-medium text-gray-300 mb-1">CTA Button Link</label>
         <input type="url" name="cta_url" value="{{ old('cta_url', $slide->cta_url ?? '') }}"
-            class="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-2.5 text-white focus:border-yellow-500 focus:ring-yellow-500"
+            class="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-3 text-white focus:border-yellow-500 focus:ring-yellow-500"
             placeholder="https://example.com/collection">
     </div>
 
@@ -65,14 +65,14 @@
     <div>
         <label class="block text-sm font-medium text-gray-300 mb-1">Alt Text</label>
         <input type="text" name="alt_text" value="{{ old('alt_text', $slide->alt_text ?? '') }}"
-            class="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-2.5 text-white focus:border-yellow-500 focus:ring-yellow-500">
+            class="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-3 text-white focus:border-yellow-500 focus:ring-yellow-500">
     </div>
 
     <!-- Sort Order -->
     <div>
         <label class="block text-sm font-medium text-gray-300 mb-1">Sort Order</label>
         <input type="number" name="sort_order" value="{{ old('sort_order', $slide->sort_order ?? 0) }}"
-            class="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-2.5 text-white focus:border-yellow-500 focus:ring-yellow-500">
+            class="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-3 text-white focus:border-yellow-500 focus:ring-yellow-500">
     </div>
 
     <!-- Active -->
@@ -84,11 +84,11 @@
     </div>
 </div>
 
-<div class="mt-8 flex justify-end space-x-3">
+<div class="mt-8 flex justify-end space-x-4">
     <a href="{{ route('admin.hero-slides.index') }}"
-        class="px-6 py-2.5 border border-gray-700 rounded-lg text-gray-300 hover:bg-gray-800 transition">Cancel</a>
+        class="px-6 py-3 border border-gray-700 rounded-lg text-gray-300 hover:bg-gray-800 transition">Cancel</a>
     <button type="submit"
-        class="px-6 py-2.5 bg-gradient-to-r from-yellow-500 to-yellow-600 text-gray-900 font-semibold rounded-lg hover:from-yellow-400 hover:to-yellow-500 transition">
+        class="px-6 py-3 bg-gradient-to-r from-yellow-500 to-yellow-600 text-gray-900 font-semibold rounded-lg hover:from-yellow-400 hover:to-yellow-500 transition">
         {{ $submitLabel ?? 'Save Slide' }}
     </button>
 </div>

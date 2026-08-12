@@ -36,7 +36,7 @@
                         <div class="cart-item bg-black/90 backdrop-blur-sm border border-gray-800 rounded-xl p-4 flex flex-col sm:flex-row gap-4 hover:border-yellow-500/30 transition-colors"
                             data-product-id="{{ $dress->id }}">
                             {{-- Image --}}
-                            <div class="sm:w-24 sm:h-24 rounded-lg overflow-hidden border border-gray-800 flex-shrink-0">
+                            <div class="w-20 h-20 sm:w-24 sm:h-24 rounded-lg overflow-hidden border border-gray-800 flex-shrink-0">
                                 @if ($dress->main_image_url)
                                     <img src="{{ $dress->main_image_url }}" alt="{{ $dress->name }}"
                                         class="w-full h-full object-cover">

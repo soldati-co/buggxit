@@ -5,13 +5,15 @@
 @section('page-description', 'Manage your dress categories')
 
 @section('header-actions')
-    <a href="{{ route('admin.categories.create') }}"
-        class="inline-flex items-center px-4 py-2.5 bg-gradient-to-r from-yellow-500 to-yellow-600 text-gray-900 font-semibold rounded-lg hover:from-yellow-400 hover:to-yellow-500 transition-all duration-300 text-sm shadow-lg shadow-yellow-500/20">
-        <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M12 4v16m8-8H4" />
-        </svg>
-        Add New Category
-    </a>
+    <div class="mt-4 md:mt-0">
+        <a href="{{ route('admin.categories.create') }}"
+            class="inline-flex items-center px-4 py-2.5 bg-gradient-to-r from-yellow-500 to-yellow-600 text-gray-900 font-semibold rounded-lg hover:from-yellow-400 hover:to-yellow-500 transition-all duration-300 text-sm shadow-lg shadow-yellow-500/20">
+            <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 4v16m8-8H4" />
+            </svg>
+            Add New Category
+        </a>
+    </div>
 @endsection
 
 @section('content')

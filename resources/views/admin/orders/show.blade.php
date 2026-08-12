@@ -21,7 +21,7 @@
                     @csrf
                     @method('PATCH')
                     <div>
-                        <label class="block text-sm text-gray-400 mb-1">Order Status</label>
+                        <label class="block text-sm font-medium text-gray-400 mb-2">Order Status</label>
                         <select name="status"
                             class="px-4 py-2 bg-gray-800/50 border border-gray-700 rounded-lg text-white">
                             <option value="pending" @selected($order->status == 'pending')>Pending</option>
@@ -31,7 +31,7 @@
                         </select>
                     </div>
                     <div>
-                        <label class="block text-sm text-gray-400 mb-1">Payment Status</label>
+                        <label class="block text-sm font-medium text-gray-400 mb-2">Payment Status</label>
                         <select name="payment_status"
                             class="px-4 py-2 bg-gray-800/50 border border-gray-700 rounded-lg text-white">
                             <option value="pending" @selected($order->payment_status == 'pending')>Pending</option>
@@ -53,12 +53,12 @@
                 <h3 class="text-lg font-semibold text-white mb-4">Order Items</h3>
                 <div class="overflow-x-auto">
                     <table class="min-w-full divide-y divide-gray-800/50">
-                        <thead>
+                        <thead class="bg-gray-900/50">
                             <tr>
-                                <th class="px-4 py-3 text-left text-xs text-gray-400">Product</th>
-                                <th class="px-4 py-3 text-left text-xs text-gray-400">Price</th>
-                                <th class="px-4 py-3 text-left text-xs text-gray-400">Qty</th>
-                                <th class="px-4 py-3 text-left text-xs text-gray-400">Total</th>
+                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Product</th>
+                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Price</th>
+                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Qty</th>
+                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Total</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-800/50">

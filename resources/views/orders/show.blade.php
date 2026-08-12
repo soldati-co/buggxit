@@ -3,7 +3,7 @@
 @section('title', 'Order ' . $order->order_number)
 
 @section('content')
-    <div class="container-wide px-4 py-12 mx-auto">
+    <div class="container-wide px-4 sm:px-6 lg:px-8 py-12 mx-auto">
         <div class="mb-6">
             <a href="{{ route('orders.index') }}"
                 class="inline-flex items-center text-gray-400 hover:text-yellow-500 transition-colors group">

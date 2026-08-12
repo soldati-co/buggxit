@@ -1,37 +1,34 @@
 @extends('layouts.admin')
 
 @section('title', 'Hero Carousel - BUGGXIT Admin')
+@section('page-title', 'Hero Carousel Slides')
+@section('page-description', 'Manage the homepage hero carousel')
+
+@section('header-actions')
+    <div class="mt-4 md:mt-0">
+        <a href="{{ route('admin.hero-slides.create') }}"
+            class="inline-flex items-center px-4 py-2.5 bg-gradient-to-r from-yellow-500 to-yellow-600 text-gray-900 font-semibold rounded-lg hover:from-yellow-400 hover:to-yellow-500 transition-all duration-300 text-sm shadow-lg shadow-yellow-500/20">
+            <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 4v16m8-8H4" />
+            </svg>
+            Add New Slide
+        </a>
+    </div>
+@endsection
 
 @section('content')
+    <!-- Back Button -->
+    <div class="mb-4">
+        <a href="{{ route('admin.dashboard') }}"
+            class="text-gray-400 hover:text-yellow-500 transition-colors inline-flex items-center text-sm group">
+            <svg class="w-4 h-4 mr-1 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+            Back to Dashboard
+        </a>
+    </div>
+
     <div class="mb-8">
-        <!-- Back Button -->
-        <div class="mb-4">
-            <a href="{{ route('admin.dashboard') }}"
-                class="text-gray-400 hover:text-yellow-500 transition-colors inline-flex items-center text-sm group">
-                <svg class="w-4 h-4 mr-1 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-                </svg>
-                Back to Dashboard
-            </a>
-        </div>
-
-        <div class="flex items-center justify-between mb-6">
-            <h2 class="text-2xl font-bold text-white">Hero Carousel Slides</h2>
-            <a href="{{ route('admin.hero-slides.create') }}"
-                class="inline-flex items-center px-4 py-2.5 bg-gradient-to-r from-yellow-500 to-yellow-600 text-gray-900 font-semibold rounded-lg hover:from-yellow-400 hover:to-yellow-500 transition-all">
-                <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M12 4v16m8-8H4" />
-                </svg>
-                Add New Slide
-            </a>
-        </div>
-
-        @if (session('success'))
-            <div class="bg-green-500/20 border border-green-500/50 text-green-400 p-4 rounded-lg mb-6">
-                {{ session('success') }}
-            </div>
-        @endif
-
         @if ($slides->isEmpty())
             <div class="bg-black/90 border border-gray-800 rounded-xl p-12 text-center">
                 <svg class="w-16 h-16 mx-auto text-gray-700 mb-4" fill="currentColor" viewBox="0 0 24 24">
@@ -44,17 +41,19 @@
             </div>
         @else
             <div class="bg-black/90 border border-gray-800 rounded-xl overflow-hidden">
-                <div class="p-4 border-b border-gray-800 text-sm text-gray-400 flex">
-                    <span class="w-12">Order</span>
-                    <span class="w-20">Image</span>
-                    <span class="flex-1">Headline / Sub</span>
-                    <span class="w-40">CTA</span>
-                    <span class="w-24 text-center">Active</span>
-                    <span class="w-32 text-right">Actions</span>
-                </div>
-                <div id="slides-sortable" class="divide-y divide-gray-800">
-                    @foreach ($slides as $slide)
-                        <div class="flex items-center p-4 hover:bg-gray-800/30 transition" data-slide-id="{{ $slide->id }}">
+                <div class="overflow-x-auto">
+                    <div class="min-w-[640px]">
+                        <div class="px-6 py-4 border-b border-gray-800 text-xs font-medium text-gray-400 uppercase tracking-wider flex">
+                            <span class="w-12">Order</span>
+                            <span class="w-20">Image</span>
+                            <span class="flex-1">Headline / Sub</span>
+                            <span class="w-40">CTA</span>
+                            <span class="w-24 text-center">Active</span>
+                            <span class="w-32 text-right">Actions</span>
+                        </div>
+                        <div id="slides-sortable" class="divide-y divide-gray-800">
+                            @foreach ($slides as $slide)
+                                <div class="flex items-center px-6 py-4 hover:bg-gray-800/30 transition" data-slide-id="{{ $slide->id }}">
                             <div class="w-12 text-gray-500 cursor-move handle">☰</div>
                             <div class="w-20 flex-shrink-0 mr-4">
                                 <div class="w-16 h-12 rounded overflow-hidden bg-gray-700 flex items-center justify-center">
@@ -107,6 +106,8 @@
                             </div>
                         </div>
                     @endforeach
+                        </div>
+                    </div>
                 </div>
             </div>
         @endif

@@ -3,7 +3,7 @@
 @section('title', 'Order Confirmed – BUGGXIT Couture')
 
 @section('content')
-    <div class="container-wide px-4 py-16 mx-auto text-center">
+    <div class="container-wide px-4 sm:px-6 lg:px-8 py-16 mx-auto text-center">
         <div class="max-w-2xl mx-auto bg-black/90 backdrop-blur-sm border border-gray-800 rounded-2xl p-8 md:p-12">
             <div
                 class="w-20 h-20 mx-auto mb-6 bg-green-500/20 rounded-full flex items-center justify-center border border-green-500/30">

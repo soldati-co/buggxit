@@ -1,10 +1,8 @@
 @extends('layouts.app')
 
 @section('header')
-    <div class="container-wide px-4 sm:px-6 lg:px-8 mx-auto">
-        <h1 class="text-3xl md:text-4xl font-bold text-white">My Dashboard</h1>
-        <p class="mt-2 text-gray-400 max-w-3xl">Welcome back, {{ Auth::user()->name ?? 'valued customer' }}. Manage your account, view orders, and discover the latest collections.</p>
-    </div>
+    <h1 class="text-3xl md:text-4xl font-bold text-white">My Dashboard</h1>
+    <p class="mt-2 text-gray-400 max-w-3xl">Welcome back, {{ Auth::user()->name ?? 'valued customer' }}. Manage your account, view orders, and discover the latest collections.</p>
 @endsection
 
 @section('content')

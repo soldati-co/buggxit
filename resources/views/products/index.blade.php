@@ -4,10 +4,10 @@
 
 @section('content')
     <div x-data="productsPage(@json($newArrivals ?? false))" x-init="init()" x-cloak class="space-y-12">
-        <section class="relative mb-12 overflow-hidden">
+        <section class="relative mb-20 overflow-hidden">
             <div class="absolute -top-20 -right-20 w-64 h-64 bg-yellow-500/10 rounded-full blur-3xl"></div>
             <div class="absolute -bottom-20 -left-20 w-64 h-64 bg-yellow-500/5 rounded-full blur-3xl"></div>
-            <div class="relative z-10 py-12 md:py-16">
+            <div class="relative z-10 py-16 md:py-24">
                 <div class="container-wide px-4 sm:px-6 lg:px-8 mx-auto">
                     <div class="max-w-3xl">
                         <span class="inline-flex items-center px-4 py-2 rounded-full text-xs font-medium bg-yellow-500/10 text-yellow-500 border border-yellow-500/30 mb-4 backdrop-blur-sm">

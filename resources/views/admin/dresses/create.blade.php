@@ -329,7 +329,7 @@
             </div>
 
             <!-- Form Actions -->
-            <div class="flex justify-end space-x-4">
+            <div class="mt-2 flex justify-end space-x-4">
                 <a href="{{ route('admin.dresses.index') }}"
                     class="px-6 py-3 border border-gray-700 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800/50 transition-all duration-200">
                     Cancel

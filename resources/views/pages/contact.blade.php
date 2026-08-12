@@ -130,26 +130,23 @@
                                 <h3 class="text-white font-semibold text-lg">Phone & WhatsApp</h3>
                                 <p class="text-gray-400 leading-relaxed">
                                     +27 31 234 5678<br>
-                                    <span
-                                        class="texon-Fri: 9AM-6PM CET</span>
+                                    <span class="text-xs">Mon-Fri: 9AM-6PM CET</span>
                                 </p>
                             </div>
                         </div>
 
                         {{-- Email --}}
-                        <div class="flex
-                                        items-start gap-4">
-                                        <div
-                                            class="w-12 h-12 bg-yellow-500/10 rounded-full flex items-center justify-center flex-shrink-0">
-                                            <i class="fas fa-envelope text-yellow-500 text-lg"></i>
-                                        </div>
-                                        <div>
-                                            <h3 class="text-white font-semibold text-lg">Email</h3>
-                                            <p class="text-gray-400 leading-relaxed">
-                                                info@buggxit.com<br>
-                                                clientservices@buggxit.com
-                                            </p>
-                                        </div>
+                        <div class="flex items-start gap-4">
+                            <div
+                                class="w-12 h-12 bg-yellow-500/10 rounded-full flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-envelope text-yellow-500 text-lg"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-white font-semibold text-lg">Email</h3>
+                                <p class="text-gray-400 leading-relaxed">
+                                    info@buggxit.com<br>
+                                    clientservices@buggxit.com
+                                </p>
                             </div>
                         </div>
 
