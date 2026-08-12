@@ -185,7 +185,7 @@ class Dress extends Model
 
     public function mainImage(): MorphOne
     {
-        return $this->morphOne(Image::class, 'imageable')->where('collection', 'main');
+        return $this->morphOne(Image::class, 'imageable')->where('collection', 'main')->latest('id');
     }
 
     public function galleryImages(): MorphMany
@@ -200,18 +200,21 @@ class Dress extends Model
      * build URLs (never pulls the multi-MB image_data column), so
      * listing endpoints don't issue a query per dress per image.
      */
-    public function scopeWithImageUrls($query)
+    public function scopeWithImageUrls(Builder $query): Builder
     {
+        if (! static::imagesTableExists()) {
+            return $query;
+        }
+
         return $query->with([
-            'mainImage' => fn($q) => $q->select('id', 'imageable_id', 'imageable_type', 'collection'),
+            'mainImage' => fn($q) => $q->select('id', 'imageable_id', 'imageable_type', 'collection')
+                ->whereNotNull('image_data')
+                ->where('image_data', '!=', ''),
             'galleryImages' => fn($q) => $q->select('id', 'imageable_id', 'imageable_type', 'collection', 'sort_order'),
         ]);
     }
 
     // ---------- Image URL Helpers (use these in your views) ----------
-    /**
-     * API URL for the main image (null if none).
-     */
     protected static ?bool $imagesTableExists = null;
 
     protected static function imagesTableExists(): bool
@@ -219,6 +222,9 @@ class Dress extends Model
         return static::$imagesTableExists ??= Schema::hasTable('images');
     }
 
+    /**
+     * API URL for the main image (null if none).
+     */
     public function getMainImageUrlAttribute(): string
     {
         if (! static::imagesTableExists()) {
