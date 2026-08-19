@@ -8,6 +8,7 @@ use App\Services\ImageStorageService;
 use Illuminate\Http\Request;
 use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Gd\Driver;
+use Intervention\Image\Encoders\WebpEncoder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -30,25 +31,28 @@ class HeroSlideController extends Controller
 
     public function store(Request $request)
     {
+        if ($oversizeError = $this->oversizeUploadError($request, 'image')) {
+            return back()->withErrors(['error' => $oversizeError])->withInput();
+        }
+
         $validated = $request->validate([
             'title'      => 'nullable|string|max:255',
             'headline'   => 'nullable|string|max:255',
             'subheading' => 'nullable|string|max:1000',
             'cta_text'   => 'nullable|string|max:255',
             'cta_url'    => 'nullable|url|max:2048',
-            'image'      => 'required|image|max:9999048',
+            'image'      => 'required|file|mimes:jpg,jpeg,png,gif,bmp,webp,avif|max:9999048',
             'alt_text'   => 'nullable|string|max:255',
             'sort_order' => 'nullable|integer|min:0',
             'is_active'  => 'boolean',
         ]);
 
-        try {
-            // Process image using Intervention v4
-            $manager = new ImageManager(new Driver());
-            $binary = (string) $manager->read($request->file('image'))
-                ->cover(1920, 1080)
-                ->toWebp(80);                    // quality 80
+        $binary = $this->processUpload($request->file('image'));
+        if ($binary instanceof \Illuminate\Http\RedirectResponse) {
+            return $binary;
+        }
 
+        try {
             // Create slide
             $slide = HeroSlide::create([
                 'title'      => $validated['title'] ?? null,
@@ -71,8 +75,12 @@ class HeroSlideController extends Controller
 
             return redirect()->route('admin.hero-slides.index')
                 ->with('success', 'Slide added successfully.');
-        } catch (\Exception $e) {
-            Log::error('HeroSlide store error: ' . $e->getMessage());
+        } catch (\Throwable $e) {
+            Log::error('HeroSlide store error', [
+                'exception' => get_class($e),
+                'message' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+            ]);
             return back()->withErrors(['error' => 'Failed to create slide: ' . $e->getMessage()])->withInput();
         }
     }
@@ -84,13 +92,17 @@ class HeroSlideController extends Controller
 
     public function update(Request $request, HeroSlide $heroSlide)
     {
+        if ($oversizeError = $this->oversizeUploadError($request, 'image')) {
+            return back()->withErrors(['error' => $oversizeError])->withInput();
+        }
+
         $validated = $request->validate([
             'title'      => 'nullable|string|max:255',
             'headline'   => 'nullable|string|max:255',
             'subheading' => 'nullable|string|max:1000',
             'cta_text'   => 'nullable|string|max:255',
             'cta_url'    => 'nullable|url|max:2048',
-            'image'      => 'nullable|image|max:9999048',
+            'image'      => 'nullable|file|mimes:jpg,jpeg,png,gif,bmp,webp,avif|max:9999048',
             'alt_text'   => 'nullable|string|max:255',
             'sort_order' => 'nullable|integer|min:0',
             'is_active'  => 'boolean',
@@ -102,17 +114,18 @@ class HeroSlideController extends Controller
         ]);
         $data['is_active'] = $request->boolean('is_active', true);
 
+        $binary = null;
+        if ($request->hasFile('image')) {
+            $binary = $this->processUpload($request->file('image'));
+            if ($binary instanceof \Illuminate\Http\RedirectResponse) {
+                return $binary;
+            }
+        }
+
         try {
-            if ($request->hasFile('image')) {
+            if ($binary !== null) {
                 // Delete old database image record
                 $heroSlide->image()->delete();
-
-                // Process new image
-                $manager = new ImageManager(new Driver());
-                $binary = (string) $manager->read($request->file('image'))
-                    ->cover(1920, 1080)
-                    ->toWebp(80);
-
                 $this->images->storeFromBinary($heroSlide, $binary, 'image/webp', 'hero');
             }
 
@@ -121,8 +134,12 @@ class HeroSlideController extends Controller
 
             return redirect()->route('admin.hero-slides.index')
                 ->with('success', 'Slide updated successfully.');
-        } catch (\Exception $e) {
-            Log::error('HeroSlide update error: ' . $e->getMessage());
+        } catch (\Throwable $e) {
+            Log::error('HeroSlide update error', [
+                'exception' => get_class($e),
+                'message' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+            ]);
             return back()->withErrors(['error' => 'Update failed: ' . $e->getMessage()])->withInput();
         }
     }
@@ -166,6 +183,82 @@ class HeroSlideController extends Controller
         } catch (\Exception $e) {
             Log::error('HeroSlide updateOrder error: ' . $e->getMessage());
             return response()->json(['message' => 'Failed to update order.'], 500);
+        }
+    }
+
+    /**
+     * PHP silently drops an upload that exceeds post_max_size — no $_FILES
+     * entry is populated at all, so Laravel's own validation just sees a
+     * missing field and reports "the image field is required", which is
+     * misleading for what's actually a size problem. Detect that specific
+     * case (a POST body was clearly larger than what PHP accepted, but the
+     * expected file is missing) and return a clear, accurate message instead.
+     */
+    private function oversizeUploadError(Request $request, string $field): ?string
+    {
+        if ($request->hasFile($field)) {
+            return null;
+        }
+
+        $contentLength = (int) $request->server('CONTENT_LENGTH', 0);
+        $postMaxBytes = $this->iniBytes(ini_get('post_max_size'));
+
+        if ($contentLength > 0 && $postMaxBytes > 0 && $contentLength > $postMaxBytes) {
+            return sprintf(
+                'That image is too large for the server to accept (limit is %s). Please use a smaller file or compress it first.',
+                ini_get('post_max_size')
+            );
+        }
+
+        return null;
+    }
+
+    private function iniBytes(string $value): int
+    {
+        $value = trim($value);
+        $unit = strtolower(substr($value, -1));
+        $number = (float) $value;
+
+        return (int) match ($unit) {
+            'g' => $number * 1024 * 1024 * 1024,
+            'm' => $number * 1024 * 1024,
+            'k' => $number * 1024,
+            default => $number,
+        };
+    }
+
+    /**
+     * Run the uploaded file through Intervention/GD, converting it to webp.
+     * Returns the encoded binary on success, or a redirect-back-with-errors
+     * response if GD can't decode this particular file (e.g. a corrupt file,
+     * or a format that technically matched the mimes: rule but that this
+     * server's GD build can't actually read).
+     *
+     * @return string|\Illuminate\Http\RedirectResponse
+     */
+    private function processUpload(\Illuminate\Http\UploadedFile $file)
+    {
+        try {
+            $manager = new ImageManager(new Driver());
+
+            return (string) $manager->decodeSplFileInfo($file)
+                ->cover(1920, 1080)
+                ->encode(new WebpEncoder(quality: 80));
+        } catch (\Throwable $e) {
+            Log::error('HeroSlide image processing failed', [
+                'exception' => get_class($e),
+                'message' => $e->getMessage(),
+                'original_name' => $file->getClientOriginalName(),
+                'client_mime' => $file->getClientMimeType(),
+                'detected_mime' => $file->getMimeType(),
+                'size_bytes' => $file->getSize(),
+            ]);
+
+            return back()->withErrors([
+                'error' => "This server couldn't process that image ({$file->getClientOriginalName()}). "
+                    . 'Supported formats: JPEG, PNG, GIF, BMP, WebP, AVIF. If it\'s one of those, try re-saving it '
+                    . 'and uploading again.',
+            ])->withInput();
         }
     }
 }

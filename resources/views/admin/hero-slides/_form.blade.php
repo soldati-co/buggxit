@@ -1,4 +1,12 @@
 @csrf
+
+@if ($errors->has('error'))
+    <div class="mb-6 p-4 bg-bad/10 border border-bad/30 rounded-lg flex items-start gap-3">
+        <i class="fas fa-triangle-exclamation text-bad mt-0.5"></i>
+        <p class="text-bad text-sm">{{ $errors->first('error') }}</p>
+    </div>
+@endif
+
 <div class="space-y-6">
     <!-- Title (admin label) -->
     <div>

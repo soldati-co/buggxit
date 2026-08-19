@@ -9,6 +9,13 @@
         <form action="{{ route('admin.dresses.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
             @csrf
 
+            @if ($errors->has('error'))
+                <div class="p-4 bg-bad/10 border border-bad/30 rounded-lg flex items-start gap-3">
+                    <i class="fas fa-triangle-exclamation text-bad mt-0.5"></i>
+                    <p class="text-bad text-sm">{{ $errors->first('error') }}</p>
+                </div>
+            @endif
+
             <!-- Basic Information Card -->
             <div class="bg-ink-raised/90 backdrop-blur-sm border border-line rounded-xl p-6">
                 <h3 class="text-lg font-semibold text-bone mb-4 flex items-center">
