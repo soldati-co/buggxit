@@ -43,7 +43,7 @@ class CheckoutFlowTest extends TestCase
         $order = app(OrderService::class)->createOrderFromCart(
             shippingAddress: $address,
             billingAddress: null,
-            paymentMethod: 'eft',
+            paymentMethod: 'payfast',
             userId: null,
         );
 
@@ -77,7 +77,7 @@ class CheckoutFlowTest extends TestCase
         $order = app(OrderService::class)->createOrderFromCart(
             shippingAddress: $address,
             billingAddress: null,
-            paymentMethod: 'cash_on_delivery',
+            paymentMethod: 'payfast',
             userId: $user->id,
         );
 
@@ -93,7 +93,7 @@ class CheckoutFlowTest extends TestCase
         app(OrderService::class)->createOrderFromCart(
             shippingAddress: $address,
             billingAddress: null,
-            paymentMethod: 'eft',
+            paymentMethod: 'payfast',
             userId: null,
         );
     }
@@ -109,7 +109,7 @@ class CheckoutFlowTest extends TestCase
                 'postal_code' => '8001',
                 'country' => 'South Africa',
                 'phone' => '0111234567',
-                'payment_method' => 'eft',
+                'payment_method' => 'payfast',
             ]);
 
         $this->assertDatabaseCount('orders', 1);

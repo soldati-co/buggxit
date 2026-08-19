@@ -28,9 +28,16 @@
                     <div class="relative">
                         <template x-for="(slide, index) in heroSlides" :key="slide.id">
                             <div x-show="activeSlide === index" x-transition class="absolute inset-0 w-full h-full">
-                                <img :src="slide.image_url" :alt="slide.alt_text"
-                                    class="absolute inset-0 w-full h-full object-cover"
-                                    loading="lazy">
+                                <template x-if="slide.image_url">
+                                    <img :src="slide.image_url" :alt="slide.alt_text"
+                                        class="absolute inset-0 w-full h-full object-cover"
+                                        loading="lazy">
+                                </template>
+                                <template x-if="!slide.image_url">
+                                    <div class="absolute inset-0 bg-gradient-to-br from-ink-raised2 to-ink-raised flex items-center justify-center">
+                                        <i class="fas fa-image text-6xl text-bone-faint/20"></i>
+                                    </div>
+                                </template>
                                 <div class="absolute inset-0 bg-ink-raised/50"></div>
                                 <div class="relative z-10 flex h-full items-center max-w-6xl mx-auto px-6 lg:px-16">
                                     <div class="text-bone max-w-2xl">
@@ -131,19 +138,23 @@
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                     <template x-for="dress in featured" :key="dress.id">
                         <div class="group bg-ink-raised/90 backdrop-blur-sm border border-line rounded-2xl overflow-hidden hover:border-gold/50 transition-all duration-500 hover:shadow-2xl hover:shadow-gold/10">
-                            <div class="relative h-72 overflow-hidden">
-                                <div class="absolute inset-0 bg-gradient-to-t from-ink-raised/80 via-transparent to-transparent z-10"></div>
-                                <img :src="dress.main_image_url" :alt="dress.name" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
-                                <template x-if="dress.is_featured">
-                                    <span class="absolute top-4 left-4 z-20 px-3 py-1.5 text-xs font-medium bg-gold/90 text-ink rounded-full backdrop-blur-sm">
-                                        <i class="fas fa-star mr-1"></i> Featured
-                                    </span>
-                                </template>
-                                <div class="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-gold to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-20"></div>
-                            </div>
-                            <div class="p-5">
-                                <div class="text-xs text-gold uppercase tracking-wider mb-1" x-text="dress.categories?.map(c => c.name).join(', ') || 'Collection'"></div>
-                                <h3 class="font-semibold text-bone text-lg mb-2 line-clamp-1" x-text="dress.name"></h3>
+                            <a :href="getProductUrl(dress)" class="block">
+                                <div class="relative h-72 overflow-hidden">
+                                    <div class="absolute inset-0 bg-gradient-to-t from-ink-raised/80 via-transparent to-transparent z-10"></div>
+                                    <img :src="dress.main_image_url" :alt="dress.name" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                                    <template x-if="dress.is_featured">
+                                        <span class="absolute top-4 left-4 z-20 px-3 py-1.5 text-xs font-medium bg-gold/90 text-ink rounded-full backdrop-blur-sm">
+                                            <i class="fas fa-star mr-1"></i> Featured
+                                        </span>
+                                    </template>
+                                    <div class="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-gold to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-20"></div>
+                                </div>
+                                <div class="px-5 pt-5">
+                                    <div class="text-xs text-gold uppercase tracking-wider mb-1" x-text="dress.categories?.map(c => c.name).join(', ') || 'Collection'"></div>
+                                    <h3 class="font-semibold text-bone text-lg mb-2 line-clamp-1 group-hover:text-gold transition-colors" x-text="dress.name"></h3>
+                                </div>
+                            </a>
+                            <div class="px-5 pb-5">
                                 <div class="flex justify-between items-center">
                                     <span class="text-2xl font-bold font-numeric text-gold">R<span x-text="dress.price.toLocaleString()"></span></span>
                                     <button type="button" @click.prevent="addToCart(dress.id)"

@@ -139,15 +139,15 @@
 
                 <!-- Legal Links - center on desktop -->
                 <div class="flex items-center justify-center space-x-6">
-                    <a href="#"
+                    <a href="{{ route('privacy-policy') }}"
                         class="text-bone-dim hover:text-gold text-sm transition-colors duration-300">
                         Privacy Policy
                     </a>
-                    <a href="#"
+                    <a href="{{ route('terms-of-service') }}"
                         class="text-bone-dim hover:text-gold text-sm transition-colors duration-300">
                         Terms of Service
                     </a>
-                    <a href="#"
+                    <a href="{{ route('shipping-policy') }}"
                         class="text-bone-dim hover:text-gold text-sm transition-colors duration-300">
                         Shipping Policy
                     </a>

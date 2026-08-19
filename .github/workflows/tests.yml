@@ -41,3 +41,65 @@ jobs:
 
       - name: Run tests
         run: php artisan test
+
+  deploy:
+    name: Deploy to Coolify
+    needs: test
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    runs-on: ubuntu-latest
+    env:
+      COOLIFY_TOKEN: ${{ secrets.COOLIFY_TOKEN }}
+      COOLIFY_APP_UUID: wtmk5vqpheayjp58cu1zc3hj
+      COOLIFY_API: http://46.225.99.43:8000/api/v1
+
+    steps:
+      - name: Trigger Coolify deployment
+        id: trigger
+        run: |
+          response=$(curl -s --fail --max-time 15 -X POST \
+            -H "Authorization: Bearer $COOLIFY_TOKEN" \
+            "$COOLIFY_API/deploy?uuid=$COOLIFY_APP_UUID")
+          echo "Coolify response: $response"
+
+          deployment_uuid=$(echo "$response" | jq -r '.deployments[0].deployment_uuid // empty')
+          if [ -z "$deployment_uuid" ]; then
+            echo "::error::Could not read a deployment_uuid from Coolify's response."
+            exit 1
+          fi
+          echo "deployment_uuid=$deployment_uuid" >> "$GITHUB_OUTPUT"
+
+      - name: Wait for deployment to finish
+        run: |
+          deployment_uuid="${{ steps.trigger.outputs.deployment_uuid }}"
+          final_status=""
+
+          # Builds (composer/npm/docker) can take a few minutes; poll for up to 10 minutes.
+          for i in $(seq 1 40); do
+            sleep 15
+            status=$(curl -s --max-time 10 -H "Authorization: Bearer $COOLIFY_TOKEN" \
+              "$COOLIFY_API/deployments/$deployment_uuid" | jq -r '.status // empty')
+            echo "check $i ($((i * 15))s): $status"
+            if [ -n "$status" ] && [ "$status" != "in_progress" ] && [ "$status" != "queued" ]; then
+              final_status="$status"
+              break
+            fi
+          done
+
+          if [ "$final_status" != "finished" ]; then
+            echo "::error::Coolify deployment did not finish successfully (last status: ${final_status:-timed out})"
+            exit 1
+          fi
+
+      - name: Verify site is healthy
+        run: |
+          for i in 1 2 3 4 5 6; do
+            code=$(curl -s -o /dev/null -w "%{http_code}" --max-time 15 "https://app.buggxit.store/up")
+            if [ "$code" = "200" ]; then
+              echo "Site healthy (HTTP $code)"
+              exit 0
+            fi
+            echo "attempt $i: HTTP $code, retrying..."
+            sleep 10
+          done
+          echo "::error::Site did not report healthy after deployment."
+          exit 1

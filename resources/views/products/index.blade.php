@@ -3,7 +3,7 @@
 @section('title', 'All Dresses – BUGGXIT Couture')
 
 @section('content')
-    <div x-data="productsPage(@json($newArrivals ?? false))" x-init="init()" x-cloak class="space-y-12">
+    <div x-data="productsPage(@json($newArrivals ?? false))" x-init="init()" x-cloak class="space-y-12 pb-16">
         <section class="relative mb-20 overflow-hidden">
             <div class="absolute -top-20 -right-20 w-64 h-64 bg-gold/10 rounded-full blur-3xl"></div>
             <div class="absolute -bottom-20 -left-20 w-64 h-64 bg-gold/5 rounded-full blur-3xl"></div>
@@ -85,19 +85,21 @@
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                     <template x-for="dress in dresses" :key="dress.id">
                         <div class="group bg-ink-raised/90 backdrop-blur-sm border border-line rounded-2xl overflow-hidden hover:border-gold/50 transition-all duration-500 hover:shadow-2xl hover:shadow-gold/10">
-                            <div class="relative h-72 overflow-hidden">
-                                <div class="absolute inset-0 bg-gradient-to-t from-ink-raised/80 via-transparent to-transparent z-10"></div>
-                                <img :src="dress.main_image_url" :alt="dress.name" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
-                                <template x-if="dress.is_featured">
-                                    <span class="absolute top-4 left-4 z-20 px-3 py-1.5 text-xs font-medium bg-gold/90 text-ink rounded-full backdrop-blur-sm"><i class="fas fa-star mr-1"></i> Featured</span>
-                                </template>
-                                <div class="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-gold to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-20"></div>
-                            </div>
-                            <div class="p-5">
-                                <div class="text-xs text-gold uppercase tracking-wider mb-1">Traditional Dress</div>
-                                <a :href="getProductUrl(dress)" class="block">
-                                    <h3 class="font-semibold text-bone text-lg mb-2 line-clamp-1 hover:text-gold transition-colors" x-text="dress.name"></h3>
-                                </a>
+                            <a :href="getProductUrl(dress)" class="block">
+                                <div class="relative h-72 overflow-hidden">
+                                    <div class="absolute inset-0 bg-gradient-to-t from-ink-raised/80 via-transparent to-transparent z-10"></div>
+                                    <img :src="dress.main_image_url" :alt="dress.name" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                                    <template x-if="dress.is_featured">
+                                        <span class="absolute top-4 left-4 z-20 px-3 py-1.5 text-xs font-medium bg-gold/90 text-ink rounded-full backdrop-blur-sm"><i class="fas fa-star mr-1"></i> Featured</span>
+                                    </template>
+                                    <div class="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-gold to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-20"></div>
+                                </div>
+                                <div class="px-5 pt-5">
+                                    <div class="text-xs text-gold uppercase tracking-wider mb-1">Traditional Dress</div>
+                                    <h3 class="font-semibold text-bone text-lg mb-2 line-clamp-1 group-hover:text-gold transition-colors" x-text="dress.name"></h3>
+                                </div>
+                            </a>
+                            <div class="px-5 pb-5">
                                 <div class="flex justify-between items-center">
                                     <span class="text-2xl font-bold font-numeric text-gold">R<span x-text="dress.price.toLocaleString()"></span></span>
                                     <button type="button" @click.prevent="addToCart(dress.id)" class="p-3 bg-gold/10 rounded-xl text-gold hover:bg-gold hover:text-ink transition-all duration-300">

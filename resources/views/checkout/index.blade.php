@@ -83,25 +83,13 @@
                             <i class="fas fa-credit-card text-gold mr-2"></i>
                             Payment Method
                         </h2>
-                        <div class="space-y-3">
-                            <label
-                                class="flex items-center p-3 border border-line rounded-lg cursor-pointer hover:border-gold/50 transition-colors">
-                                <input type="radio" name="payment_method" value="eft"
-                                    class="h-4 w-4 text-gold focus:ring-gold" checked>
-                                <span class="ml-3 text-bone">Bank Transfer (EFT)</span>
-                            </label>
-                            <label
-                                class="flex items-center p-3 border border-line rounded-lg cursor-pointer hover:border-gold/50 transition-colors">
-                                <input type="radio" name="payment_method" value="cash_on_delivery"
-                                    class="h-4 w-4 text-gold focus:ring-gold">
-                                <span class="ml-3 text-bone">Cash on Delivery</span>
-                            </label>
-                            <label
-                                class="flex items-center p-3 border border-line rounded-lg cursor-pointer hover:border-gold/50 transition-colors">
-                                <input type="radio" name="payment_method" value="payfast"
-                                    class="h-4 w-4 text-gold focus:ring-gold">
-                                <span class="ml-3 text-bone">Pay Now (Card / PayFast)</span>
-                            </label>
+                        <input type="hidden" name="payment_method" value="payfast">
+                        <div class="flex items-center p-3 border border-gold/50 bg-gold/5 rounded-lg">
+                            <i class="fas fa-shield-alt text-gold mr-3 text-lg"></i>
+                            <div>
+                                <span class="block text-bone font-medium">Pay Now via PayFast</span>
+                                <span class="block text-bone-dim text-sm">Secure card payment. You'll be redirected to PayFast to complete your payment.</span>
+                            </div>
                         </div>
                     </div>
 

@@ -16,6 +16,21 @@ class PageController extends Controller
         return view('pages.contact');
     }
 
+    public function privacyPolicy()
+    {
+        return view('pages.privacy-policy');
+    }
+
+    public function termsOfService()
+    {
+        return view('pages.terms-of-service');
+    }
+
+    public function shippingPolicy()
+    {
+        return view('pages.shipping-policy');
+    }
+
     public function dashboard()
     {
         return view('pages.dashboard');

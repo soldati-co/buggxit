@@ -60,7 +60,7 @@
                         <i class="fas fa-credit-card text-gold mr-2"></i> Payment Method
                     </h3>
                     <div class="text-bone-dim text-sm border border-line rounded-lg p-4 bg-ink-raised2/30">
-                        {{ $order->payment_method == 'eft' ? 'Bank Transfer (EFT)' : 'Cash on Delivery' }}
+                        {{ match ($order->payment_method) { 'eft' => 'Bank Transfer (EFT)', 'cash_on_delivery' => 'Cash on Delivery', 'payfast' => 'PayFast', default => ucfirst($order->payment_method ?? 'Unknown') } }}
                     </div>
                 </div>
             </div>
