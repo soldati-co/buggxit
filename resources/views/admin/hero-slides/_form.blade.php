@@ -39,7 +39,7 @@
     <!-- Image -->
     <div>
         <label class="block text-sm font-medium text-bone-dim mb-1">Image</label>
-        @if (isset($slide) && $slide->image_path)
+        @if (isset($slide) && $slide->image_api_url)
             <div class="mb-3" id="current-image-container">
                 <img src="{{ $slide->image_api_url }}?t={{ time() }}"
                      id="current-image"

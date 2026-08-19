@@ -19,7 +19,7 @@ class HeroSlideController extends Controller
 
     public function index()
     {
-        $slides = HeroSlide::ordered()->get();
+        $slides = HeroSlide::ordered()->with('image')->get();
         return view('admin.hero-slides.index', compact('slides'));
     }
 

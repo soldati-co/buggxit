@@ -57,7 +57,7 @@
                             <div class="w-12 text-bone-faint cursor-move handle">☰</div>
                             <div class="w-20 flex-shrink-0 mr-4">
                                 <div class="w-16 h-12 rounded overflow-hidden bg-ink-raised2 flex items-center justify-center">
-                                    @if ($slide->image_path)
+                                    @if ($slide->image_api_url)
                                         <img src="{{ $slide->image_api_url }}?t={{ time() }}"
                                              alt="{{ $slide->alt_text }}"
                                              class="w-full h-full object-cover"
