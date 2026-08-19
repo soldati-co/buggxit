@@ -3,6 +3,8 @@
 @section('title', 'Buggxit Couture')
 
 @section('content')
+    @include('partials.hero')
+
     <div x-data="landingPage()" x-init="init()" x-cloak>
         <template x-if="loading">
             <div class="space-y-8">
@@ -23,57 +25,6 @@
 
         <template x-if="!loading && !error">
           <div>
-            <section class="relative w-full min-h-[60vh] overflow-hidden rounded-3xl bg-ink-raised2/90">
-                <template x-if="heroSlides.length">
-                    <div class="relative">
-                        <template x-for="(slide, index) in heroSlides" :key="slide.id">
-                            <div x-show="activeSlide === index" x-transition class="absolute inset-0 w-full h-full">
-                                <template x-if="slide.image_url">
-                                    <img :src="slide.image_url" :alt="slide.alt_text"
-                                        class="absolute inset-0 w-full h-full object-cover"
-                                        loading="lazy">
-                                </template>
-                                <template x-if="!slide.image_url">
-                                    <div class="absolute inset-0 bg-gradient-to-br from-ink-raised2 to-ink-raised flex items-center justify-center">
-                                        <i class="fas fa-image text-6xl text-bone-faint/20"></i>
-                                    </div>
-                                </template>
-                                <div class="absolute inset-0 bg-ink-raised/50"></div>
-                                <div class="relative z-10 flex h-full items-center max-w-6xl mx-auto px-6 lg:px-16">
-                                    <div class="text-bone max-w-2xl">
-                                        <h1 class="text-4xl md:text-6xl font-bold leading-tight mb-4" x-text="slide.headline || slide.title"></h1>
-                                        <p class="text-lg md:text-xl text-bone mb-8" x-text="slide.subheading"></p>
-                                        <a x-show="slide.cta_text && slide.cta_url" :href="slide.cta_url"
-                                            class="inline-flex items-center px-8 py-3 bg-gold text-ink font-semibold rounded-lg hover:bg-gold-bright transition">
-                                            <span x-text="slide.cta_text"></span>
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </template>
-
-                        <div class="absolute inset-x-0 bottom-6 flex justify-center space-x-2 z-20">
-                            <template x-for="(slide, index) in heroSlides" :key="slide.id">
-                                <button type="button" @click="goToHero(index)"
-                                    :class="activeSlide === index ? 'bg-gold' : 'bg-white/50'"
-                                    class="w-3 h-3 rounded-full transition-colors"></button>
-                            </template>
-                        </div>
-
-                        <button @click="prevHero()" class="absolute left-4 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full bg-ink-raised/50 text-bone hover:bg-ink-raised/70 transition">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-                            </svg>
-                        </button>
-                        <button @click="nextHero()" class="absolute right-4 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full bg-ink-raised/50 text-bone hover:bg-ink-raised/70 transition">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                            </svg>
-                        </button>
-                    </div>
-                </template>
-            </section>
-
             <section class="container-wide px-4 sm:px-6 lg:px-8 mx-auto mt-5 mb-10">
                 <div class="flex flex-col md:flex-row md:items-end justify-between mb-10">
                     <div>
@@ -254,11 +205,9 @@
             return {
                 loading: true,
                 error: null,
-                heroSlides: [],
                 categories: [],
                 featured: [],
                 newArrivals: [],
-                activeSlide: 0,
 
                 init() {
                     this.fetchHome();
@@ -271,7 +220,6 @@
                             throw new Error('Unable to load home data.');
                         }
                         const json = await response.json();
-                        this.heroSlides = json.hero_slides || [];
                         this.categories = json.categories || [];
                         this.featured = json.featured || [];
                         this.newArrivals = json.new_arrivals || [];
@@ -280,20 +228,6 @@
                     } finally {
                         this.loading = false;
                     }
-                },
-
-                nextHero() {
-                    if (!this.heroSlides.length) return;
-                    this.activeSlide = (this.activeSlide + 1) % this.heroSlides.length;
-                },
-
-                prevHero() {
-                    if (!this.heroSlides.length) return;
-                    this.activeSlide = (this.activeSlide - 1 + this.heroSlides.length) % this.heroSlides.length;
-                },
-
-                goToHero(index) {
-                    this.activeSlide = index;
                 },
 
                 async addToCart(productId) {

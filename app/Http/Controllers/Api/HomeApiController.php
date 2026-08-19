@@ -5,10 +5,8 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\CategoryResource;
 use App\Http\Resources\DressResource;
-use App\Http\Resources\HeroSlideResource;
 use App\Models\Category;
 use App\Models\Dress;
-use App\Models\HeroSlide;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Schema;
@@ -45,7 +43,6 @@ class HomeApiController extends Controller
             ]);
 
             return response()->json([
-                'hero_slides' => [],
                 'featured' => [],
                 'new_arrivals' => [],
                 'categories' => [],
@@ -63,7 +60,6 @@ class HomeApiController extends Controller
         $featuredDresses = collect();
         $newArrivals = collect();
         $activeCategories = collect();
-        $heroSlides = collect();
 
         if ($tables['dresses']) {
             $featuredDresses = Dress::with('categories')
@@ -88,14 +84,7 @@ class HomeApiController extends Controller
                 ->get();
         }
 
-        if ($tables['hero']) {
-            $heroSlides = HeroSlide::where('is_active', true)
-                ->orderBy('sort_order')
-                ->get();
-        }
-
         return [
-            'hero_slides' => HeroSlideResource::collection($heroSlides)->resolve(),
             'featured' => DressResource::collection($featuredDresses)->resolve(),
             'new_arrivals' => DressResource::collection($newArrivals)->resolve(),
             'categories' => CategoryResource::collection($activeCategories)->resolve(),
@@ -106,7 +95,7 @@ class HomeApiController extends Controller
      * Cache the Schema::hasTable() lookups. These hit the DB every time otherwise,
      * and the answer never changes outside of a deploy/migration.
      *
-     * @return array{dresses: bool, hero: bool}
+     * @return array{dresses: bool}
      */
     private function tablesExist(): array
     {
@@ -115,8 +104,6 @@ class HomeApiController extends Controller
                 'dresses' => Schema::hasTable('dresses')
                     && Schema::hasTable('categories')
                     && Schema::hasTable('category_dress'),
-                'hero' => Schema::hasTable('hero_slides')
-                    && Schema::hasTable('images'),
             ];
         });
     }
