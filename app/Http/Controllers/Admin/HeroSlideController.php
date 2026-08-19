@@ -6,9 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Models\HeroSlide;
 use App\Services\ImageStorageService;
 use Illuminate\Http\Request;
-use Intervention\Image\ImageManager;
-use Intervention\Image\Drivers\Gd\Driver;
-use Intervention\Image\Encoders\WebpEncoder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -47,11 +44,6 @@ class HeroSlideController extends Controller
             'is_active'  => 'boolean',
         ]);
 
-        $binary = $this->processUpload($request->file('image'));
-        if ($binary instanceof \Illuminate\Http\RedirectResponse) {
-            return $binary;
-        }
-
         try {
             // Create slide
             $slide = HeroSlide::create([
@@ -65,11 +57,10 @@ class HeroSlideController extends Controller
                 'is_active'  => $request->boolean('is_active', true),
             ]);
 
-            // Save image binary in polymorphic table (base64-encoded via
-            // ImageStorageService, matching what ImageController::show()
-            // expects to base64_decode() — see AdminDressController for the
-            // same invariant on the dress-image write path)
-            $this->images->storeFromBinary($slide, $binary, 'image/webp', 'hero');
+            // Store the upload as-is (base64-encoded, same as dress images
+            // via ImageStorageService) — no GD/Intervention resizing or
+            // format conversion, since GD isn't available on this server.
+            $this->images->store($slide, $request->file('image'), 'hero');
 
             Log::info('HeroSlide created with DB image', ['id' => $slide->id]);
 
@@ -114,19 +105,11 @@ class HeroSlideController extends Controller
         ]);
         $data['is_active'] = $request->boolean('is_active', true);
 
-        $binary = null;
-        if ($request->hasFile('image')) {
-            $binary = $this->processUpload($request->file('image'));
-            if ($binary instanceof \Illuminate\Http\RedirectResponse) {
-                return $binary;
-            }
-        }
-
         try {
-            if ($binary !== null) {
+            if ($request->hasFile('image')) {
                 // Delete old database image record
                 $heroSlide->image()->delete();
-                $this->images->storeFromBinary($heroSlide, $binary, 'image/webp', 'hero');
+                $this->images->store($heroSlide, $request->file('image'), 'hero');
             }
 
             $heroSlide->update($data);
@@ -225,40 +208,5 @@ class HeroSlideController extends Controller
             'k' => $number * 1024,
             default => $number,
         };
-    }
-
-    /**
-     * Run the uploaded file through Intervention/GD, converting it to webp.
-     * Returns the encoded binary on success, or a redirect-back-with-errors
-     * response if GD can't decode this particular file (e.g. a corrupt file,
-     * or a format that technically matched the mimes: rule but that this
-     * server's GD build can't actually read).
-     *
-     * @return string|\Illuminate\Http\RedirectResponse
-     */
-    private function processUpload(\Illuminate\Http\UploadedFile $file)
-    {
-        try {
-            $manager = new ImageManager(new Driver());
-
-            return (string) $manager->decodeSplFileInfo($file)
-                ->cover(1920, 1080)
-                ->encode(new WebpEncoder(quality: 80));
-        } catch (\Throwable $e) {
-            Log::error('HeroSlide image processing failed', [
-                'exception' => get_class($e),
-                'message' => $e->getMessage(),
-                'original_name' => $file->getClientOriginalName(),
-                'client_mime' => $file->getClientMimeType(),
-                'detected_mime' => $file->getMimeType(),
-                'size_bytes' => $file->getSize(),
-            ]);
-
-            return back()->withErrors([
-                'error' => "This server couldn't process that image ({$file->getClientOriginalName()}, "
-                    . "{$file->getMimeType()}, " . round($file->getSize() / 1024) . "KB). "
-                    . "Reason: {$e->getMessage()}. Supported formats: JPEG, PNG, GIF, BMP, WebP, AVIF.",
-            ])->withInput();
-        }
     }
 }

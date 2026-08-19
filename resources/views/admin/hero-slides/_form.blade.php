@@ -47,6 +47,7 @@
     <!-- Image -->
     <div>
         <label class="block text-sm font-medium text-bone-dim mb-1">Image</label>
+        <p class="text-xs text-bone-faint mb-2">Uploaded as-is (not auto-cropped) — a widescreen image around 1920&times;1080 works best for the carousel.</p>
         @if (isset($slide) && $slide->image_api_url)
             <div class="mb-3" id="current-image-container">
                 <img src="{{ $slide->image_api_url }}?t={{ time() }}"

@@ -13,14 +13,6 @@ FROM serversideup/php:8.4-fpm-nginx
 
 WORKDIR /var/www/html
 
-# GD (image resizing/encoding for hero slides) and exif (JPEG auto-orientation)
-# aren't included by default on this base image. serversideup/php images run
-# unprivileged by default, so extensions must be installed as root, then the
-# user switched back to www-data.
-USER root
-RUN install-php-extensions gd exif
-USER www-data
-
 # Copy application code
 COPY --chown=www-data:www-data . /var/www/html
 
