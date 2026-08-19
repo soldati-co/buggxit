@@ -255,9 +255,9 @@ class HeroSlideController extends Controller
             ]);
 
             return back()->withErrors([
-                'error' => "This server couldn't process that image ({$file->getClientOriginalName()}). "
-                    . 'Supported formats: JPEG, PNG, GIF, BMP, WebP, AVIF. If it\'s one of those, try re-saving it '
-                    . 'and uploading again.',
+                'error' => "This server couldn't process that image ({$file->getClientOriginalName()}, "
+                    . "{$file->getMimeType()}, " . round($file->getSize() / 1024) . "KB). "
+                    . "Reason: {$e->getMessage()}. Supported formats: JPEG, PNG, GIF, BMP, WebP, AVIF.",
             ])->withInput();
         }
     }
