@@ -3,7 +3,7 @@
 @section('title', 'Dress details – BUGGXIT Couture')
 
 @section('content')
-    <div x-data="productPage(@json($productIdentifier))" x-init="init()" x-cloak class="space-y-10">
+    <div x-data='productPage(@json($productIdentifier))' x-init="init()" x-cloak class="space-y-10">
         <div class="container-wide px-4 sm:px-6 lg:px-8 mx-auto pt-6">
             <a href="{{ route('products.index') }}" class="inline-flex items-center text-bone-dim hover:text-gold transition-colors group">
                 <svg class="w-4 h-4 mr-2 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
