@@ -3,7 +3,7 @@
 @section('title', 'Buggxit Couture')
 
 @section('content')
-    <div x-data="landingPage()" x-init="init()" x-cloak class="space-y-20">
+    <div x-data="landingPage()" x-init="init()" x-cloak>
         <template x-if="loading">
             <div class="space-y-8">
                 <div class="h-[60vh] rounded-3xl bg-ink-raised2/90 animate-pulse"></div>
@@ -22,6 +22,7 @@
         </template>
 
         <template x-if="!loading && !error">
+          <div>
             <section class="relative w-full min-h-[60vh] overflow-hidden rounded-3xl bg-ink-raised2/90">
                 <template x-if="heroSlides.length">
                     <div class="relative">
@@ -231,6 +232,7 @@
                     </div>
                 </div>
             </section>
+          </div>
         </template>
     </div>
 @endsection
