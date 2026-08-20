@@ -19,31 +19,23 @@
                 <div class="flex items-center space-x-3">
                     <img src="{{ asset('Buggxit_Submark_Gold.svg') }}" alt="BUGGXIT Logo" class="h-12 w-auto md:h-14">
                 </div>
-                <div class="space-y-6">
-                    <div class="flex flex-wrap gap-3">
-                        <a href="https://www.instagram.com/buggxit_couture/"
-                            class="p-2.5 bg-ink-raised2/50 rounded-full text-bone-dim hover:text-gold hover:bg-ink-raised2/80 transition-all duration-300 group">
-                            <i class="fab fa-instagram text-lg group-hover:scale-110"></i>
-                        </a>
-                        <a href="https://www.facebook.com/p/Buggxit-Couture-Clothing-Accessories-100053004263016/"
-                            class="p-2.5 bg-ink-raised2/50 rounded-full text-bone-dim hover:text-gold hover:bg-ink-raised2/80 transition-all duration-300 group">
-                            <i class="fab fa-facebook text-lg group-hover:scale-110"></i>
-                        </a>
-                        <a href="#"
-                            class="p-2.5 bg-ink-raised2/50 rounded-full text-bone-dim hover:text-gold hover:bg-ink-raised2/80 transition-all duration-300 group">
-                            <i class="fab fa-twitter text-lg group-hover:scale-110"></i>
-                        </a>
-                        <a href="#"
-                            class="p-2.5 bg-ink-raised2/50 rounded-full text-bone-dim hover:text-gold hover:bg-ink-raised2/80 transition-all duration-300 group">
-                            <i class="fab fa-tiktok text-lg group-hover:scale-110"></i>
-                        </a>
-
-                    </div>
-
-                    <!-- Admin Access Button -->
-                    <a href="{{ route('admin.login') }}"
-                        class="inline-flex items-center px-4 py-2.5 text-sm border border-line rounded-full text-bone-dim hover:border-gold hover:text-gold hover:bg-gold/10 transition-all duration-300 group">
-                        <i class="fas fa-lock mr-2 group-hover:scale-110"></i> Admin Access
+                <p class="text-bone-dim text-sm">Ceremony-ready fashion. Proudly South African.</p>
+                <div class="flex flex-wrap gap-3">
+                    <a href="https://www.instagram.com/buggxit_couture/"
+                        class="p-2.5 bg-ink-raised2/50 rounded-full text-bone-dim hover:text-gold hover:bg-ink-raised2/80 transition-all duration-300 group">
+                        <i class="fab fa-instagram text-lg group-hover:scale-110"></i>
+                    </a>
+                    <a href="https://www.facebook.com/p/Buggxit-Couture-Clothing-Accessories-100053004263016/"
+                        class="p-2.5 bg-ink-raised2/50 rounded-full text-bone-dim hover:text-gold hover:bg-ink-raised2/80 transition-all duration-300 group">
+                        <i class="fab fa-facebook text-lg group-hover:scale-110"></i>
+                    </a>
+                    <a href="#"
+                        class="p-2.5 bg-ink-raised2/50 rounded-full text-bone-dim hover:text-gold hover:bg-ink-raised2/80 transition-all duration-300 group">
+                        <i class="fab fa-twitter text-lg group-hover:scale-110"></i>
+                    </a>
+                    <a href="#"
+                        class="p-2.5 bg-ink-raised2/50 rounded-full text-bone-dim hover:text-gold hover:bg-ink-raised2/80 transition-all duration-300 group">
+                        <i class="fab fa-tiktok text-lg group-hover:scale-110"></i>
                     </a>
                 </div>
             </div>
@@ -94,8 +86,8 @@
             <!-- Newsletter -->
             <div class="space-y-6 sm:col-span-2 lg:col-span-1">
                 <div>
-                    <h3 class="text-bone font-semibold mb-4 pb-2 border-b border-line/50">Stay Updated</h3>
-                    <p class="text-bone-dim text-sm mb-4">Subscribe for exclusive offers and new collections.</p>
+                    <h3 class="text-bone font-semibold mb-4 pb-2 border-b border-line/50">Stay in the Loop</h3>
+                    <p class="text-bone-dim text-sm mb-4">New drops, pop-up dates, and exclusive offers. Straight to your inbox.</p>
                 </div>
 
                 <form class="space-y-4">
@@ -153,7 +145,7 @@
                     </a>
                     <a href="{{ route('shipping-policy') }}"
                         class="text-bone-dim hover:text-gold text-sm transition-colors duration-300">
-                        Shipping Policy
+                        Exchange Policy
                     </a>
                 </div>
 
