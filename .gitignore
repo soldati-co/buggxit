@@ -9,10 +9,8 @@
 /storage/framework/views/*
 /storage/framework/sessions/*
 /storage/logs/*
-.env
-.env.local
-.env.backup
-.env.production
+.env*
+!.env.example
 .phpunit.result.cache
 Homestead.json
 Homestead.yaml

@@ -72,8 +72,11 @@ class PayfastWebhookTest extends TestCase
 
     public function test_notification_for_unknown_order_still_acknowledges_without_error(): void
     {
+        // The order lookup happens before verifyItn() now (its result feeds
+        // the amount_gross/m_payment_id checks), so an unknown order should
+        // short-circuit without ever calling PayFast's verification.
         $this->mock(PayfastService::class, function (MockInterface $mock) {
-            $mock->shouldReceive('verifyItn')->once()->andReturn(true);
+            $mock->shouldReceive('verifyItn')->never();
         });
 
         $response = $this->post(route('payfast.notify'), [
@@ -89,6 +92,8 @@ class PayfastWebhookTest extends TestCase
         $this->mock(PayfastService::class, function (MockInterface $mock) {
             $mock->shouldReceive('verifyItn')->once()->andReturn(false);
         });
+
+        Order::factory()->create(['order_number' => 'whatever', 'payment_status' => 'pending']);
 
         // No _token/X-CSRF-TOKEN provided at all — a real Laravel session
         // middleware stack would 419 this without the except() entry in

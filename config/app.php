@@ -26,8 +26,9 @@ return [
     |
     */
 
-    // 'env' => env('APP_ENV', 'production'), // FOR PRODUCTION
-    'env' => env('APP_ENV', 'local'), // FOR LOACL DEV
+    // Fail-safe default: if APP_ENV ever fails to load (deploy misconfig,
+    // missing .env mount), fall back to the deployed target, not 'local'.
+    'env' => env('APP_ENV', 'production'),
 
     /*
     |--------------------------------------------------------------------------
@@ -40,8 +41,9 @@ return [
     |
     */
 
-    // 'debug' => (bool) env('APP_DEBUG', false), // FOR PRODUCTION
-    'debug' => (bool) env('APP_DEBUG', true), // FOR LOCAL DEV
+    // Fail-safe default: if APP_DEBUG ever fails to load, fall back to
+    // debug OFF so stack traces/env values never leak, rather than ON.
+    'debug' => (bool) env('APP_DEBUG', false),
 
     /*
     |--------------------------------------------------------------------------
@@ -54,8 +56,7 @@ return [
     |
     */
 
-    'url' => env('APP_URL', 'http://localhost'), // FOR LOCAL DEV
-    // 'url' => env('APP_URL', 'https://app.buggxit.store/'), // FOR PRODUCTION (DOMAIN)
+    'url' => env('APP_URL', 'https://app.buggxit.store'),
 
     /*
     |--------------------------------------------------------------------------

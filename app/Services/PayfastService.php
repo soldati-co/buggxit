@@ -50,6 +50,18 @@ class PayfastService
             'item_name' => 'BUGGXIT Couture Order '.$order->order_number,
         ]);
 
+        // The SDK's createFormFields() builds <input value="..."> by raw string
+        // concatenation with no escaping, and computes the ITN signature from
+        // these same raw values — so we can't HTML-escape (that would make the
+        // signed string disagree with what the browser submits once entities
+        // decode). Stripping HTML-metacharacters instead closes the injection
+        // path (e.g. a user's own account name containing `">`) while leaving
+        // the submitted value byte-for-byte identical to what gets signed.
+        $data = array_map(
+            static fn ($value) => is_string($value) ? preg_replace('/[<>"\'&]/', '', $value) : $value,
+            $data
+        );
+
         return $this->payfast->custom->createFormFields($data, [
             'value' => 'Continue to PayFast',
             'class' => 'w-full py-3.5 bg-gradient-to-r from-yellow-500 to-yellow-600 text-gray-900 font-bold rounded-lg cursor-pointer',
@@ -62,10 +74,10 @@ class PayfastService
      * failure here should be logged and acknowledged (HTTP 200), not
      * surfaced as a 500 that would make PayFast endlessly retry.
      */
-    public function verifyItn(array $payload): bool
+    public function verifyItn(array $payload, array $checks = []): bool
     {
         try {
-            return $this->payfast->notification->isValidNotification($payload);
+            return $this->payfast->notification->isValidNotification($payload, $checks);
         } catch (\Throwable $e) {
             Log::warning('PayFast ITN verification threw', ['message' => $e->getMessage()]);
 

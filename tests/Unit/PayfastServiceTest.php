@@ -79,4 +79,28 @@ class PayfastServiceTest extends TestCase
         $this->assertStringContainsString('name="name_last" type="hidden" value="Doe"', $html);
         $this->assertStringContainsString('name="email_address" type="hidden" value="jane@example.com"', $html);
     }
+
+    /**
+     * The SDK builds <input value="..."> via raw string concatenation with
+     * no escaping (see PayfastService::paymentFormHtml), so a name containing
+     * HTML metacharacters used to be able to break out of the attribute and
+     * inject a <script> tag into resources/views/payfast/redirect.blade.php,
+     * which renders the form HTML via {!! !!}. Assert the dangerous
+     * characters never reach the output.
+     */
+    public function test_payment_form_html_strips_html_metacharacters_from_buyer_name(): void
+    {
+        $user = User::factory()->create(['name' => 'John"><script>alert(1)</script>', 'email' => 'john@example.com']);
+        $order = Order::factory()->create(['user_id' => $user->id]);
+
+        $html = app(PayfastService::class)->paymentFormHtml($order);
+
+        $this->assertStringNotContainsString('<script>', $html);
+        // Confirms the injected quote/angle-brackets were stripped rather than
+        // merely HTML-entity-encoded (encoding would still contain the raw
+        // characters as text and, more importantly, would desync the signed
+        // payload from what the browser submits — see the comment in
+        // PayfastService::paymentFormHtml).
+        $this->assertStringContainsString('name="name_first" type="hidden" value="Johnscriptalert(1)/script"', $html);
+    }
 }
