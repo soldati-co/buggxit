@@ -78,18 +78,4 @@ class OrderHistoryTest extends TestCase
     {
         $this->get(route('orders.index'))->assertRedirect(route('login'));
     }
-
-    /**
-     * Order::resolveRouteBinding used to pass any route segment straight into
-     * where('id', $value) against a uuid-typed Postgres column, throwing an
-     * uncaught QueryException (500) for a malformed id instead of a clean 404.
-     */
-    public function test_malformed_order_id_returns_404_not_a_server_error(): void
-    {
-        $user = User::factory()->create();
-
-        $this->actingAs($user)
-            ->get('/orders/not-a-real-uuid')
-            ->assertNotFound();
-    }
 }

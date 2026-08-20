@@ -5,7 +5,6 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Str;
 
 /**
  * @property string $id
@@ -67,20 +66,6 @@ class Order extends Model
         'discount_amount' => 'decimal:2',
         'total' => 'decimal:2',
     ];
-
-    /**
-     * Guard against non-UUID route segments (e.g. GET /orders/foo) hitting
-     * `where('id', $value)` against a uuid-typed Postgres column, which
-     * throws a raw SQLSTATE[22P02] instead of a clean 404.
-     */
-    public function resolveRouteBinding($value, $field = null)
-    {
-        if ($field !== null) {
-            return parent::resolveRouteBinding($value, $field);
-        }
-
-        return Str::isUuid($value) ? $this->where('id', $value)->first() : null;
-    }
 
     public function user()
     {

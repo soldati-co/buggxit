@@ -4,7 +4,6 @@ use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use App\Http\Middleware\AdminAuthenticate;
-use App\Http\Middleware\SecurityHeaders;
 use App\Http\Middleware\SetCacheHeadersForStorage;
 
 return Application::configure(basePath: dirname(__DIR__))
@@ -17,7 +16,6 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->trustProxies(at: '*');
         $middleware->web(append: [
             SetCacheHeadersForStorage::class,
-            SecurityHeaders::class,
         ]);
 
         // NOTE: this app also ships a legacy-style app/Http/Kernel.php with

@@ -45,7 +45,7 @@ Route::prefix('products')->name('products.')->group(function () {
 
 Route::prefix('checkout')->name('checkout.')->middleware('web')->group(function () {
     Route::get('/', [CheckoutController::class, 'index'])->name('index');
-    Route::post('/', [CheckoutController::class, 'store'])->name('store')->middleware('throttle:10,1');
+    Route::post('/', [CheckoutController::class, 'store'])->name('store');
     // No route-level 'signed' middleware: an authenticated owner must still be
     // able to revisit this page later (e.g. from order history) after the
     // signature has expired. The signature-or-ownership check happens inside

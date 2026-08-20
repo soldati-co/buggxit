@@ -107,7 +107,7 @@ class Dress extends Model
         }
 
         return $this->where('slug', $value)->first()
-            ?? (Str::isUuid($value) ? $this->where('id', $value)->first() : null);
+            ?? $this->where('id', $value)->first();
     }
 
     // ---------- Standard Color Palette ----------
