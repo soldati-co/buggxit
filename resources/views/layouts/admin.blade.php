@@ -12,7 +12,7 @@
     @stack('styles')
 </head>
 
-<body class="bg-ink-raised text-bone font-sans antialiased overflow-x-hidden">
+<body class="bg-ink-raised text-bone font-sans antialiased overflow-x-hidden" x-data="{ sidebarOpen: false }">
 
     <!-- Fixed top gradient line (signature detail) -->
     <div
@@ -23,231 +23,133 @@
     <div class="fixed -top-40 -left-40 w-80 h-80 bg-gold/5 rounded-full blur-3xl pointer-events-none"></div>
     <div class="fixed -bottom-40 -right-40 w-80 h-80 bg-gold/3 rounded-full blur-3xl pointer-events-none"></div>
 
-    <!-- ========== ADMIN NAVBAR ========== -->
-    <nav x-data="{ mobileMenuOpen: false, userDropdownOpen: false }" class="relative z-40 bg-ink-raised/90 backdrop-blur-sm border-b border-line/50 w-full">
+    @php
+        $adminNavLinks = [
+            ['route' => 'admin.dashboard', 'match' => 'admin.dashboard', 'icon' => 'fa-tachometer-alt', 'label' => 'Dashboard'],
+            ['route' => 'admin.dresses.index', 'match' => 'admin.dresses.*', 'icon' => 'fa-tshirt', 'label' => 'Dresses'],
+            ['route' => 'admin.categories.index', 'match' => 'admin.categories.*', 'icon' => 'fa-tags', 'label' => 'Categories'],
+            ['route' => 'admin.orders.index', 'match' => 'admin.orders.*', 'icon' => 'fa-receipt', 'label' => 'Orders'],
+            ['route' => 'admin.hero-slides.index', 'match' => 'admin.hero-slides.*', 'icon' => 'fa-images', 'label' => 'Hero Slides'],
+            ['route' => 'admin.settings.edit', 'match' => 'admin.settings.*', 'icon' => 'fa-cog', 'label' => 'Settings'],
+        ];
+    @endphp
 
-        <div class="container-wide px-4 sm:px-6 lg:px-8 mx-auto relative">
-            <div class="flex items-center justify-between h-16">
+    <!-- ========== SIDEBAR NAV (shared partial for desktop-fixed + mobile off-canvas) ========== -->
 
-                <!-- Logo + Brand -->
-                <div class="flex items-center flex-1">
-                    <a href="{{ route('admin.dashboard') }}" class="flex items-center space-x-2 group">
-                        <div class="relative">
-                            <div
-                                class="absolute inset-0 bg-gold/20 rounded-full blur-md group-hover:bg-gold/30 transition-all duration-300">
-                            </div>
-                            <div
-                                class="relative p-2 bg-gradient-to-br from-ink-raised2 to-ink-raised border border-line rounded-full">
-                                <svg class="w-5 h-5 text-gold" fill="currentColor" viewBox="0 0 24 24">
-                                    <path
-                                        d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z" />
-                                </svg>
-                            </div>
-                        </div>
-                        <span
-                            class="text-bone font-bold text-lg tracking-tight group-hover:text-gold transition-colors">
-                            BUGGXIT<span class="text-gold">.</span>admin
-                        </span>
-                    </a>
+    <!-- Desktop sidebar (always visible, fixed) -->
+    <aside class="hidden md:flex md:flex-col fixed inset-y-0 left-0 z-40 w-64 bg-ink-raised/95 backdrop-blur-sm border-r border-line/50">
+        @include('admin.partials.sidebar-nav', ['adminNavLinks' => $adminNavLinks])
+    </aside>
+
+    <!-- Mobile off-canvas sidebar -->
+    <div x-show="sidebarOpen" x-cloak class="md:hidden fixed inset-0 z-50">
+        <div class="absolute inset-0 bg-ink/80 backdrop-blur-sm" @click="sidebarOpen = false"
+            x-show="sidebarOpen" x-transition:enter="transition ease-out duration-200"
+            x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+            x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100"
+            x-transition:leave-end="opacity-0"></div>
+        <aside class="relative flex flex-col w-64 h-full bg-ink-raised border-r border-line/50"
+            x-show="sidebarOpen" x-transition:enter="transition ease-out duration-200"
+            x-transition:enter-start="-translate-x-full" x-transition:enter-end="translate-x-0"
+            x-transition:leave="transition ease-in duration-150" x-transition:leave-start="translate-x-0"
+            x-transition:leave-end="-translate-x-full">
+            @include('admin.partials.sidebar-nav', ['adminNavLinks' => $adminNavLinks, 'isMobile' => true])
+        </aside>
+    </div>
+
+    <!-- Mobile top bar -->
+    <header class="md:hidden sticky top-0 z-30 bg-ink-raised/90 backdrop-blur-sm border-b border-line/50">
+        <div class="flex items-center justify-between h-16 px-4">
+            <a href="{{ route('admin.dashboard') }}" class="flex items-center space-x-2">
+                <div class="relative p-2 bg-gradient-to-br from-ink-raised2 to-ink-raised border border-line rounded-full">
+                    <svg class="w-5 h-5 text-gold" fill="currentColor" viewBox="0 0 24 24">
+                        <path
+                            d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z" />
+                    </svg>
                 </div>
+                <span class="text-bone font-bold text-lg tracking-tight">BUGGXIT<span class="text-gold">.</span>admin</span>
+            </a>
+            <button @click="sidebarOpen = !sidebarOpen"
+                class="p-2 text-bone-dim hover:text-gold hover:bg-ink-raised2/50 rounded-lg transition-all duration-300">
+                <svg x-show="!sidebarOpen" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3.75 9h16.5M3.75 15h16.5" />
+                </svg>
+                <svg x-show="sidebarOpen" x-cloak class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+    </header>
 
-                <!-- Desktop Navigation Links (admin sections) -->
-                <div class="hidden md:flex items-center justify-center flex-1 space-x-1">
-                    <a href="{{ route('admin.dashboard') }}"
-                        class="px-3 py-2 rounded-lg text-sm font-medium transition-all duration-300
-                              {{ request()->routeIs('admin.dashboard') ? 'bg-gold/10 text-gold border border-gold/30' : 'text-bone-dim hover:text-gold hover:bg-ink-raised2/50' }}">
-                        <i class="fas fa-tachometer-alt mr-2"></i>Dashboard
-                    </a>
-                    <a href="{{ route('admin.dresses.index') }}"
-                        class="px-3 py-2 rounded-lg text-sm font-medium transition-all duration-300
-                              {{ request()->routeIs('admin.dresses.*') ? 'bg-gold/10 text-gold border border-gold/30' : 'text-bone-dim hover:text-gold hover:bg-ink-raised2/50' }}">
-                        <i class="fas fa-tshirt mr-2"></i>Dresses
-                    </a>
-                    <!-- NEW: Categories link -->
-                    <a href="{{ route('admin.categories.index') }}"
-                        class="px-3 py-2 rounded-lg text-sm font-medium transition-all duration-300
-                              {{ request()->routeIs('admin.categories.*') ? 'bg-gold/10 text-gold border border-gold/30' : 'text-bone-dim hover:text-gold hover:bg-ink-raised2/50' }}">
-                        <i class="fas fa-tags mr-2"></i>Categories
-                    </a>
-                    <a href="{{ route('admin.hero-slides.index') }}"
-                        class="px-3 py-2 rounded-lg text-sm font-medium transition-all duration-300
-                              {{ request()->routeIs('admin.hero-slides.*') ? 'bg-gold/10 text-gold border border-gold/30' : 'text-bone-dim hover:text-gold hover:bg-ink-raised2/50' }}">
-                        <i class="fas fa-images mr-2"></i>Hero Slides
-                    </a>
-                    <a href="{{ route('admin.settings.edit') }}"
-                        class="px-3 py-2 rounded-lg text-sm font-medium transition-all duration-300
-                              {{ request()->routeIs('admin.settings.*') ? 'bg-gold/10 text-gold border border-gold/30' : 'text-bone-dim hover:text-gold hover:bg-ink-raised2/50' }}">
-                        <i class="fas fa-cog mr-2"></i>Settings
-                    </a>
+    <!-- ========== CONTENT WRAPPER (offset for the desktop sidebar) ========== -->
+    <div class="md:pl-64 flex flex-col min-h-screen">
+        <main class="relative z-10 flex-1 container-wide px-4 sm:px-6 lg:px-8 py-8 mx-auto w-full">
+
+            <!-- Page Header (can be overridden) -->
+            @hasSection('page-header')
+                <div class="mb-8">
+                    @yield('page-header')
                 </div>
-
-                <!-- Right: Admin User Dropdown -->
-                <div class="flex items-center justify-end flex-1 space-x-2">
-                    <!-- Admin User Dropdown (desktop) -->
-                    <div class="hidden md:relative md:block" x-data="{ open: false }">
-                        <button @click="open = !open"
-                            class="flex items-center space-x-2 px-3 py-2 rounded-lg text-bone-dim hover:text-gold hover:bg-ink-raised2/50 transition-all duration-300 group">
-                            <div
-                                class="w-6 h-6 rounded-full bg-gradient-to-br from-gold to-gold-dim flex items-center justify-center">
-                                <span
-                                    class="text-xs font-bold text-ink">{{ substr(Auth::guard('admin')->user()->name ?? 'A', 0, 1) }}</span>
-                            </div>
-                            <span class="text-sm font-medium">{{ Auth::guard('admin')->user()->name ?? 'Admin' }}</span>
-                            <svg class="w-4 h-4 transition-transform duration-300" :class="open ? 'rotate-180' : ''"
-                                fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M19 9l-7 7-7-7" />
-                            </svg>
-                        </button>
-
-                        <!-- Dropdown Menu -->
-                        <div x-show="open" @click.away="open = false" x-cloak
-                            x-transition:enter="transition ease-out duration-200"
-                            x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100"
-                            class="absolute right-0 mt-2 w-48 bg-ink-raised/90 backdrop-blur-sm border border-line rounded-lg shadow-xl overflow-hidden z-50">
-                            <div
-                                class="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-gold/30 to-transparent">
-                            </div>
-
-                            <div class="px-4 py-3 border-b border-line/50">
-                                <p class="text-sm font-semibold text-bone">
-                                    {{ Auth::guard('admin')->user()->name ?? 'Admin' }}</p>
-                                <p class="text-xs text-bone-dim">{{ Auth::guard('admin')->user()->email ?? '' }}</p>
-                            </div>
-
-                            <form method="POST" action="{{ route('admin.logout') }}">
-                                @csrf
-                                <button type="submit"
-                                    class="w-full text-left px-4 py-3 text-sm text-bone-dim hover:text-bad hover:bg-bad/20 transition-all duration-200 flex items-center">
-                                    <i class="fas fa-sign-out-alt mr-3 w-4"></i> Logout
-                                </button>
-                            </form>
-                        </div>
+            @else
+                <div class="mb-8 flex flex-col md:flex-row md:items-center md:justify-between">
+                    <div>
+                        <h1 class="text-2xl md:text-3xl font-bold text-bone">
+                            @yield('page-title', 'Admin Dashboard')
+                        </h1>
+                        <p class="text-bone-dim text-sm mt-1">
+                            @yield('page-description', 'Manage your BUGGXIT Couture collection')
+                        </p>
                     </div>
-
-                    <!-- Mobile Menu Button -->
-                    <button @click="mobileMenuOpen = !mobileMenuOpen"
-                        class="md:hidden p-2 text-bone-dim hover:text-gold hover:bg-ink-raised2/50 rounded-lg transition-all duration-300">
-                        <svg x-show="!mobileMenuOpen" class="w-6 h-6" fill="none" stroke="currentColor"
-                            viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                d="M3.75 9h16.5M3.75 15h16.5" />
-                        </svg>
-                        <svg x-show="mobileMenuOpen" x-cloak class="w-6 h-6" fill="none" stroke="currentColor"
-                            viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                    </button>
+                    @yield('header-actions')
                 </div>
-            </div>
-        </div>
+            @endif
 
-        <!-- Mobile Menu -->
-        <div x-show="mobileMenuOpen" x-cloak x-transition:enter="transition ease-out duration-200"
-            x-transition:enter-start="opacity-0 -translate-y-2" x-transition:enter-end="opacity-100 translate-y-0"
-            class="md:hidden border-t border-line/50 bg-ink-raised/90 backdrop-blur-sm">
-            <div class="container-wide px-4 py-3 space-y-2">
-                <a href="{{ route('admin.dashboard') }}" @click="mobileMenuOpen = false"
-                    class="block px-4 py-3 rounded-lg text-bone-dim hover:text-gold hover:bg-ink-raised2/50 transition-all duration-200">
-                    <i class="fas fa-tachometer-alt mr-3 w-5"></i> Dashboard
-                </a>
-                <a href="{{ route('admin.dresses.index') }}" @click="mobileMenuOpen = false"
-                    class="block px-4 py-3 rounded-lg text-bone-dim hover:text-gold hover:bg-ink-raised2/50 transition-all duration-200">
-                    <i class="fas fa-tshirt mr-3 w-5"></i> Dresses
-                </a>
-                <!-- NEW: Categories mobile link -->
-                <a href="{{ route('admin.categories.index') }}" @click="mobileMenuOpen = false"
-                    class="block px-4 py-3 rounded-lg text-bone-dim hover:text-gold hover:bg-ink-raised2/50 transition-all duration-200">
-                    <i class="fas fa-tags mr-3 w-5"></i> Categories
-                </a>
-                <a href="{{ route('admin.hero-slides.index') }}" @click="mobileMenuOpen = false"
-                    class="block px-4 py-3 rounded-lg text-bone-dim hover:text-gold hover:bg-ink-raised2/50 transition-all duration-200">
-                    <i class="fas fa-images mr-3 w-5"></i> Hero Slides
-                </a>
-                <a href="{{ route('admin.settings.edit') }}" @click="mobileMenuOpen = false"
-                    class="block px-4 py-3 rounded-lg text-bone-dim hover:text-gold hover:bg-ink-raised2/50 transition-all duration-200">
-                    <i class="fas fa-cog mr-3 w-5"></i> Settings
-                </a>
-                <div class="border-t border-line/50 my-2"></div>
-                <form method="POST" action="{{ route('admin.logout') }}">
-                    @csrf
-                    <button type="submit"
-                        class="w-full text-left px-4 py-3 rounded-lg text-bone-dim hover:text-bad hover:bg-bad/20 transition-all duration-200">
-                        <i class="fas fa-sign-out-alt mr-3 w-5"></i> Logout
-                    </button>
-                </form>
-            </div>
-        </div>
-    </nav>
+            <!-- Flash Messages -->
+            @if (session('success'))
+                <div class="mb-6 p-4 bg-good/10 border border-good/30 rounded-lg flex items-center">
+                    <svg class="w-5 h-5 text-good mr-3" fill="currentColor" viewBox="0 0 24 24">
+                        <path
+                            d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
+                    </svg>
+                    <span class="text-good text-sm">{{ session('success') }}</span>
+                </div>
+            @endif
 
-    <!-- ========== MAIN CONTENT ========== -->
-    <main class="relative z-10 container-wide px-4 sm:px-6 lg:px-8 py-8 mx-auto min-h-[calc(100vh-64px)]">
+            @if (session('error'))
+                <div class="mb-6 p-4 bg-bad/10 border border-bad/30 rounded-lg flex items-center">
+                    <svg class="w-5 h-5 text-bad mr-3" fill="currentColor" viewBox="0 0 24 24">
+                        <path
+                            d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" />
+                    </svg>
+                    <span class="text-bad text-sm">{{ session('error') }}</span>
+                </div>
+            @endif
 
-        <!-- Page Header (can be overridden) -->
-        @hasSection('page-header')
-            <div class="mb-8">
-                @yield('page-header')
+            <!-- Yield Content -->
+            @yield('content')
+        </main>
+
+        <!-- ========== ADMIN FOOTER ========== -->
+        <footer class="relative bg-ink-raised/90 backdrop-blur-sm border-t border-line/50 w-full">
+            <div
+                class="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-gold/30 to-transparent pointer-events-none">
             </div>
-        @else
-            <div class="mb-8 flex flex-col md:flex-row md:items-center md:justify-between">
-                <div>
-                    <h1 class="text-2xl md:text-3xl font-bold text-bone">
-                        @yield('page-title', 'Admin Dashboard')
-                    </h1>
-                    <p class="text-bone-dim text-sm mt-1">
-                        @yield('page-description', 'Manage your BUGGXIT Couture collection')
+
+            <div class="container-wide px-4 sm:px-6 lg:px-8 py-6 mx-auto">
+                <div class="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+                    <p class="text-bone-dim text-xs">
+                        &copy; {{ date('Y') }} <span class="text-gold font-semibold">Buggxit Couture</span>. All
+                        rights reserved.
                     </p>
-                </div>
-                @yield('header-actions')
-            </div>
-        @endif
-
-        <!-- Flash Messages -->
-        @if (session('success'))
-            <div class="mb-6 p-4 bg-good/10 border border-good/30 rounded-lg flex items-center">
-                <svg class="w-5 h-5 text-good mr-3" fill="currentColor" viewBox="0 0 24 24">
-                    <path
-                        d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
-                </svg>
-                <span class="text-good text-sm">{{ session('success') }}</span>
-            </div>
-        @endif
-
-        @if (session('error'))
-            <div class="mb-6 p-4 bg-bad/10 border border-bad/30 rounded-lg flex items-center">
-                <svg class="w-5 h-5 text-bad mr-3" fill="currentColor" viewBox="0 0 24 24">
-                    <path
-                        d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" />
-                </svg>
-                <span class="text-bad text-sm">{{ session('error') }}</span>
-            </div>
-        @endif
-
-        <!-- Yield Content -->
-        @yield('content')
-    </main>
-
-    <!-- ========== ADMIN FOOTER ========== -->
-    <footer class="relative bg-ink-raised/90 backdrop-blur-sm border-t border-line/50 w-full mt-auto">
-        <div
-            class="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-gold/30 to-transparent pointer-events-none">
-        </div>
-
-        <div class="container-wide px-4 sm:px-6 lg:px-8 py-6 mx-auto">
-            <div class="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
-                <p class="text-bone-dim text-xs">
-                    &copy; {{ date('Y') }} <span class="text-gold font-semibold">Buggxit Couture</span>. All
-                    rights reserved.
-                </p>
-                <div class="flex items-center space-x-4 text-xs text-bone-faint">
-                    <span>Admin Portal v1.0</span>
-                    <span class="text-bone-faint">•</span>
-                    <span>Session timeout: 30 min</span>
+                    <div class="flex items-center space-x-4 text-xs text-bone-faint">
+                        <span>Admin Portal v1.0</span>
+                        <span class="text-bone-faint">•</span>
+                        <span>Session timeout: 30 min</span>
+                    </div>
                 </div>
             </div>
-        </div>
-    </footer>
+        </footer>
+    </div>
 
     @include('components.back-to-top')
 
