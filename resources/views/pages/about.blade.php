@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'About BUGGXIT | Geometric Luxury Fashion')
+@section('title', 'About BUGGXIT Couture | Southern African Heritage Fashion')
 
 @section('content')
     {{-- Hero Section --}}
@@ -15,16 +15,16 @@
                     <span
                         class="inline-flex items-center px-4 py-2 rounded-full text-xs font-medium bg-gold/10 text-gold border border-gold/30 mb-6 backdrop-blur-sm">
                         <span class="w-2 h-2 bg-gold rounded-full mr-2 animate-pulse"></span>
-                        Since 2018 • Geometric Luxury
+                        Since 2018 · Southern African Heritage Fashion
                     </span>
 
                     <h1 class="text-4xl md:text-6xl lg:text-7xl font-bold text-bone mb-6 leading-tight">
-                        Redefining <span class="text-gold block mt-2">Geometric Elegance</span>
+                        Dressed in <span class="text-gold block mt-2">Culture & Confidence</span>
                     </h1>
 
                     <p class="text-xl text-bone-dim mb-10 max-w-2xl mx-auto">
-                        At BUGGXIT Couture, we transform sharp angles and precise lines into wearable art.
-                        Since 2018, we've been challenging conventional fashion with our geometric luxury collections.
+                        Buggxit Couture creates ceremony-ready traditional wear and casual wear for the modern
+                        woman. Rooted in Southern African heritage. Ready when she is.
                     </p>
                 </div>
             </div>
@@ -45,18 +45,24 @@
                     </h2>
                     <div class="space-y-5 text-bone-dim leading-relaxed">
                         <p>
-                            Founded by visionary designer Alexei Volkov, BUGGXIT emerged from a fascination with
-                            architectural forms and their intersection with human movement. What began as a
-                            graduate thesis project has evolved into a globally recognized luxury brand.
+                            BUGGXIT started with a nickname. Her brother playfully called her Buggz — because of
+                            her big teeth, a nod to Bugs Bunny. What began as a childhood tease became a source of
+                            identity. The name stuck, grew, and eventually became the brand: BUGGXIT. A reminder
+                            that what makes you different is exactly what makes you remarkable.
                         </p>
                         <p>
-                            The name "BUGGXIT" derives from the concept of "breaking out of the box" –
-                            challenging traditional fashion norms through angular precision and mathematical elegance.
+                            Siyasanga Soldati has wanted to be a fashion designer since she was nine years old.
+                            She started Buggxit Couture in 2018, during her college years, when money was tight
+                            and the dream still felt far away. She could not always afford the basics. But the
+                            desire to create beautiful things, to dress women with intention, never left her.
                         </p>
                         <p>
-                            Each collection is meticulously crafted, combining advanced tailoring techniques
-                            with innovative materials to create pieces that are both structurally remarkable
-                            and surprisingly comfortable.
+                            So she started where she was. And she kept going.
+                        </p>
+                        <p>
+                            Today, Buggxit Couture is a nationally recognised traditional fashion brand, built
+                            ceremony by ceremony on the values of resilience, cultural pride, and real
+                            craftsmanship.
                         </p>
                     </div>
                 </div>
@@ -75,9 +81,9 @@
     {{-- Philosophy Section --}}
     <section class="container-wide px-4 sm:px-6 lg:px-8 mx-auto mb-20">
         <div class="text-center max-w-3xl mx-auto mb-12">
-            <span class="text-gold text-sm font-semibold uppercase tracking-wider">Our Design Philosophy</span>
+            <span class="text-gold text-sm font-semibold uppercase tracking-wider">Our Philosophy</span>
             <h2 class="text-3xl md:text-4xl font-bold text-bone mt-2">
-                Where <span class="text-gold">Precision</span> Meets Passion
+                Where <span class="text-gold">Heritage</span> Meets Style
             </h2>
         </div>
 
@@ -86,24 +92,23 @@
                 $philosophies = [
                     [
                         'icon' => 'fa-cube',
-                        'title' => 'Precision Geometry',
-                        'desc' =>
-                            'Every angle is calculated, every line intentional. Clothing with the mathematical precision of architecture.',
+                        'title' => 'Cultural Pride',
+                        'desc' => 'Heritage is not a trend here. Every garment we make is an act of cultural celebration.',
                     ],
                     [
                         'icon' => 'fa-leaf',
-                        'title' => 'Sustainable Luxury',
-                        'desc' => 'Ethical materials and zero-waste patterns. Luxury that doesn\'t cost the planet.',
+                        'title' => 'Ceremony Ready',
+                        'desc' => 'She should never have to wait weeks to look beautiful. Our pieces are ready when the occasion calls.',
                     ],
                     [
                         'icon' => 'fa-hands',
-                        'title' => 'Artisan Craft',
-                        'desc' => 'Hand-finished by master tailors. Traditional techniques meet futuristic design.',
+                        'title' => 'Real Craftsmanship',
+                        'desc' => 'Hand-finished pieces, authentic details, and quality that holds up long after the ceremony ends.',
                     ],
                     [
                         'icon' => 'fa-infinity',
-                        'title' => 'Timeless Innovation',
-                        'desc' => 'Pieces that defy trends, becoming heirlooms of the future.',
+                        'title' => 'Made for Her',
+                        'desc' => 'Confident, busy, proud of her roots. Every design decision is made with her in mind.',
                     ],
                 ];
             @endphp
@@ -127,10 +132,11 @@
         <div class="text-center mt-12">
             <div class="inline-block bg-ink-raised/50 backdrop-blur-sm border border-line rounded-2xl p-6 max-w-2xl">
                 <p class="text-bone-dim italic text-lg mb-3">
-                    "Fashion is architecture: it is a matter of proportions. At BUGGXIT, we build clothing
-                    that becomes a second skin of structured beauty."
+                    "Fashion is more than clothing. It is a celebration of culture,
+                    confidence, and creativity. My mission is to help every woman feel
+                    proud and empowered in every piece she wears."
                 </p>
-                <p class="text-gold font-semibold">— Alexei Volkov, Founder & Creative Director</p>
+                <p class="text-gold font-semibold">— Siyasanga Magabuko-Soldati, Founder & Creative Director</p>
             </div>
         </div>
     </section>
@@ -163,24 +169,22 @@
                     </div>
                 </div>
                 <div class="order-1 md:order-2">
-                    <span class="text-gold text-sm font-semibold uppercase tracking-wider">The Craftsmanship</span>
+                    <span class="text-gold text-sm font-semibold uppercase tracking-wider">The Craft</span>
                     <h2 class="text-3xl md:text-4xl font-bold text-bone mt-2 mb-6">
-                        127 Steps to <span class="text-gold">Perfection</span>
+                        Made with <span class="text-gold block mt-2">Intention</span>
                     </h2>
                     <p class="text-bone-dim mb-6 leading-relaxed">
-                        Every BUGGXIT garment undergoes 127 precise steps from concept to completion.
-                        Our atelier in Milan houses state-of-the-art laser cutting technology alongside
-                        traditional tailoring stations.
+                        Each piece leaves our studio only when it is right. No shortcuts. No mass production.
                     </p>
                     <ul class="space-y-3 text-bone-dim">
-                        <li class="flex items-start gap-2"><span class="text-gold font-bold">✓</span> Italian wool and
-                            Japanese technical fabrics</li>
-                        <li class="flex items-start gap-2"><span class="text-gold font-bold">✓</span> Laser precision
-                            cutting for perfect geometry</li>
+                        <li class="flex items-start gap-2"><span class="text-gold font-bold">✓</span> Authentic
+                            Shweshwe and 3 Cats fabrics, sourced with care</li>
+                        <li class="flex items-start gap-2"><span class="text-gold font-bold">✓</span> Every pattern
+                            hand-cut to shape</li>
                         <li class="flex items-start gap-2"><span class="text-gold font-bold">✓</span> Hand-finished
-                            seams and edges</li>
-                        <li class="flex items-start gap-2"><span class="text-gold font-bold">✓</span> 48-hour quality
-                            inspection for each piece</li>
+                            seams and cultural detailing</li>
+                        <li class="flex items-start gap-2"><span class="text-gold font-bold">✓</span> Quality-checked
+                            before every dispatch</li>
                     </ul>
                 </div>
             </div>
@@ -192,7 +196,7 @@
         <div class="text-center max-w-3xl mx-auto mb-12">
             <span class="text-gold text-sm font-semibold uppercase tracking-wider">Our Commitments</span>
             <h2 class="text-3xl md:text-4xl font-bold text-bone mt-2">
-                Built on <span class="text-gold">Trust & Integrity</span>
+                Built on <span class="text-gold">Trust & Craft</span>
             </h2>
         </div>
 
@@ -201,21 +205,21 @@
                 $commitments = [
                     [
                         'num' => '01',
-                        'title' => 'Ethical Production',
+                        'title' => 'Ready When You Need It',
                         'desc' =>
-                            'Direct relationships with suppliers, fair wages, and safe working conditions throughout our supply chain.',
+                            'Our ready-made collections are designed so you never have to choose between quality and convenience. Shop and receive — no long waits.',
                     ],
                     [
                         'num' => '02',
-                        'title' => 'Zero Waste Initiative',
+                        'title' => 'Honest Communication',
                         'desc' =>
-                            'Pattern-making engineered to minimize fabric waste. Remaining materials repurposed or donated.',
+                            'We keep you updated from the moment you order to the moment it arrives. No chasing. No guessing.',
                     ],
                     [
                         'num' => '03',
-                        'title' => 'Lifetime Care',
+                        'title' => 'Quality You Can Feel',
                         'desc' =>
-                            'Complimentary lifetime alterations and repair services. True luxury is designed to last.',
+                            'Every piece is checked before it leaves us. If something is not right, we make it right.',
                     ],
                 ];
             @endphp
@@ -240,9 +244,9 @@
                 @php
                     $stats = [
                         ['value' => '2018', 'label' => 'Year Founded'],
-                        ['value' => '42+', 'label' => 'Countries Served'],
-                        ['value' => '127', 'label' => 'Crafting Steps'],
-                        ['value' => '98%', 'label' => 'Recycled Materials'],
+                        ['value' => '7+', 'label' => 'Years of Craftsmanship'],
+                        ['value' => '5', 'label' => 'Signature Collections'],
+                        ['value' => 'SA-Wide', 'label' => 'Nationwide Delivery'],
                     ];
                 @endphp
                 @foreach ($stats as $stat)
@@ -264,25 +268,25 @@
 
             <div class="relative z-10 max-w-3xl mx-auto">
                 <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-bone mb-6">
-                    Experience <span class="text-gold">Geometric Luxury</span>
+                    Ready to Find <span class="text-gold block mt-2">Your Piece?</span>
                 </h2>
                 <p class="text-bone-dim text-lg mb-10">
-                    Join thousands who have transformed their wardrobe with architectural elegance.
-                    Explore our collections and discover why precision never goes out of style.
+                    Browse our collections and find ceremony-ready traditional wear designed for the woman who
+                    carries her culture with confidence.
                 </p>
                 <div class="flex flex-col sm:flex-row gap-5 justify-center">
                     <a href="{{ route('products.index') }}"
                         class="group inline-flex items-center justify-center px-8 py-4 bg-gradient-to-r from-gold to-gold-dim text-ink font-bold rounded-full hover:from-gold-bright hover:to-gold transition-all duration-300 shadow-2xl shadow-gold/25">
-                        Explore Collections
+                        Shop Ready-Made
                         <svg class="w-5 h-5 ml-3 group-hover:translate-x-1.5 transition-transform" fill="none"
                             stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M14 5l7 7m0 0l-7 7m7-7H3" />
                         </svg>
                     </a>
-                    <a href="{{ route('products.index') }}"
+                    <a href="{{ route('newarrival') }}"
                         class="group inline-flex items-center justify-center px-8 py-4 bg-ink-raised2/50 backdrop-blur-sm border border-line text-bone-dim font-bold rounded-full hover:bg-ink-raised2 hover:text-bone hover:border-gold/50 transition-all duration-300">
-                        View New Arrivals
+                        See New Arrivals
                         <svg class="w-5 h-5 ml-3 group-hover:translate-x-1 transition-transform" fill="none"
                             stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
