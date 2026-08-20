@@ -14,6 +14,15 @@ class CartService
 {
     private const SESSION_KEY = 'cart';
 
+    /**
+     * Per-item cap on how many of one dress a customer can order. Enforced
+     * here (not just in request validation) because add() accumulates onto
+     * whatever quantity is already in the cart — capping only the quantity
+     * on a single request would still let repeated "Add to Cart" clicks
+     * push the total past the limit.
+     */
+    public const MAX_QUANTITY_PER_ITEM = 5;
+
     public function all(): array
     {
         return Session::get(self::SESSION_KEY, []);
@@ -27,7 +36,8 @@ class CartService
     public function add(string $dressId, int $quantity = 1): array
     {
         $cart = $this->all();
-        $cart[$dressId] = ($cart[$dressId] ?? 0) + $quantity;
+        $requested = ($cart[$dressId] ?? 0) + $quantity;
+        $cart[$dressId] = min($requested, self::MAX_QUANTITY_PER_ITEM);
         Session::put(self::SESSION_KEY, $cart);
 
         return $cart;
@@ -40,7 +50,7 @@ class CartService
         if ($quantity <= 0) {
             unset($cart[$dressId]);
         } else {
-            $cart[$dressId] = $quantity;
+            $cart[$dressId] = min($quantity, self::MAX_QUANTITY_PER_ITEM);
         }
 
         Session::put(self::SESSION_KEY, $cart);

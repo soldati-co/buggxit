@@ -42,13 +42,47 @@ class CartApiTest extends TestCase
         $response->assertJsonValidationErrors('product_id');
     }
 
-    public function test_add_rejects_quantity_above_ten(): void
+    public function test_add_rejects_quantity_above_the_max(): void
     {
         $dress = Dress::factory()->create(['status' => 'active']);
 
         $response = $this->postJson(route('api.cart.add'), [
             'product_id' => $dress->id,
-            'quantity' => 11,
+            'quantity' => CartService::MAX_QUANTITY_PER_ITEM + 1,
+        ]);
+
+        $response->assertStatus(422);
+        $response->assertJsonValidationErrors('quantity');
+    }
+
+    public function test_add_caps_cumulative_quantity_and_reports_it_in_the_response(): void
+    {
+        $dress = Dress::factory()->create(['status' => 'active']);
+        $max = CartService::MAX_QUANTITY_PER_ITEM;
+
+        // Repeated single-unit adds (the real "Add to Cart" button flow) must
+        // not be able to push the total past the cap just because each
+        // individual request is within the per-request limit.
+        for ($i = 0; $i < $max; $i++) {
+            $this->postJson(route('api.cart.add'), ['product_id' => $dress->id, 'quantity' => 1])
+                ->assertJson(['success' => true, 'capped' => false]);
+        }
+
+        $response = $this->postJson(route('api.cart.add'), ['product_id' => $dress->id, 'quantity' => 1]);
+
+        $response->assertOk();
+        $response->assertJson(['success' => true, 'capped' => true, 'cart_count' => $max]);
+        $this->assertStringContainsString((string) $max, $response->json('message'));
+    }
+
+    public function test_update_rejects_quantity_above_the_max(): void
+    {
+        $dress = Dress::factory()->create(['status' => 'active']);
+        app(CartService::class)->add($dress->id, 1);
+
+        $response = $this->postJson(route('api.cart.update'), [
+            'product_id' => $dress->id,
+            'quantity' => CartService::MAX_QUANTITY_PER_ITEM + 1,
         ]);
 
         $response->assertStatus(422);

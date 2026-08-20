@@ -77,7 +77,7 @@
                                             class="quantity-value w-8 text-center text-bone font-medium">{{ $item['quantity'] }}</span>
                                         <button
                                             class="quantity-increase px-3 py-2 text-bone-dim hover:text-gold transition-colors"
-                                            {{ $item['quantity'] >= 10 ? 'disabled' : '' }}>
+                                            {{ $item['quantity'] >= \App\Services\CartService::MAX_QUANTITY_PER_ITEM ? 'disabled' : '' }}>
                                             <i class="fas fa-plus"></i>
                                         </button>
                                     </div>
@@ -154,6 +154,7 @@
 @push('scripts')
     <script>
         const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
+        const MAX_QUANTITY_PER_ITEM = {{ \App\Services\CartService::MAX_QUANTITY_PER_ITEM }};
 
         // Quantity increase
         document.querySelectorAll('.quantity-increase').forEach(btn => {
@@ -163,7 +164,7 @@
                 const productId = container.dataset.productId;
                 const qtySpan = container.querySelector('.quantity-value');
                 let qty = parseInt(qtySpan.textContent);
-                if (qty < 10) {
+                if (qty < MAX_QUANTITY_PER_ITEM) {
                     qty++;
                     updateCart(productId, qty, container);
                 }
@@ -257,7 +258,7 @@
 
                         // Enable/disable quantity buttons at the min/max bounds
                         container.querySelector('.quantity-decrease').disabled = newQty <= 1;
-                        container.querySelector('.quantity-increase').disabled = newQty >= 10;
+                        container.querySelector('.quantity-increase').disabled = newQty >= MAX_QUANTITY_PER_ITEM;
                     } else {
                         window.showCartToast('Could not update the quantity. Please try again.', true);
                     }

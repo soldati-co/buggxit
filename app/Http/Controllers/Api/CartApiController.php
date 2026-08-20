@@ -27,15 +27,22 @@ class CartApiController extends Controller
     {
         $request->validate([
             'product_id' => 'required|exists:dresses,id',
-            'quantity' => 'nullable|integer|min:1|max:10',
+            'quantity' => 'nullable|integer|min:1|max:'.CartService::MAX_QUANTITY_PER_ITEM,
         ]);
 
-        $this->cart->add($request->product_id, $request->quantity ?? 1);
+        $requestedQuantity = $request->quantity ?? 1;
+        $before = $this->cart->all()[$request->product_id] ?? 0;
+
+        $cart = $this->cart->add($request->product_id, $requestedQuantity);
+        $capped = ($cart[$request->product_id] ?? 0) < $before + $requestedQuantity;
 
         return response()->json([
             'success' => true,
+            'capped' => $capped,
             'cart_count' => $this->cart->count(),
-            'message' => 'Added to your cart.',
+            'message' => $capped
+                ? 'You already have the maximum of '.CartService::MAX_QUANTITY_PER_ITEM.' of this item in your cart.'
+                : 'Added to your cart.',
         ]);
     }
 
@@ -43,7 +50,7 @@ class CartApiController extends Controller
     {
         $request->validate([
             'product_id' => 'required|exists:dresses,id',
-            'quantity' => 'required|integer|min:0|max:10',
+            'quantity' => 'required|integer|min:0|max:'.CartService::MAX_QUANTITY_PER_ITEM,
         ]);
 
         $this->cart->update($request->product_id, $request->quantity);

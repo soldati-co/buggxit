@@ -24,6 +24,27 @@ class CartServiceTest extends TestCase
         $this->assertSame(5, $cart->count());
     }
 
+    public function test_add_caps_accumulated_quantity_at_the_per_item_max(): void
+    {
+        $dress = Dress::factory()->create();
+        $cart = new CartService();
+
+        $cart->add($dress->id, CartService::MAX_QUANTITY_PER_ITEM);
+        $cart->add($dress->id, 1);
+
+        $this->assertSame(CartService::MAX_QUANTITY_PER_ITEM, $cart->all()[$dress->id]);
+    }
+
+    public function test_update_caps_quantity_at_the_per_item_max(): void
+    {
+        $dress = Dress::factory()->create();
+        $cart = new CartService();
+
+        $cart->update($dress->id, CartService::MAX_QUANTITY_PER_ITEM + 10);
+
+        $this->assertSame(CartService::MAX_QUANTITY_PER_ITEM, $cart->all()[$dress->id]);
+    }
+
     public function test_update_to_zero_or_below_removes_the_item(): void
     {
         $dress = Dress::factory()->create();

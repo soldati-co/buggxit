@@ -221,7 +221,7 @@
                         const data = await response.json();
                         if (data.success) {
                             window.updateCartBadges(data.cart_count);
-                            window.showCartToast(data.message || 'Added to your cart.');
+                            window.showCartToast(data.message || 'Added to your cart.', data.capped === true);
                         } else {
                             window.showCartToast('Could not add this to your cart. Please try again.', true);
                         }
