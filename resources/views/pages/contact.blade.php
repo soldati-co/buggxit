@@ -197,27 +197,32 @@
                         [
                             'q' => 'What is your exchange policy?',
                             'a' =>
-                                'Standard (non-custom) pieces can be exchanged within 7 days of delivery for a different size or an item of equal value, provided they\'re unworn, unwashed, and still have their tags. Custom and made-to-order pieces are final sale unless they arrive faulty. See our Shipping & Exchange Policy for full details.',
+                                'We do not offer refunds. Exchanges are accepted within 7 days of delivery or purchase, provided the item is unworn and returned with all tags attached. If the correct item was delivered as ordered, return courier costs are the customer\'s responsibility. If the error is on our side, we cover it. Sale items are final sale and we offer no exchange on them.',
                         ],
                         [
-                            'q' => 'Do you offer custom sizing or bespoke pieces?',
+                            'q' => 'Do you offer custom sizing or alterations?',
                             'a' =>
-                                'Yes — most BUGGXIT Couture pieces are made to order and can be tailored to your measurements. For a fully custom or bespoke design, select "Custom Order Enquiry" above and we\'ll walk you through pricing and turnaround for your piece.',
+                                'We do not alter existing designs. Custom sizing is only available for made-to-measure orders. We take a maximum of 2 custom clients per month to ensure every piece gets the attention it deserves.',
                         ],
                         [
                             'q' => 'How can I track my order?',
                             'a' =>
-                                'Once your order ships, we\'ll send you your courier\'s tracking details by email. You can also check your order status anytime from your account\'s Order History.',
+                                'Once your order ships, you\'ll receive a tracking number via email or WhatsApp. You can also track it by logging into your account and visiting Order History.',
                         ],
                         [
-                            'q' => 'Where do you ship, and how much does it cost?',
+                            'q' => 'What are your shipping options?',
                             'a' =>
-                                'We currently ship nationwide within South Africa via courier. Shipping cost depends on your delivery address and is confirmed with you after your order is placed, before it\'s dispatched.',
+                                'We deliver nationwide across South Africa via The Courier Guy and PEP Paxi. Delivery takes 7-14 working days. Costs start from R150 and are calculated at checkout based on parcel size.',
                         ],
                         [
                             'q' => 'Do you have a physical store?',
                             'a' =>
-                                'We\'re online-only, based in Durban, KwaZulu-Natal, and deliver nationwide. Follow us on Instagram for pop-up and market appearance dates.',
+                                'We are proudly online-based. We do host pop-up shops from time to time — follow us on Instagram at @buggxit_couture for dates and locations.',
+                        ],
+                        [
+                            'q' => 'How long does a custom order take?',
+                            'a' =>
+                                'Custom pieces take approximately 6 weeks from the time the deposit is confirmed and all measurements and design details are finalised. We\'ll keep you updated on the production process throughout.',
                         ],
                     ];
                 @endphp
