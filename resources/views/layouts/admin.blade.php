@@ -69,6 +69,16 @@
                               {{ request()->routeIs('admin.categories.*') ? 'bg-gold/10 text-gold border border-gold/30' : 'text-bone-dim hover:text-gold hover:bg-ink-raised2/50' }}">
                         <i class="fas fa-tags mr-2"></i>Categories
                     </a>
+                    <a href="{{ route('admin.hero-slides.index') }}"
+                        class="px-3 py-2 rounded-lg text-sm font-medium transition-all duration-300
+                              {{ request()->routeIs('admin.hero-slides.*') ? 'bg-gold/10 text-gold border border-gold/30' : 'text-bone-dim hover:text-gold hover:bg-ink-raised2/50' }}">
+                        <i class="fas fa-images mr-2"></i>Hero Slides
+                    </a>
+                    <a href="{{ route('admin.settings.edit') }}"
+                        class="px-3 py-2 rounded-lg text-sm font-medium transition-all duration-300
+                              {{ request()->routeIs('admin.settings.*') ? 'bg-gold/10 text-gold border border-gold/30' : 'text-bone-dim hover:text-gold hover:bg-ink-raised2/50' }}">
+                        <i class="fas fa-cog mr-2"></i>Settings
+                    </a>
                 </div>
 
                 <!-- Right: Admin User Dropdown -->
@@ -150,6 +160,14 @@
                 <a href="{{ route('admin.categories.index') }}" @click="mobileMenuOpen = false"
                     class="block px-4 py-3 rounded-lg text-bone-dim hover:text-gold hover:bg-ink-raised2/50 transition-all duration-200">
                     <i class="fas fa-tags mr-3 w-5"></i> Categories
+                </a>
+                <a href="{{ route('admin.hero-slides.index') }}" @click="mobileMenuOpen = false"
+                    class="block px-4 py-3 rounded-lg text-bone-dim hover:text-gold hover:bg-ink-raised2/50 transition-all duration-200">
+                    <i class="fas fa-images mr-3 w-5"></i> Hero Slides
+                </a>
+                <a href="{{ route('admin.settings.edit') }}" @click="mobileMenuOpen = false"
+                    class="block px-4 py-3 rounded-lg text-bone-dim hover:text-gold hover:bg-ink-raised2/50 transition-all duration-200">
+                    <i class="fas fa-cog mr-3 w-5"></i> Settings
                 </a>
                 <div class="border-t border-line/50 my-2"></div>
                 <form method="POST" action="{{ route('admin.logout') }}">

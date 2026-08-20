@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\AdminOrderController;
 use App\Http\Controllers\Admin\AdminCategoryController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\AdminPasswordResetController;
+use App\Http\Controllers\Admin\AdminSettingsController;
 use App\Http\Controllers\Admin\HeroSlideController;
 
 // ================== ADMIN ROUTES ================== //
@@ -90,6 +91,12 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::put('/{heroSlide}', [HeroSlideController::class, 'update'])->name('update');
             Route::delete('/{heroSlide}', [HeroSlideController::class, 'destroy'])->name('destroy');
             Route::post('/update-order', [HeroSlideController::class, 'updateOrder'])->name('update-order');
+        });
+
+        // ===== Settings =====
+        Route::prefix('settings')->name('settings.')->group(function () {
+            Route::get('/', [AdminSettingsController::class, 'edit'])->name('edit');
+            Route::put('/', [AdminSettingsController::class, 'update'])->name('update');
         });
 
         // ===== Logout =====

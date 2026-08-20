@@ -161,6 +161,8 @@
         </div>
     </div>
 
+    @include('components.whatsapp-button')
+
     @stack('scripts')
 </body>
 
