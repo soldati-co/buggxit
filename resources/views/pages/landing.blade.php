@@ -157,36 +157,36 @@
                     <div class="absolute -bottom-24 -left-24 w-64 h-64 bg-gold/5 rounded-full blur-3xl"></div>
                     <div class="relative z-10 max-w-4xl mx-auto text-center">
                         <span class="inline-flex items-center px-4 py-2 rounded-full text-xs font-medium bg-gold/10 text-gold border border-gold/30 mb-6">
-                            <i class="fas fa-ruler-combined mr-2"></i> Made to measure
+                            <i class="fas fa-ruler-combined mr-2"></i> Limited Custom Orders
                         </span>
-                        <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-bone mb-6">Your vision, <span class="text-gold">perfectly fitted</span></h2>
-                        <p class="text-bone-dim text-lg mb-10 max-w-2xl mx-auto">From consultation to delivery – every dress is hand‑cut, hand‑sewn, and fitted to your unique measurements. No mass production, only singular pieces.</p>
+                        <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-bone mb-6">Something <span class="text-gold">Special</span> in Mind?</h2>
+                        <p class="text-bone-dim text-lg mb-10 max-w-2xl mx-auto">For milestone celebrations, or a vision that is entirely your own. Hand-cut, hand-sewn, built around your exact measurements. We take a maximum of 2 custom clients per month.</p>
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-3xl mx-auto">
                             <div class="flex flex-col items-center p-5">
                                 <div class="w-16 h-16 mb-4 bg-gold/10 rounded-full flex items-center justify-center border border-gold/30">
                                     <i class="fas fa-comments text-2xl text-gold"></i>
                                 </div>
                                 <h4 class="text-bone font-semibold text-lg">1. Consult</h4>
-                                <p class="text-bone-dim text-sm text-center">Share your style, fabric, and event.</p>
+                                <p class="text-bone-dim text-sm text-center">Tell us your vision, fabric, and occasion.</p>
                             </div>
                             <div class="flex flex-col items-center p-5">
                                 <div class="w-16 h-16 mb-4 bg-gold/10 rounded-full flex items-center justify-center border border-gold/30">
                                     <i class="fas fa-cut text-2xl text-gold"></i>
                                 </div>
                                 <h4 class="text-bone font-semibold text-lg">2. Craft</h4>
-                                <p class="text-bone-dim text-sm text-center">Hand‑cut patterns, hand‑stitched detail.</p>
+                                <p class="text-bone-dim text-sm text-center">Hand‑cut patterns. Every stitch intentional.</p>
                             </div>
                             <div class="flex flex-col items-center p-5">
                                 <div class="w-16 h-16 mb-4 bg-gold/10 rounded-full flex items-center justify-center border border-gold/30">
                                     <i class="fas fa-truck text-2xl text-gold"></i>
                                 </div>
                                 <h4 class="text-bone font-semibold text-lg">3. Deliver</h4>
-                                <p class="text-bone-dim text-sm text-center">Quality checked, sent to your courier.</p>
+                                <p class="text-bone-dim text-sm text-center">Quality-checked and with you within 6 weeks.</p>
                             </div>
                         </div>
                         <div class="mt-12">
                             <a href="{{ route('contact') }}" class="inline-flex items-center px-8 py-4 bg-gradient-to-r from-gold to-gold-dim text-ink font-bold rounded-full hover:from-gold-bright hover:to-gold transition-all duration-300 shadow-lg">
-                                Start your bespoke order
+                                Enquire About Custom
                                 <svg class="w-5 h-5 ml-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
                                 </svg>
