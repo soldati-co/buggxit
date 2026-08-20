@@ -163,6 +163,37 @@
 
     @include('components.whatsapp-button')
 
+    <script>
+        // Shared by every "Add to Cart" entry point (landing, product listing,
+        // product detail, cart page) so the navbar badge and user feedback stay
+        // consistent no matter where the cart is touched from.
+        window.updateCartBadges = function (count) {
+            document.querySelectorAll('.cart-count').forEach((el) => {
+                el.textContent = count > 99 ? '99+' : count;
+                el.classList.toggle('hidden', count <= 0);
+                el.classList.add('scale-150');
+                setTimeout(() => el.classList.remove('scale-150'), 300);
+            });
+        };
+
+        window.showCartToast = function (message, isError = false) {
+            document.getElementById('cart-toast')?.remove();
+
+            const toast = document.createElement('div');
+            toast.id = 'cart-toast';
+            toast.className = `fixed top-20 left-1/2 -translate-x-1/2 z-[60] px-5 py-3 rounded-lg shadow-lg text-sm font-medium text-center opacity-0 transition-opacity duration-300 ${isError ? 'bg-bad text-white' : 'bg-gold text-ink'}`;
+            toast.textContent = message;
+            document.body.appendChild(toast);
+
+            requestAnimationFrame(() => toast.classList.remove('opacity-0'));
+
+            setTimeout(() => {
+                toast.classList.add('opacity-0');
+                setTimeout(() => toast.remove(), 300);
+            }, 2500);
+        };
+    </script>
+
     @stack('scripts')
 </body>
 

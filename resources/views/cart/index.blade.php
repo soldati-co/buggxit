@@ -206,14 +206,19 @@
                     .then(data => {
                         if (data.success) {
                             container.remove();
-                            updateGlobalCartCount(data.cart_count);
+                            window.updateCartBadges(data.cart_count);
                             updateSummary(data.subtotal);
                             if (data.cart_count == 0) {
                                 location.reload(); // refresh to show empty state
                             }
+                        } else {
+                            window.showCartToast('Could not remove this item. Please try again.', true);
                         }
                     })
-                    .catch(err => console.error(err));
+                    .catch(err => {
+                        console.error(err);
+                        window.showCartToast('Could not remove this item. Please try again.', true);
+                    });
             });
         });
 
@@ -234,30 +239,33 @@
                     if (data.success) {
                         // Update quantity display
                         container.querySelector('.quantity-value').textContent = newQty;
-                        // Update subtotal for this item
-                        const price = parseFloat(container.querySelector('.subtotal').textContent.replace('R', '')
-                            .replace(',', '')) / (newQty - (newQty > 1 ? -1 : 1));
-                        const newSubtotal = price * newQty;
-                        container.querySelector('.subtotal').textContent = 'R' + newSubtotal.toLocaleString('en-ZA', {
-                            maximumFractionDigits: 0
-                        });
-                        // Update global summary
-                        updateGlobalCartCount(data.cart_count);
-                        updateSummary(data.subtotal);
-                        // Enable/disable decrease button
-                        const decBtn = container.querySelector('.quantity-decrease');
-                        if (newQty <= 1) decBtn.disabled = true;
-                        else decBtn.disabled = false;
-                    }
-                });
-        }
 
-        function updateGlobalCartCount(count) {
-            document.querySelectorAll('.cart-count').forEach(el => {
-                el.textContent = count;
-                el.classList.add('scale-150');
-                setTimeout(() => el.classList.remove('scale-150'), 300);
-            });
+                        // Read the line subtotal back from the server response instead
+                        // of deriving it from DOM text (which broke down to 0/0 = Infinity
+                        // when decreasing 2 -> 1, and was wrong on every increase).
+                        const updatedItem = data.items.find(item => item.dress.id === productId);
+                        if (updatedItem) {
+                            container.querySelector('.subtotal').textContent = 'R' + Number(updatedItem
+                                .subtotal).toLocaleString('en-ZA', {
+                                maximumFractionDigits: 0
+                            });
+                        }
+
+                        // Update global summary
+                        window.updateCartBadges(data.cart_count);
+                        updateSummary(data.subtotal);
+
+                        // Enable/disable quantity buttons at the min/max bounds
+                        container.querySelector('.quantity-decrease').disabled = newQty <= 1;
+                        container.querySelector('.quantity-increase').disabled = newQty >= 10;
+                    } else {
+                        window.showCartToast('Could not update the quantity. Please try again.', true);
+                    }
+                })
+                .catch(err => {
+                    console.error(err);
+                    window.showCartToast('Could not update the quantity. Please try again.', true);
+                });
         }
 
         function updateSummary(subtotal) {

@@ -27,12 +27,10 @@
         <i class="fas fa-shopping-bag {{ $iconSizeClasses }}"></i>
 
         <!-- Cart Counter Badge -->
-        @if ($count > 0)
-            <span
-                class="absolute {{ $counterSizeClasses }} bg-gold text-ink rounded-full flex items-center justify-center font-bold transform hover:scale-110 transition-transform duration-200">
-                {{ $count > 99 ? '99+' : $count }}
-            </span>
-        @endif
+        <span
+            class="cart-count absolute {{ $counterSizeClasses }} bg-gold text-ink rounded-full flex items-center justify-center font-bold transform hover:scale-110 transition-transform duration-200 {{ $count > 0 ? '' : 'hidden' }}">
+            {{ $count > 99 ? '99+' : $count }}
+        </span>
     </div>
 
     @if ($showText)

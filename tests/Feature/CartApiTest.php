@@ -1,0 +1,133 @@
+<?php
+
+namespace Tests\Feature;
+
+use App\Models\Dress;
+use App\Services\CartService;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
+
+/**
+ * Regression coverage for a set of cart bugs found while auditing the flow:
+ * the update/remove JSON responses are what the cart page's JS now reads to
+ * redraw a line's subtotal (it used to derive it from stale DOM text with a
+ * formula that divided by zero on 2 -> 1), and the navbar badge relies on a
+ * `cart-count` class + always-rendered markup that didn't previously exist.
+ */
+class CartApiTest extends TestCase
+{
+    use RefreshDatabase;
+
+    public function test_add_creates_a_cart_entry(): void
+    {
+        $dress = Dress::factory()->create(['status' => 'active']);
+
+        $response = $this->postJson(route('api.cart.add'), [
+            'product_id' => $dress->id,
+            'quantity' => 2,
+        ]);
+
+        $response->assertOk();
+        $response->assertJson(['success' => true, 'cart_count' => 2]);
+    }
+
+    public function test_add_validates_product_id_and_quantity(): void
+    {
+        $response = $this->postJson(route('api.cart.add'), [
+            'product_id' => 'not-a-real-id',
+            'quantity' => 1,
+        ]);
+
+        $response->assertStatus(422);
+        $response->assertJsonValidationErrors('product_id');
+    }
+
+    public function test_add_rejects_quantity_above_ten(): void
+    {
+        $dress = Dress::factory()->create(['status' => 'active']);
+
+        $response = $this->postJson(route('api.cart.add'), [
+            'product_id' => $dress->id,
+            'quantity' => 11,
+        ]);
+
+        $response->assertStatus(422);
+        $response->assertJsonValidationErrors('quantity');
+    }
+
+    public function test_update_response_includes_the_matching_item_with_its_correct_subtotal(): void
+    {
+        $dress = Dress::factory()->create(['price' => 500, 'status' => 'active']);
+        app(CartService::class)->add($dress->id, 1);
+
+        $response = $this->postJson(route('api.cart.update'), [
+            'product_id' => $dress->id,
+            'quantity' => 3,
+        ]);
+
+        $response->assertOk();
+        $response->assertJson(['success' => true, 'cart_count' => 3]);
+
+        $items = $response->json('items');
+        $this->assertCount(1, $items);
+        $this->assertSame($dress->id, $items[0]['dress']['id']);
+        $this->assertEquals(1500, $items[0]['subtotal']);
+    }
+
+    public function test_update_to_zero_removes_the_item(): void
+    {
+        $dress = Dress::factory()->create(['status' => 'active']);
+        app(CartService::class)->add($dress->id, 2);
+
+        $response = $this->postJson(route('api.cart.update'), [
+            'product_id' => $dress->id,
+            'quantity' => 0,
+        ]);
+
+        $response->assertOk();
+        $response->assertJson(['success' => true, 'cart_count' => 0, 'items' => []]);
+    }
+
+    public function test_remove_deletes_the_item_and_recomputes_the_subtotal(): void
+    {
+        $dressA = Dress::factory()->create(['price' => 500, 'status' => 'active']);
+        $dressB = Dress::factory()->create(['price' => 300, 'status' => 'active']);
+        $cart = app(CartService::class);
+        $cart->add($dressA->id, 1);
+        $cart->add($dressB->id, 1);
+
+        $response = $this->postJson(route('api.cart.remove'), [
+            'product_id' => $dressA->id,
+        ]);
+
+        $response->assertOk();
+        $items = $response->json('items');
+        $this->assertCount(1, $items);
+        $this->assertSame($dressB->id, $items[0]['dress']['id']);
+        $this->assertSame('R300', $response->json('subtotal'));
+    }
+
+    public function test_navbar_badge_markup_always_renders_and_toggles_hidden_with_cart_state(): void
+    {
+        $response = $this->get(route('home'));
+        $response->assertOk();
+
+        $this->assertMatchesRegularExpression(
+            '/class="cart-count[^"]*\bhidden\b[^"]*"/',
+            $response->getContent(),
+            'Badge should render (so JS can update it without a reload) but stay hidden while the cart is empty.'
+        );
+
+        $dress = Dress::factory()->create(['status' => 'active']);
+        app(CartService::class)->add($dress->id, 4);
+
+        $response = $this->get(route('home'));
+        $response->assertOk();
+
+        $this->assertDoesNotMatchRegularExpression(
+            '/class="cart-count[^"]*\bhidden\b[^"]*"/',
+            $response->getContent(),
+            'Badge should lose the hidden class once the cart has items.'
+        );
+    }
+}

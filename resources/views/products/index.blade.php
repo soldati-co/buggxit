@@ -220,14 +220,14 @@
                         });
                         const data = await response.json();
                         if (data.success) {
-                            document.querySelectorAll('.cart-count').forEach(el => {
-                                el.textContent = data.cart_count;
-                                el.classList.add('scale-150');
-                                setTimeout(() => el.classList.remove('scale-150'), 300);
-                            });
+                            window.updateCartBadges(data.cart_count);
+                            window.showCartToast(data.message || 'Added to your cart.');
+                        } else {
+                            window.showCartToast('Could not add this to your cart. Please try again.', true);
                         }
                     } catch (error) {
                         console.error(error);
+                        window.showCartToast('Could not add this to your cart. Please try again.', true);
                     }
                 },
 
