@@ -28,13 +28,20 @@ class SecurityHeaders
             $response->headers->set('Strict-Transport-Security', 'max-age=31536000');
         }
 
+        // *.elfsight.com / *.elfsightcdn.com: the Instagram Feed widget on the
+        // homepage (see resources/views/components/follow-along.blade.php) —
+        // Elfsight's platform.js loads widget config/images/fonts from its own
+        // domains, per https://help.elfsight.com/article/1581.
+        $elfsight = 'https://*.elfsight.com https://*.elfsightcdn.com';
+
         $response->headers->set('Content-Security-Policy', implode('; ', [
             "default-src 'self'",
-            "script-src 'self' 'unsafe-inline'",
-            "style-src 'self' 'unsafe-inline'",
-            "img-src 'self' data:",
-            "font-src 'self' data:",
-            "connect-src 'self'",
+            "script-src 'self' 'unsafe-inline' {$elfsight}",
+            "style-src 'self' 'unsafe-inline' {$elfsight}",
+            "img-src 'self' data: {$elfsight}",
+            "font-src 'self' data: {$elfsight}",
+            "connect-src 'self' {$elfsight}",
+            "frame-src {$elfsight}",
             "form-action 'self' https://www.payfast.co.za https://sandbox.payfast.co.za",
             "frame-ancestors 'none'",
             "base-uri 'self'",

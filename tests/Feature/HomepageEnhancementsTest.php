@@ -59,18 +59,18 @@ class HomepageEnhancementsTest extends TestCase
         $response->assertOk();
         $response->assertSee('Follow Along');
         $response->assertSee('@buggxit_couture');
-        $response->assertDontSee('snapwidget.js', false);
+        $response->assertDontSee('elfsightcdn.com', false);
     }
 
-    public function test_follow_along_section_embeds_snapwidget_when_widget_id_set(): void
+    public function test_follow_along_section_embeds_elfsight_widget_when_widget_id_set(): void
     {
-        Setting::set('instagram_widget_id', '987654');
+        Setting::set('instagram_widget_id', '29f4d79e-8ae9-4324-bce0-5553440396bf');
 
         $response = $this->get(route('home'));
 
         $response->assertOk();
-        $response->assertSee('data-id="987654"', false);
-        $response->assertSee('snapwidget.js', false);
+        $response->assertSee('elfsight-app-29f4d79e-8ae9-4324-bce0-5553440396bf', false);
+        $response->assertSee('elfsightcdn.com/platform.js', false);
     }
 
     public function test_size_guide_page_loads_with_expected_content(): void

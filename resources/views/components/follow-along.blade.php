@@ -15,13 +15,11 @@
 
     @if($instagramWidgetId)
         <div class="max-w-4xl mx-auto rounded-2xl overflow-hidden border border-line">
-            <div class="snapwidget-widget" data-id="{{ $instagramWidgetId }}" data-ref="widget">
-                <a href="https://snapwidget.com">View on Instagram</a>
-            </div>
+            <div class="elfsight-app-{{ $instagramWidgetId }}" data-elfsight-app-lazy></div>
         </div>
         @once
             @push('scripts')
-                <script src="https://snapwidget.com/js/snapwidget.js" charset="utf-8"></script>
+                <script src="https://elfsightcdn.com/platform.js" async></script>
             @endpush
         @endonce
     @endif

@@ -69,20 +69,21 @@
                     <i class="fab fa-instagram text-gold mr-2"></i> Instagram Feed
                 </h2>
                 <p class="text-sm text-bone-dim mb-6">
-                    Shows a "Follow Along" section on the homepage. Paste a
-                    <a href="https://snapwidget.com" target="_blank" rel="noopener noreferrer" class="text-gold hover:text-gold-bright underline">SnapWidget</a>
-                    widget ID to embed your live @buggxit_couture feed — leave it blank to show a simple follow
+                    Shows a "Follow Along" section on the homepage. Paste an
+                    <a href="https://elfsight.com" target="_blank" rel="noopener noreferrer" class="text-gold hover:text-gold-bright underline">Elfsight</a>
+                    Instagram Feed widget ID to embed your live @buggxit_couture feed — leave it blank to show a simple follow
                     link instead.
                 </p>
 
                 <div>
-                    <label class="block text-sm font-medium text-bone-dim mb-1">SnapWidget Widget ID</label>
+                    <label class="block text-sm font-medium text-bone-dim mb-1">Elfsight Widget ID</label>
                     <input type="text" name="instagram_widget_id" value="{{ old('instagram_widget_id', $settings['instagram_widget_id']) }}"
-                        placeholder="e.g. 1234567"
+                        placeholder="e.g. 29f4d79e-8ae9-4324-bce0-5553440396bf"
                         class="w-full bg-ink-raised2 border border-line rounded-lg px-4 py-3 text-bone focus:border-gold focus:ring-gold">
                     @error('instagram_widget_id')
                         <p class="text-bad text-xs mt-1">{{ $message }}</p>
                     @enderror
+                    <p class="text-xs text-bone-faint mt-1">Find this in your Elfsight dashboard under the widget's Export/Publish code — it's the UUID after "elfsight-app-" in the embed snippet.</p>
                 </div>
             </div>
 
