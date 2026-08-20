@@ -165,12 +165,9 @@
         </div>
     </div>
 
-    <!-- Return to top button - positioned to avoid overlap -->
-    <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})"
-        class="fixed bottom-6 right-6 md:bottom-8 md:right-8 p-3 bg-ink-raised/80 backdrop-blur-sm border border-line rounded-full text-bone-dim hover:text-gold hover:border-gold transition-all duration-300 z-40 shadow-lg group">
-        <i class="fas fa-arrow-up text-lg group-hover:-translate-y-1 transition-transform duration-300"></i>
-    </button>
 </footer>
+
+@include('components.back-to-top')
 
 <style>
     @keyframes glow {
