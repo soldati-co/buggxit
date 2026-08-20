@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Contact Us | BUGGXIT Couture | Geometric Luxury Fashion')
+@section('title', 'Contact Us | BUGGXIT Couture')
 
 @section('content')
     {{-- Hero Section --}}
@@ -19,12 +19,12 @@
                     </span>
 
                     <h1 class="text-4xl md:text-6xl lg:text-7xl font-bold text-bone mb-6 leading-tight">
-                        Connect with <span class="text-gold block mt-2">Precision</span>
+                        We'd Love <span class="text-gold block mt-2">to Hear from You</span>
                     </h1>
 
                     <p class="text-xl text-bone-dim mb-10 max-w-2xl mx-auto">
-                        Our geometric approach extends to customer service. Reach out for inquiries,
-                        consultations, or collaborations. We respond with the same precision we design with.
+                        Whether you have a question about sizing, want to place a custom order, or just need help
+                        choosing a piece — reach out. We respond with care, not a script.
                     </p>
                 </div>
             </div>
@@ -57,7 +57,7 @@
                         <label class="block text-bone-dim text-sm uppercase tracking-wider mb-2">Email *</label>
                         <input type="email" name="email" required
                             class="w-full px-4 py-3 bg-ink-raised/50 border border-line rounded-lg text-bone focus:border-gold focus:ring-1 focus:ring-gold/30 transition-all"
-                            placeholder="your.email@example.com">
+                            placeholder="your@email.com">
                     </div>
 
                     <div class="mb-5">
@@ -65,12 +65,10 @@
                         <select name="subject" required
                             class="w-full px-4 py-3 bg-ink-raised/50 border border-line rounded-lg text-bone focus:border-gold focus:ring-1 focus:ring-gold/30 transition-all appearance-none cursor-pointer">
                             <option value="" disabled selected>Select a subject</option>
-                            <option value="general">General Inquiry</option>
+                            <option value="general">General Enquiry</option>
                             <option value="order">Order Support</option>
-                            <option value="returns">Returns & Exchanges</option>
-                            <option value="custom">Custom Design Inquiry</option>
-                            <option value="wholesale">Wholesale & Partnerships</option>
-                            <option value="press">Press & Media</option>
+                            <option value="exchange">Exchange Request</option>
+                            <option value="custom">Custom Order Enquiry</option>
                             <option value="other">Other</option>
                         </select>
                     </div>
@@ -79,14 +77,13 @@
                         <label class="block text-bone-dim text-sm uppercase tracking-wider mb-2">Message *</label>
                         <textarea name="message" required rows="6"
                             class="w-full px-4 py-3 bg-ink-raised/50 border border-line rounded-lg text-bone focus:border-gold focus:ring-1 focus:ring-gold/30 transition-all resize-vertical"
-                            placeholder="Your message..."></textarea>
+                            placeholder="Tell us what you need — we're here to help."></textarea>
                     </div>
 
                     <div class="mb-6">
                         <label class="flex items-start gap-3 text-bone-dim text-sm">
                             <input type="checkbox" name="newsletter" class="mt-1 accent-gold">
-                            <span>Subscribe to our newsletter for updates on new collections, exclusive offers, and
-                                geometric design insights.</span>
+                            <span>Subscribe to our newsletter for new arrivals and pop-up dates.</span>
                         </label>
                     </div>
 
@@ -114,8 +111,8 @@
                             <div>
                                 <h3 class="text-bone font-semibold text-lg">Physical Address</h3>
                                 <p class="text-bone-dim leading-relaxed">
-                                    [approx. location],[building number]<br>
-                                    [street name], South Africa
+                                    Based in Durban, KwaZulu-Natal, South Africa<br>
+                                    Serving customers nationwide
                                 </p>
                             </div>
                         </div>
@@ -129,8 +126,7 @@
                             <div>
                                 <h3 class="text-bone font-semibold text-lg">Phone & WhatsApp</h3>
                                 <p class="text-bone-dim leading-relaxed">
-                                    +27 31 234 5678<br>
-                                    <span class="text-xs">Mon-Fri: 9AM-6PM CET</span>
+                                    083 285 6913
                                 </p>
                             </div>
                         </div>
@@ -144,8 +140,8 @@
                             <div>
                                 <h3 class="text-bone font-semibold text-lg">Email</h3>
                                 <p class="text-bone-dim leading-relaxed">
-                                    info@buggxit.com<br>
-                                    clientservices@buggxit.com
+                                    info@buggxit.store<br>
+                                    custom@buggxit.store
                                 </p>
                             </div>
                         </div>
@@ -155,7 +151,7 @@
                             <h3 class="text-gold font-semibold text-xl mb-4">Response Time</h3>
                             <div class="bg-ink-raised/50 border border-line rounded-xl p-5 space-y-3">
                                 <div class="flex justify-between items-center">
-                                    <span class="text-bone-dim">General Inquiries</span>
+                                    <span class="text-bone-dim">General Enquiries</span>
                                     <span class="text-gold font-semibold">24-48 hours</span>
                                 </div>
                                 <div class="flex justify-between items-center">
@@ -164,7 +160,7 @@
                                 </div>
                                 <div class="flex justify-between items-center">
                                     <span class="text-bone-dim">Custom Design</span>
-                                    <span class="text-gold font-semibold">3-5 business days</span>
+                                    <span class="text-gold font-semibold">2-4 business days</span>
                                 </div>
                             </div>
                         </div>
@@ -185,6 +181,7 @@
                     </div>
                 </div>
             </div>
+        </div>
     </section>
 
     {{-- FAQ Section (Accordion) --}}
@@ -198,29 +195,29 @@
                 @php
                     $faqs = [
                         [
-                            'q' => 'What is your return and exchange policy?',
+                            'q' => 'What is your exchange policy?',
                             'a' =>
-                                'We accept returns within 30 days of delivery for full-price items in their original condition with tags attached. Sale items are final sale. Exchanges are available for size or color within 14 days. All returns are processed within 5-7 business days after we receive your item.',
+                                'Standard (non-custom) pieces can be exchanged within 7 days of delivery for a different size or an item of equal value, provided they\'re unworn, unwashed, and still have their tags. Custom and made-to-order pieces are final sale unless they arrive faulty. See our Shipping & Exchange Policy for full details.',
                         ],
                         [
-                            'q' => 'Do you offer custom sizing or alterations?',
+                            'q' => 'Do you offer custom sizing or bespoke pieces?',
                             'a' =>
-                                'Yes, we offer complimentary basic alterations on all full-price items. For custom sizing beyond our standard range, we provide made-to-measure services starting at $500. Please contact our custom design team for a consultation.',
+                                'Yes — most BUGGXIT Couture pieces are made to order and can be tailored to your measurements. For a fully custom or bespoke design, select "Custom Order Enquiry" above and we\'ll walk you through pricing and turnaround for your piece.',
                         ],
                         [
                             'q' => 'How can I track my order?',
                             'a' =>
-                                'Once your order ships, you\'ll receive a tracking number via email. You can also track your order by logging into your account on our website and visiting the "Order History" section. For international orders, tracking updates may take 24-48 hours to appear.',
+                                'Once your order ships, we\'ll send you your courier\'s tracking details by email. You can also check your order status anytime from your account\'s Order History.',
                         ],
                         [
-                            'q' => 'What shipping methods do you offer?',
+                            'q' => 'Where do you ship, and how much does it cost?',
                             'a' =>
-                                'We offer express worldwide shipping via DHL and FedEx. Standard shipping (5-7 business days) is free on orders over $500. Express shipping (2-3 business days) is available for $35. For Milan residents, we offer same-day delivery within the city center.',
+                                'We currently ship nationwide within South Africa via courier. Shipping cost depends on your delivery address and is confirmed with you after your order is placed, before it\'s dispatched.',
                         ],
                         [
-                            'q' => 'Do you have physical stores?',
+                            'q' => 'Do you have a physical store?',
                             'a' =>
-                                'Our flagship atelier and showroom is located in Milan at Via Monte Napoleone, 23. We also have seasonal pop-up stores in major fashion capitals including Paris, New York, Tokyo, and Dubai. Check our Instagram for current pop-up locations and dates.',
+                                'We\'re online-only, based in Durban, KwaZulu-Natal, and deliver nationwide. Follow us on Instagram for pop-up and market appearance dates.',
                         ],
                     ];
                 @endphp
@@ -241,27 +238,6 @@
         </div>
     </section>
 
-    {{-- Map Section --}}
-    <section class="container-wide px-4 sm:px-6 lg:px-8 mx-auto mb-20">
-        <div class="relative h-96 md:h-[500px] rounded-2xl overflow-hidden border border-line bg-ink-raised/50">
-            <div class="absolute inset-0 flex flex-col items-center justify-center z-10 bg-ink-raised/60 backdrop-blur-sm">
-                <i class="fas fa-map-marked-alt text-6xl text-gold mb-4"></i>
-                <h3 class="text-2xl font-bold text-bone text-center">Via Monte Napoleone, 23<br>20121 Milano MI, Italy
-                </h3>
-                <p class="text-bone-dim text-center max-w-md mt-3">Our Milan atelier is open by appointment only. Please
-                    contact us to schedule a private viewing of our collections.</p>
-                <button id="getDirections"
-                    class="mt-6 bg-gold hover:bg-gold-bright text-ink font-bold px-6 py-3 rounded-full transition-all">
-                    <i class="fas fa-directions mr-2"></i> Get Directions
-                </button>
-            </div>
-            <!-- Decorative pattern overlay -->
-            <div class="absolute inset-0 opacity-10 pointer-events-none"
-                style="background-image: url('data:image/svg+xml,%3Csvg width=\'100\' height=\'100\' viewBox=\'0 0 100 100\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cpath d=\'M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z\' fill=\'%23d4af37\' fill-opacity=\'0.3\' fill-rule=\'evenodd\'/%3E%3C/svg%3E');">
-            </div>
-        </div>
-    </section>
-
     {{-- Departments Section --}}
     <section class="bg-ink-raised/90 backdrop-blur-sm border-y border-line py-20 mb-20">
         <div class="container-wide px-4 sm:px-6 lg:px-8 mx-auto">
@@ -269,32 +245,20 @@
                 Contact by <span class="text-gold">Department</span>
             </h2>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-2xl mx-auto">
                 @php
                     $depts = [
                         [
                             'icon' => 'shopping-bag',
                             'title' => 'Customer Service',
-                            'desc' => 'Orders, returns, exchanges, and general inquiries',
-                            'email' => 'customerservice@buggxit.com',
+                            'desc' => 'Orders, returns, exchanges, and general enquiries',
+                            'email' => 'info@buggxit.store',
                         ],
                         [
                             'icon' => 'pencil-ruler',
                             'title' => 'Custom Design',
                             'desc' => 'Made-to-measure, bespoke commissions, and alterations',
-                            'email' => 'custom@buggxit.com',
-                        ],
-                        [
-                            'icon' => 'users',
-                            'title' => 'Wholesale & Partnerships',
-                            'desc' => 'Retail partnerships, collaborations, and bulk orders',
-                            'email' => 'wholesale@buggxit.com',
-                        ],
-                        [
-                            'icon' => 'microphone',
-                            'title' => 'Press & Media',
-                            'desc' => 'Editorial requests, press kits, and media inquiries',
-                            'email' => 'press@buggxit.com',
+                            'email' => 'custom@buggxit.store',
                         ],
                     ];
                 @endphp
@@ -328,11 +292,11 @@
                     Still Have <span class="text-gold">Questions</span>?
                 </h2>
                 <p class="text-bone-dim text-lg mb-10">
-                    Our geometric approach ensures precise and thoughtful responses.
-                    We're committed to providing exceptional service that matches the quality of our designs.
+                    We're committed to responding with care, not a script. Reach out and we'll help however we
+                    can.
                 </p>
                 <div class="flex flex-col sm:flex-row gap-5 justify-center">
-                    <a href="tel:+390212345678"
+                    <a href="tel:+27832856913"
                         class="group inline-flex items-center justify-center px-8 py-4 bg-gradient-to-r from-gold to-gold-dim text-ink font-bold rounded-full hover:from-gold-bright hover:to-gold transition-all duration-300 shadow-2xl shadow-gold/25">
                         <i class="fas fa-phone mr-2"></i> Call Us
                     </a>
@@ -438,12 +402,6 @@
                         submitBtn.innerHTML = originalText;
                     }, 3000);
                 });
-        });
-
-        // Get directions
-        document.getElementById('getDirections')?.addEventListener('click', () => {
-            window.open('https://www.google.com/maps/search/?api=1&query=Via+Monte+Napoleone+23+Milano+Italy',
-                '_blank');
         });
     </script>
 @endpush
