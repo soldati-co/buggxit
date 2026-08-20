@@ -80,6 +80,15 @@
                         </a>
                     </li>
 
+                    <li>
+                        <a href="{{ route('size-guide') }}"
+                            class="flex items-center text-bone-dim hover:text-gold text-sm transition-all duration-300 group">
+                            <i
+                                class="fas fa-chevron-right text-xs mr-2 opacity-0 group-hover:opacity-100 group-hover:text-gold transition-all duration-300"></i>
+                            Size Guide
+                        </a>
+                    </li>
+
                 </ul>
             </div>
 

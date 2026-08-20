@@ -82,4 +82,45 @@ class AdminSettingsTest extends TestCase
         $response->assertOk();
         $response->assertDontSee('wa.me', false);
     }
+
+    public function test_admin_can_set_instagram_widget_id(): void
+    {
+        $admin = Admin::factory()->create();
+
+        $response = $this->actingAs($admin, 'admin')->put(route('admin.settings.update'), [
+            'whatsapp_position' => 'right',
+            'instagram_widget_id' => '123456',
+        ]);
+
+        $response->assertRedirect();
+        $this->assertSame('123456', Setting::get('instagram_widget_id'));
+    }
+
+    public function test_invalid_instagram_widget_id_is_rejected(): void
+    {
+        $admin = Admin::factory()->create();
+
+        $response = $this->actingAs($admin, 'admin')->put(route('admin.settings.update'), [
+            'whatsapp_position' => 'right',
+            'instagram_widget_id' => '<script>alert(1)</script>',
+        ]);
+
+        $response->assertSessionHasErrors('instagram_widget_id');
+        $this->assertNull(Setting::get('instagram_widget_id'));
+    }
+
+    public function test_admin_can_enable_popup_banner_with_custom_text(): void
+    {
+        $admin = Admin::factory()->create();
+
+        $response = $this->actingAs($admin, 'admin')->put(route('admin.settings.update'), [
+            'whatsapp_position' => 'right',
+            'popup_banner_enabled' => '1',
+            'popup_banner_text' => 'Pop-up in Durban this Saturday!',
+        ]);
+
+        $response->assertRedirect();
+        $this->assertSame('1', Setting::get('popup_banner_enabled'));
+        $this->assertSame('Pop-up in Durban this Saturday!', Setting::get('popup_banner_text'));
+    }
 }

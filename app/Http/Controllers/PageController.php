@@ -31,6 +31,11 @@ class PageController extends Controller
         return view('pages.shipping-policy');
     }
 
+    public function sizeGuide()
+    {
+        return view('pages.size-guide');
+    }
+
     public function dashboard()
     {
         return view('pages.dashboard');

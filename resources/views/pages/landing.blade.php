@@ -3,7 +3,11 @@
 @section('title', 'Buggxit Couture')
 
 @section('content')
+    @include('components.popup-banner')
+
     @include('partials.hero')
+
+    @include('components.trust-strip')
 
     <div x-data="landingPage()" x-init="init()" x-cloak>
         <template x-if="loading">
@@ -198,6 +202,8 @@
           </div>
         </template>
     </div>
+
+    @include('components.follow-along')
 @endsection
 
 @push('scripts')

@@ -3,6 +3,13 @@
 @section('title', 'Dress details – BUGGXIT Couture')
 
 @section('content')
+    @php
+        $whatsappNumber = \Illuminate\Support\Facades\Schema::hasTable('settings')
+            ? \App\Models\Setting::get('whatsapp_number')
+            : null;
+        $whatsappDigits = $whatsappNumber ? preg_replace('/\D/', '', $whatsappNumber) : null;
+    @endphp
+
     <div x-data='productPage(@json($productIdentifier))' x-init="init()" x-cloak class="space-y-10">
         <div class="container-wide px-4 sm:px-6 lg:px-8 mx-auto pt-6">
             <a href="{{ route('products.index') }}" class="inline-flex items-center text-bone-dim hover:text-gold transition-colors group">
@@ -127,8 +134,24 @@
                                 <span>Add to Collection</span>
                             </button>
                         </div>
-                        <div class="text-xs text-bone-faint pt-4 border-t border-line/50">
-                            <i class="fas fa-shield-alt mr-1"></i> Handcrafted with care in South Africa. Each piece is made to order.
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-2 pt-4 border-t border-line/50 text-sm text-bone-dim">
+                            <div class="flex items-center gap-2">
+                                <i class="fas fa-box text-gold w-4 text-center"></i> Ships within 2 business days
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <i class="fas fa-truck text-gold w-4 text-center"></i> Nationwide delivery via The Courier Guy & PEP Paxi
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <i class="fas fa-arrows-rotate text-gold w-4 text-center"></i> 7-day exchange policy
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <i class="fab fa-whatsapp text-gold w-4 text-center"></i>
+                                @if($whatsappDigits)
+                                    <a href="https://wa.me/{{ $whatsappDigits }}" target="_blank" rel="noopener noreferrer" class="hover:text-gold transition-colors">Questions? WhatsApp us</a>
+                                @else
+                                    <span>Questions? <a href="{{ route('contact') }}" class="hover:text-gold transition-colors">Contact us</a></span>
+                                @endif
+                            </div>
                         </div>
                     </div>
                 </div>

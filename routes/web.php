@@ -33,6 +33,7 @@ Route::get('/contact', [PageController::class, 'contact'])->name('contact');
 Route::get('/privacy-policy', [PageController::class, 'privacyPolicy'])->name('privacy-policy');
 Route::get('/terms-of-service', [PageController::class, 'termsOfService'])->name('terms-of-service');
 Route::get('/shipping-policy', [PageController::class, 'shippingPolicy'])->name('shipping-policy');
+Route::get('/size-guide', [PageController::class, 'sizeGuide'])->name('size-guide');
 
 Route::get('/new-arrivals', [ProductController::class, 'newArrivals'])->name('newarrival');
 Route::get('/', [HomeController::class, 'index'])->name('home');
