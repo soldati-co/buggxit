@@ -115,11 +115,15 @@
                 <!-- Payment Methods -->
                 <div class="pt-6 mt-6 border-t border-line/50">
                     <p class="text-bone-dim text-sm mb-3">Secure Payment Methods</p>
-                    <div class="flex flex-wrap items-center gap-3 opacity-70">
-                        <i class="fab fa-cc-visa text-2xl text-bone"></i>
-                        <i class="fab fa-cc-mastercard text-2xl text-bone"></i>
-                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 border border-line rounded-md text-bone text-xs font-semibold tracking-wide">
-                            <i class="fas fa-shield-alt text-gold"></i> PayFast
+                    <div class="flex flex-wrap items-center gap-2.5">
+                        <span class="inline-flex items-center justify-center h-8 px-2.5 bg-white rounded-md">
+                            <img src="{{ asset('icons/payment-methods/visa.svg') }}" alt="Visa" class="h-4 w-auto">
+                        </span>
+                        <span class="inline-flex items-center justify-center h-8 px-2.5 bg-white rounded-md">
+                            <img src="{{ asset('icons/payment-methods/mastercard.svg') }}" alt="Mastercard" class="h-5 w-auto">
+                        </span>
+                        <span class="inline-flex items-center justify-center h-8 px-2.5 bg-white rounded-md">
+                            <img src="{{ asset('icons/payment-methods/payfast.svg') }}" alt="PayFast" class="h-4 w-auto">
                         </span>
                     </div>
                 </div>
