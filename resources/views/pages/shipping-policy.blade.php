@@ -22,22 +22,22 @@
 
             <div>
                 <h2 class="text-2xl font-bold text-bone mb-3">Turnaround time</h2>
-                <p>Because each piece is handcrafted, production takes time. The estimated turnaround and expected delivery window for each design is shown on its product page — please check this before ordering, especially if you need a piece by a specific date.</p>
+                <p>Ready-made pieces ship per the estimated turnaround shown on their product page — please check this before ordering, especially if you need a piece by a specific date. Custom, made-to-measure pieces take approximately 6 weeks from the time your deposit is confirmed and all measurements and design details are finalised. We'll keep you updated on the production process throughout.</p>
             </div>
 
             <div>
                 <h2 class="text-2xl font-bold text-bone mb-3">Delivery areas</h2>
-                <p>We currently ship within South Africa. If you're outside South Africa and would like your order shipped internationally, please get in touch before placing your order so we can confirm feasibility and cost.</p>
+                <p>We deliver nationwide across South Africa via The Courier Guy and PEP Paxi. If you're outside South Africa and would like your order shipped internationally, please get in touch before placing your order so we can confirm feasibility and cost.</p>
             </div>
 
             <div>
-                <h2 class="text-2xl font-bold text-bone mb-3">Shipping cost</h2>
-                <p>Shipping cost depends on your delivery address and is confirmed with you after your order is placed and before it's dispatched. We'll always let you know the shipping cost before your order ships.</p>
+                <h2 class="text-2xl font-bold text-bone mb-3">Shipping cost & delivery time</h2>
+                <p>Delivery takes 7–14 working days. Shipping costs start from R150 and are calculated at checkout based on parcel size — you'll always know your shipping cost before you pay.</p>
             </div>
 
             <div>
                 <h2 class="text-2xl font-bold text-bone mb-3">Order tracking</h2>
-                <p>Once your order ships, we'll notify you with your courier's tracking details so you can follow its progress. You can also view your order status at any time from your account's <a href="{{ route('orders.index') }}" class="text-gold hover:text-gold-bright transition-colors">Order History</a>.</p>
+                <p>Once your order ships, you'll receive a tracking number via email or WhatsApp so you can follow its progress. You can also view your order status at any time from your account's <a href="{{ route('orders.index') }}" class="text-gold hover:text-gold-bright transition-colors">Order History</a>.</p>
             </div>
 
             <div>
@@ -47,17 +47,17 @@
 
             <div>
                 <h2 class="text-2xl font-bold text-bone mb-3">Exchanges</h2>
-                <p>Not quite the right fit? If you ordered a standard (non-custom) piece, you may request an exchange within 7 days of delivery, provided it's unworn, unwashed, and still has its tags and packaging. Exchanges are for a different size or an item of equal value — we don't currently offer cash refunds for a change of mind.</p>
+                <p>We do not offer refunds. Exchanges are accepted within 7 days of delivery or purchase, provided the item is unworn and returned with all tags attached. If the correct item was delivered as ordered, return courier costs are the customer's responsibility; if the error is on our side, we cover it. Sale items are final sale and we offer no exchange on them.</p>
             </div>
 
             <div>
-                <h2 class="text-2xl font-bold text-bone mb-3">Custom & made-to-order pieces</h2>
-                <p>Because most BUGGXIT Couture pieces are cut and sewn to your exact measurements, custom and made-to-order orders are final sale and can't be exchanged or refunded for change of mind. This doesn't affect your right to a repair, replacement, or refund if the piece arrives faulty or doesn't match what was agreed at consultation.</p>
+                <h2 class="text-2xl font-bold text-bone mb-3">Custom sizing & alterations</h2>
+                <p>We do not alter existing designs. Custom sizing is only available for made-to-measure orders, and we take a maximum of 2 custom clients per month to ensure every piece gets the attention it deserves. Because custom and made-to-order pieces are cut and sewn to your exact measurements, they are final sale and can't be exchanged for a change of mind — this doesn't affect your right to a repair or replacement if the piece arrives faulty or doesn't match what was agreed at consultation.</p>
             </div>
 
             <div>
                 <h2 class="text-2xl font-bold text-bone mb-3">Faulty or damaged items</h2>
-                <p>If your order arrives damaged, faulty, or not as described, contact us within 7 days of delivery with a few photos of the issue. We'll arrange a repair, replacement, or refund at no cost to you.</p>
+                <p>If your order arrives damaged, faulty, or not as described, contact us within 7 days of delivery with a few photos of the issue. We'll arrange a repair or replacement at no cost to you.</p>
             </div>
 
             <div>
