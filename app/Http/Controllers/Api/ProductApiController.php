@@ -29,7 +29,13 @@ class ProductApiController extends Controller
             }
         }
 
-        $dresses = $query->latest()->paginate(12);
+        match ($request->input('sort')) {
+            'price_asc' => $query->orderBy('price', 'asc'),
+            'price_desc' => $query->orderBy('price', 'desc'),
+            default => $query->latest(),
+        };
+
+        $dresses = $query->paginate(12);
         return DressResource::collection($dresses);
     }
 

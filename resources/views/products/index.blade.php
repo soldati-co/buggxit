@@ -55,16 +55,16 @@
                 <div class="relative" x-data="{ open: false }">
                     <button @click="open = !open" class="flex items-center space-x-2 px-4 py-2 bg-ink-raised2/50 border border-line rounded-lg text-bone-dim hover:text-bone hover:border-gold/50 transition-colors text-sm">
                         <i class="fas fa-sort-amount-down text-gold"></i>
-                        <span>Sort by: Latest</span>
+                        <span x-text="'Sort by: ' + sortLabel()"></span>
                         <svg class="w-4 h-4 transition-transform" :class="open ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                         </svg>
                     </button>
                     <div x-show="open" @click.away="open = false" x-cloak x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100" class="absolute right-0 mt-2 w-48 bg-ink-raised/90 backdrop-blur-sm border border-line rounded-lg shadow-xl z-50 overflow-hidden">
                         <div class="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-gold/30 to-transparent"></div>
-                        <a href="#" class="block px-4 py-2.5 text-sm text-bone-dim hover:bg-ink-raised2/50 hover:text-gold transition-colors">Latest</a>
-                        <a href="#" class="block px-4 py-2.5 text-sm text-bone-dim hover:bg-ink-raised2/50 hover:text-gold transition-colors">Price: Low to High</a>
-                        <a href="#" class="block px-4 py-2.5 text-sm text-bone-dim hover:bg-ink-raised2/50 hover:text-gold transition-colors">Price: High to Low</a>
+                        <a href="#" @click.prevent="selectSort('latest')" class="block px-4 py-2.5 text-sm hover:bg-ink-raised2/50 hover:text-gold transition-colors" :class="sort === 'latest' ? 'text-gold' : 'text-bone-dim'">Latest</a>
+                        <a href="#" @click.prevent="selectSort('price_asc')" class="block px-4 py-2.5 text-sm hover:bg-ink-raised2/50 hover:text-gold transition-colors" :class="sort === 'price_asc' ? 'text-gold' : 'text-bone-dim'">Price: Low to High</a>
+                        <a href="#" @click.prevent="selectSort('price_desc')" class="block px-4 py-2.5 text-sm hover:bg-ink-raised2/50 hover:text-gold transition-colors" :class="sort === 'price_desc' ? 'text-gold' : 'text-bone-dim'">Price: High to Low</a>
                     </div>
                 </div>
             </div>
@@ -141,6 +141,7 @@
                 loading: true,
                 newArrivals: newArrivals || false,
                 category: null,
+                sort: 'latest',
                 dresses: [],
                 pagination: {},
                 resultText: 'Loading dresses...',
@@ -148,7 +149,21 @@
                 init() {
                     const params = new URLSearchParams(window.location.search);
                     this.category = params.get('category');
+                    this.sort = params.get('sort') || 'latest';
                     this.fetchProducts();
+                },
+
+                sortLabel() {
+                    return {
+                        latest: 'Latest',
+                        price_asc: 'Price: Low to High',
+                        price_desc: 'Price: High to Low',
+                    }[this.sort] || 'Latest';
+                },
+
+                async selectSort(value) {
+                    this.sort = value;
+                    await this.fetchProducts(1);
                 },
 
                 async fetchProducts(page = 1) {
@@ -162,6 +177,7 @@
                             endpoint = '{{ route('api.products.new-arrivals', [], false) }}';
                         } else {
                             params.set('page', page);
+                            params.set('sort', this.sort);
                         }
 
                         const url = this.newArrivals ? endpoint : `${endpoint}?${params.toString()}`;
