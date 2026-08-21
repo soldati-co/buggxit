@@ -85,4 +85,29 @@ class DressImageUrlTest extends TestCase
         $this->assertTrue($fresh->has_card_crop_new_arrivals);
         $this->assertSame(route('api.image.show', $newArrivalsCrop->id), $fresh->card_image_new_arrivals_url);
     }
+
+    public function test_detail_image_url_falls_back_to_main_image_url_when_no_crop_exists(): void
+    {
+        $dress = Dress::factory()->create();
+        app(ImageStorageService::class)->store($dress, UploadedFile::fake()->image('main.jpg'), 'main');
+
+        $fresh = $dress->fresh();
+        $this->assertFalse($fresh->has_detail_crop);
+        $this->assertSame($fresh->main_image_url, $fresh->detail_image_url);
+    }
+
+    public function test_detail_image_url_returns_the_dedicated_detail_image_when_a_crop_exists(): void
+    {
+        $dress = Dress::factory()->create();
+        app(ImageStorageService::class)->store($dress, UploadedFile::fake()->image('main.jpg'), 'main');
+        // A card-grid crop existing should NOT leak into detail_image_url —
+        // unlike New Arrivals, the detail page has no intermediate fallback.
+        app(ImageStorageService::class)->store($dress, UploadedFile::fake()->image('grid.jpg'), 'card');
+        $detailImage = app(ImageStorageService::class)->store($dress, UploadedFile::fake()->image('detail.jpg'), 'detail');
+
+        $fresh = $dress->fresh();
+        $this->assertTrue($fresh->has_detail_crop);
+        $this->assertSame(route('api.image.show', $detailImage->id), $fresh->detail_image_url);
+        $this->assertNotSame($fresh->card_image_url, $fresh->detail_image_url);
+    }
 }

@@ -54,6 +54,7 @@ class AdminDressController extends Controller
                 $validated['main_image'], $validated['gallery_images'],
                 $validated['card_image'], $validated['remove_card_image'],
                 $validated['card_image_new_arrivals'], $validated['remove_card_image_new_arrivals'],
+                $validated['detail_image'], $validated['remove_detail_image'],
             );
 
             $dress = Dress::create($validated);
@@ -63,12 +64,15 @@ class AdminDressController extends Controller
                 $this->storeMainImage($request->file('main_image'), $dress);
             }
 
-            // Handle card-crop image uploads
+            // Handle crop-image uploads
             if ($request->hasFile('card_image')) {
                 $this->storeCardImage($request->file('card_image'), $dress);
             }
             if ($request->hasFile('card_image_new_arrivals')) {
                 $this->storeCardImageNewArrivals($request->file('card_image_new_arrivals'), $dress);
+            }
+            if ($request->hasFile('detail_image')) {
+                $this->storeDetailImage($request->file('detail_image'), $dress);
             }
 
             // Handle gallery images upload
@@ -124,6 +128,7 @@ class AdminDressController extends Controller
                 $validated['main_image'], $validated['gallery_images'],
                 $validated['card_image'], $validated['remove_card_image'],
                 $validated['card_image_new_arrivals'], $validated['remove_card_image_new_arrivals'],
+                $validated['detail_image'], $validated['remove_detail_image'],
             );
 
             // Handle main image replacement
@@ -159,6 +164,16 @@ class AdminDressController extends Controller
             }
             if ($request->hasFile('card_image_new_arrivals')) {
                 $this->storeCardImageNewArrivals($request->file('card_image_new_arrivals'), $dress);
+            }
+
+            if ($request->boolean('remove_detail_image') || $request->hasFile('detail_image')) {
+                $detailImage = $dress->detailImage()->first();
+                if ($detailImage) {
+                    $detailImage->delete();
+                }
+            }
+            if ($request->hasFile('detail_image')) {
+                $this->storeDetailImage($request->file('detail_image'), $dress);
             }
 
             // Handle gallery images replacement
@@ -250,6 +265,8 @@ class AdminDressController extends Controller
             'remove_card_image' => 'nullable|boolean',
             'card_image_new_arrivals' => 'nullable|file|mimes:jpeg,jpg|max:9048',
             'remove_card_image_new_arrivals' => 'nullable|boolean',
+            'detail_image' => 'nullable|file|mimes:jpeg,jpg|max:9048',
+            'remove_detail_image' => 'nullable|boolean',
             'category_ids' => 'required|array|min:1',
             'category_ids.*' => 'exists:categories,id',
         ];
@@ -282,6 +299,15 @@ class AdminDressController extends Controller
     private function storeCardImageNewArrivals(UploadedFile $file, Dress $dress): void
     {
         $this->images->store($dress, $file, 'card_new_arrivals');
+    }
+
+    /**
+     * Store the admin's manually-cropped product-detail-page hero image —
+     * independent of the card crops (see Dress::detailImage()).
+     */
+    private function storeDetailImage(UploadedFile $file, Dress $dress): void
+    {
+        $this->images->store($dress, $file, 'detail');
     }
 
     /**

@@ -52,6 +52,7 @@ class AdminDressCardCropTest extends TestCase
         $response->assertOk();
         $response->assertSee('Card Grid');
         $response->assertSee('New Arrivals');
+        $response->assertSee('Product Page');
     }
 
     public function test_admin_can_view_the_edit_page_for_a_dress_with_no_images_yet(): void
@@ -64,6 +65,7 @@ class AdminDressCardCropTest extends TestCase
         $response->assertOk();
         $response->assertSee('Card Grid');
         $response->assertSee('New Arrivals');
+        $response->assertSee('Product Page');
     }
 
     public function test_admin_can_view_the_edit_page_for_a_dress_with_a_main_image_and_card_crop(): void
@@ -239,6 +241,102 @@ class AdminDressCardCropTest extends TestCase
         $this->assertFalse($dress->has_card_crop);
         // The New Arrivals crop is untouched by removing the Card Grid one.
         $this->assertSame(1, $dress->images()->where('collection', 'card_new_arrivals')->count());
+    }
+
+    public function test_admin_can_upload_a_detail_crop_independently_of_the_card_crops(): void
+    {
+        $admin = Admin::factory()->create();
+
+        $response = $this->actingAs($admin, 'admin')->post(route('admin.dresses.store'), $this->validPayload([
+            'main_image' => UploadedFile::fake()->image('main.jpg'),
+            'card_image' => UploadedFile::fake()->image('grid.jpg'),
+            'detail_image' => UploadedFile::fake()->image('detail.jpg'),
+        ]));
+
+        $response->assertRedirect(route('admin.dresses.index'));
+        $dress = Dress::firstOrFail();
+
+        $this->assertTrue($dress->has_card_crop);
+        $this->assertTrue($dress->has_detail_crop);
+        $this->assertNotSame($dress->card_image_url, $dress->detail_image_url);
+    }
+
+    public function test_admin_can_add_a_detail_crop_to_an_existing_dress_without_re_uploading_main_image(): void
+    {
+        $admin = Admin::factory()->create();
+        $dress = Dress::factory()->create();
+        $existingMainImageId = app(\App\Services\ImageStorageService::class)
+            ->store($dress, UploadedFile::fake()->image('main.jpg'), 'main')->id;
+
+        $response = $this->actingAs($admin, 'admin')->put(route('admin.dresses.update', $dress), $this->validPayload([
+            'detail_image' => UploadedFile::fake()->image('detail.jpg'),
+        ]));
+
+        $response->assertRedirect(route('admin.dresses.index'));
+        $dress->refresh();
+
+        $this->assertTrue($dress->has_detail_crop);
+        $this->assertSame($existingMainImageId, $dress->mainImage()->first()->id);
+    }
+
+    public function test_updating_detail_image_replaces_the_old_one_not_appends(): void
+    {
+        $admin = Admin::factory()->create();
+        $dress = Dress::factory()->create();
+        app(\App\Services\ImageStorageService::class)->store($dress, UploadedFile::fake()->image('main.jpg'), 'main');
+        app(\App\Services\ImageStorageService::class)->store($dress, UploadedFile::fake()->image('detail-v1.jpg'), 'detail');
+
+        $this->actingAs($admin, 'admin')->put(route('admin.dresses.update', $dress), $this->validPayload([
+            'detail_image' => UploadedFile::fake()->image('detail-v2.jpg'),
+        ]))->assertRedirect(route('admin.dresses.index'));
+
+        $this->assertSame(1, $dress->fresh()->images()->where('collection', 'detail')->count());
+    }
+
+    public function test_admin_can_remove_a_detail_crop_and_it_falls_back_directly_to_the_main_image(): void
+    {
+        $admin = Admin::factory()->create();
+        $dress = Dress::factory()->create();
+        app(\App\Services\ImageStorageService::class)->store($dress, UploadedFile::fake()->image('main.jpg'), 'main');
+        // Even with a card-grid crop present, removing the detail crop must
+        // NOT fall back to it — the detail page has no intermediate fallback.
+        app(\App\Services\ImageStorageService::class)->store($dress, UploadedFile::fake()->image('grid.jpg'), 'card');
+        app(\App\Services\ImageStorageService::class)->store($dress, UploadedFile::fake()->image('detail.jpg'), 'detail');
+
+        $this->actingAs($admin, 'admin')->put(route('admin.dresses.update', $dress), $this->validPayload([
+            'remove_detail_image' => '1',
+        ]))->assertRedirect(route('admin.dresses.index'));
+
+        $dress->refresh();
+        $this->assertFalse($dress->has_detail_crop);
+        $this->assertSame($dress->main_image_url, $dress->detail_image_url);
+    }
+
+    public function test_detail_image_rejects_non_jpeg_uploads(): void
+    {
+        $admin = Admin::factory()->create();
+
+        $response = $this->actingAs($admin, 'admin')->post(route('admin.dresses.store'), $this->validPayload([
+            'main_image' => UploadedFile::fake()->image('main.jpg'),
+            'detail_image' => UploadedFile::fake()->image('detail.png'),
+        ]));
+
+        $response->assertSessionHasErrors('detail_image');
+        $this->assertSame(0, Dress::count());
+    }
+
+    public function test_dress_resource_exposes_detail_crop_fields(): void
+    {
+        $dress = Dress::factory()->create(['status' => 'active']);
+        app(\App\Services\ImageStorageService::class)->store($dress, UploadedFile::fake()->image('main.jpg'), 'main');
+        app(\App\Services\ImageStorageService::class)->store($dress, UploadedFile::fake()->image('detail.jpg'), 'detail');
+
+        $response = $this->getJson(route('api.products.show', $dress));
+
+        $response->assertOk();
+        $data = $response->json('data');
+        $this->assertTrue($data['has_detail_crop']);
+        $this->assertNotSame($data['main_image_url'], $data['detail_image_url']);
     }
 
     public function test_dress_resource_exposes_card_image_url_and_has_card_crop(): void

@@ -263,6 +263,7 @@
                         'existingImageUrl' => $dress->has_main_image ? $dress->main_image_url . '?t=' . time() : null,
                         'existingCardImageUrl' => $dress->has_card_crop ? $dress->card_image_url . '?t=' . time() : null,
                         'existingCardImageNewArrivalsUrl' => $dress->cardImageNewArrivals ? route('api.image.show', $dress->cardImageNewArrivals->id) . '?t=' . time() : null,
+                        'existingDetailImageUrl' => $dress->detailImage ? route('api.image.show', $dress->detailImage->id) . '?t=' . time() : null,
                     ])
                 </div>
 

@@ -289,6 +289,7 @@
                         'existingImageUrl' => null,
                         'existingCardImageUrl' => null,
                         'existingCardImageNewArrivalsUrl' => null,
+                        'existingDetailImageUrl' => null,
                     ])
                 </div>
 

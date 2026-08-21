@@ -49,7 +49,9 @@
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16">
                     <div class="space-y-4">
                         <div class="relative aspect-square rounded-2xl overflow-hidden border border-line bg-ink-raised/90 backdrop-blur-sm group">
-                            <img :src="selectedImage" :alt="product.name" class="w-full h-full object-contain transition-transform duration-700 group-hover:scale-105">
+                            <img :src="selectedImage" :alt="product.name"
+                                :class="selectedImage === product.detail_image_url && product.has_detail_crop ? 'object-cover' : 'object-contain'"
+                                class="w-full h-full transition-transform duration-700 group-hover:scale-105">
                             <template x-if="product.is_featured">
                                 <span class="absolute top-4 left-4 z-20 px-3 py-1.5 text-xs font-medium bg-gold/90 text-ink rounded-full backdrop-blur-sm">
                                     <i class="fas fa-star mr-1"></i> Featured
@@ -211,7 +213,10 @@
                         }
                         const json = await response.json();
                         this.product = json.data || json;
-                        this.selectedImage = this.product.main_image_url;
+                        // detail_image_url falls back to main_image_url itself
+                        // when no dedicated crop exists, so this is always the
+                        // right initial image regardless of whether one's set.
+                        this.selectedImage = this.product.detail_image_url;
                         this.galleryImages = this.product.gallery_image_urls || [];
                         if (!this.selectedImage && this.galleryImages.length) {
                             this.selectedImage = this.galleryImages[0];

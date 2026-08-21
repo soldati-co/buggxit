@@ -37,6 +37,8 @@ class DressResource extends JsonResource
             'has_card_crop' => $this->has_card_crop,
             'card_image_new_arrivals_url' => $this->card_image_new_arrivals_url,
             'has_card_crop_new_arrivals' => $this->has_card_crop_new_arrivals,
+            'detail_image_url' => $this->detail_image_url,
+            'has_detail_crop' => $this->has_detail_crop,
             'categories' => CategoryResource::collection($this->whenLoaded('categories')),
             'created_at' => $this->created_at?->toIso8601String(),
             'updated_at' => $this->updated_at?->toIso8601String(),

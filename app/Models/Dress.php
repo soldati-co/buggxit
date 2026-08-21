@@ -7,6 +7,7 @@ namespace App\Models;
  * @property-read Image|null $mainImage
  * @property-read Image|null $cardImage
  * @property-read Image|null $cardImageNewArrivals
+ * @property-read Image|null $detailImage
  * @property-read \Illuminate\Database\Eloquent\Collection|Image[] $galleryImages
  * @property-read \Illuminate\Database\Eloquent\Collection|Category[] $categories
  * @property string $id
@@ -45,6 +46,8 @@ namespace App\Models;
  * @property-read bool $has_card_crop
  * @property-read string $card_image_new_arrivals_url
  * @property-read bool $has_card_crop_new_arrivals
+ * @property-read string $detail_image_url
+ * @property-read bool $has_detail_crop
  * @property-read bool $has_main_image
  * @property-read int|null $images_count
  * @method static Builder<static>|Dress active()
@@ -217,6 +220,16 @@ class Dress extends Model
         return $this->morphOne(Image::class, 'imageable')->where('collection', 'card_new_arrivals')->latest('id');
     }
 
+    /**
+     * A third, independent crop for the product detail page's large hero
+     * image box — a true 1:1 square at every viewport (unlike the card
+     * boxes, which only approximate one).
+     */
+    public function detailImage(): MorphOne
+    {
+        return $this->morphOne(Image::class, 'imageable')->where('collection', 'detail')->latest('id');
+    }
+
     public function galleryImages(): MorphMany
     {
         return $this->morphMany(Image::class, 'imageable')
@@ -243,6 +256,9 @@ class Dress extends Model
                 ->whereNotNull('image_data')
                 ->where('image_data', '!=', ''),
             'cardImageNewArrivals' => fn($q) => $q->select('id', 'imageable_id', 'imageable_type', 'collection')
+                ->whereNotNull('image_data')
+                ->where('image_data', '!=', ''),
+            'detailImage' => fn($q) => $q->select('id', 'imageable_id', 'imageable_type', 'collection')
                 ->whereNotNull('image_data')
                 ->where('image_data', '!=', ''),
             'galleryImages' => fn($q) => $q->select('id', 'imageable_id', 'imageable_type', 'collection', 'sort_order'),
@@ -374,6 +390,47 @@ class Dress extends Model
             : $this->cardImageNewArrivals()->whereNotNull('image_data')->where('image_data', '!=', '')->exists();
 
         return $hasDedicated || $this->has_card_crop;
+    }
+
+    /**
+     * API URL for the product detail page's hero image. Falls back to the
+     * full main image (object-contain-safe) when uncropped — unlike the
+     * card crops, there's no intermediate fallback to try since this is
+     * the only large-hero display context.
+     */
+    public function getDetailImageUrlAttribute(): string
+    {
+        if (! static::imagesTableExists()) {
+            return $this->main_image_url;
+        }
+
+        $imageId = $this->relationLoaded('detailImage')
+            ? $this->detailImage?->id
+            : $this->detailImage()->whereNotNull('image_data')->where('image_data', '!=', '')->value('id');
+
+        if ($imageId) {
+            return route('api.image.show', $imageId);
+        }
+
+        return $this->main_image_url;
+    }
+
+    /**
+     * True only when a dedicated 'detail' collection image exists —
+     * products/show.blade.php uses this to pick object-cover (safe,
+     * deliberate crop) vs object-contain (unmodified original).
+     */
+    public function getHasDetailCropAttribute(): bool
+    {
+        if (! static::imagesTableExists()) {
+            return false;
+        }
+
+        if ($this->relationLoaded('detailImage')) {
+            return (bool) $this->detailImage;
+        }
+
+        return $this->detailImage()->whereNotNull('image_data')->where('image_data', '!=', '')->exists();
     }
 
     /**

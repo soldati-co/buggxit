@@ -1,26 +1,31 @@
 {{--
     Shared by create.blade.php and edit.blade.php. Lets an admin manually
-    crop the dress's main image for card display — as two INDEPENDENT crops,
-    since the "Card Grid" (products listing + homepage featured) and
-    "New Arrivals" sections render different box shapes and one crop can't
-    serve both well. Both are separate from 'main' (Dress::cardImage() /
-    cardImageNewArrivals()), so the product detail page keeps showing the
-    true, uncropped photo. Cropping is optional for each: an uncropped
-    target falls back to the full main image (object-contain) — New
-    Arrivals falls back further to the Card Grid crop if only that one has
-    been set, since a deliberate crop is still better than none.
+    crop the dress's main image for display in three INDEPENDENT contexts —
+    the "Card Grid" (products listing + homepage featured, which share a box
+    shape), the homepage "New Arrivals" section (a different box shape), and
+    the product detail page's large hero image (a true 1:1 square). One crop
+    can't serve all three well. Each is separate from 'main'
+    (Dress::cardImage() / cardImageNewArrivals() / detailImage()), so the
+    product detail page's gallery still shows true, uncropped photos.
+    Cropping is optional for each: an uncropped target falls back to the
+    full main image (object-contain) — New Arrivals falls back further to
+    the Card Grid crop if only that one has been set, since a deliberate
+    crop is still better than none.
 
     Expects:
     - $existingImageUrl: the dress's current main image URL, or null.
     - $existingCardImageUrl: the dress's current Card Grid crop URL, or null.
     - $existingCardImageNewArrivalsUrl: the dress's current dedicated New
       Arrivals crop URL, or null (may still show a preview via fallback).
+    - $existingDetailImageUrl: the dress's current Product Detail crop URL,
+      or null.
 --}}
 <div class="mt-6 pt-6 border-t border-line"
     x-data="dressCardCropper({
         existingMainImageUrl: @js($existingImageUrl ?? null),
         existingCardImageUrl: @js($existingCardImageUrl ?? null),
         existingCardImageNewArrivalsUrl: @js($existingCardImageNewArrivalsUrl ?? null),
+        existingDetailImageUrl: @js($existingDetailImageUrl ?? null),
     })"
     x-init="init()">
 
@@ -31,11 +36,11 @@
     </template>
 
     <label class="block text-sm font-medium text-bone-dim mb-3">
-        Card Crops <span class="text-bone-faint">(Optional — controls how this dress looks in grid cards)</span>
+        Image Crops <span class="text-bone-faint">(Optional — controls how this dress looks in cards and on its own page)</span>
     </label>
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <template x-for="key in ['grid', 'newArrivals']" :key="key">
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <template x-for="key in ['grid', 'newArrivals', 'detail']" :key="key">
             <div class="border border-line rounded-lg p-4">
                 <div class="flex items-center justify-between mb-2">
                     <span class="text-sm text-bone font-medium" x-text="targets[key].label"></span>
@@ -64,6 +69,8 @@
     <input type="hidden" name="remove_card_image" x-ref="removeCardImageFlag" value="0">
     <input type="file" name="card_image_new_arrivals" x-ref="cardImageNewArrivalsInput" class="hidden">
     <input type="hidden" name="remove_card_image_new_arrivals" x-ref="removeCardImageNewArrivalsFlag" value="0">
+    <input type="file" name="detail_image" x-ref="detailImageInput" class="hidden">
+    <input type="hidden" name="remove_detail_image" x-ref="removeDetailImageFlag" value="0">
 
     <div x-show="modalOpen" x-cloak class="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-ink/80 backdrop-blur-sm"
         @keydown.escape.window="closeModal()">
@@ -75,12 +82,12 @@
                     <select x-model="aspectRatio" @change="setAspectRatio()"
                         class="bg-ink-raised2/50 border border-line rounded-lg text-sm text-bone px-2 py-1">
                         <option value="free">Free (drag freely)</option>
-                        <option value="1">Card Grid — Square</option>
-                        <option value="1.3333333333333333">New Arrivals</option>
+                        <option value="1">Square (1:1)</option>
+                        <option value="1.3333333333333333">Landscape (4:3)</option>
                     </select>
                 </div>
             </div>
-            <p class="text-xs text-bone-faint mb-3">Drag any corner freely, or pick a shape above to snap to it. The panels on the right show exactly how this crop will look in each card.</p>
+            <p class="text-xs text-bone-faint mb-3">Drag any corner freely, or pick a shape above to snap to it. The panels on the right show exactly how this crop will look in each spot on the site.</p>
             <div class="flex flex-col sm:flex-row gap-4">
                 <div class="flex-1 max-h-[60vh] overflow-hidden bg-ink rounded-lg">
                     <img x-ref="cropperImage" alt="Image to crop" class="block max-w-full">
@@ -93,6 +100,10 @@
                     <div>
                         <p class="text-xs text-bone-faint mb-1">New Arrivals</p>
                         <div class="w-24 h-[72px] overflow-hidden rounded-lg border border-line bg-ink-raised2/50" x-ref="previewNewArrivals"></div>
+                    </div>
+                    <div>
+                        <p class="text-xs text-bone-faint mb-1">Product Page</p>
+                        <div class="w-24 h-24 overflow-hidden rounded-lg border border-line bg-ink-raised2/50" x-ref="previewDetail"></div>
                     </div>
                 </div>
             </div>
@@ -111,6 +122,7 @@
             const existingMainImageUrl = options.existingMainImageUrl || null;
             const existingCardImageUrl = options.existingCardImageUrl || null;
             const existingCardImageNewArrivalsUrl = options.existingCardImageNewArrivalsUrl || null;
+            const existingDetailImageUrl = options.existingDetailImageUrl || null;
 
             return {
                 modalOpen: false,
@@ -141,6 +153,15 @@
                         fileInputRef: 'cardImageNewArrivalsInput',
                         removeFlagRef: 'removeCardImageNewArrivalsFlag',
                     },
+                    detail: {
+                        label: 'Product Page',
+                        hasCrop: !!existingDetailImageUrl,
+                        hadExisting: !!existingDetailImageUrl,
+                        previewUrl: existingDetailImageUrl || existingMainImageUrl || null,
+                        fallbackLabel: null,
+                        fileInputRef: 'detailImageInput',
+                        removeFlagRef: 'removeDetailImageFlag',
+                    },
                 },
 
                 init() {
@@ -153,6 +174,7 @@
                         this.mainImageInput.addEventListener('change', () => {
                             this.clearCrop('grid');
                             this.clearCrop('newArrivals');
+                            this.clearCrop('detail');
                         });
                     }
                 },
@@ -190,7 +212,7 @@
                                 responsive: true,
                                 background: false,
                                 checkCrossOrigin: false,
-                                preview: [this.$refs.previewGrid, this.$refs.previewNewArrivals],
+                                preview: [this.$refs.previewGrid, this.$refs.previewNewArrivals, this.$refs.previewDetail],
                             });
                         };
                         img.src = this.currentSourceUrl();
