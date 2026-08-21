@@ -14,15 +14,20 @@
     a deliberate crop is still better than none (and now that the boxes
     match, the Card Grid crop is also a perfectly good default there).
 
-    All three switch to object-cover once a crop exists (object-contain
-    otherwise, showing the full main image) — see products/index.blade.php,
-    pages/landing.blade.php, products/show.blade.php. That's what gives a
-    cropped dress a clean, edge-to-edge card with no empty space, but it
-    also means a crop's shape has to actually match (1:1) or it'll get
-    zoomed/cut to fit — the ratio is locked to Square by default for
-    exactly that reason, and AdminDressController rejects a saved crop
-    that isn't close enough to square as a hard backstop (see the
-    mismatch warning in applyCrop() below for the client-side heads-up).
+    Card Grid and New Arrivals always render with object-contain (see
+    products/index.blade.php, pages/landing.blade.php) — nothing is ever
+    cut off there regardless of a crop's shape; cropping just chooses what's
+    zoomed in on. (An earlier attempt switched them to object-cover once a
+    crop existed, to remove letterboxing, but that meant any dress without
+    an exactly-square crop showed inconsistently — rolled back.) The
+    Product Page image (products/show.blade.php) still switches to
+    object-cover when a crop exists, so its crop shape matters more.
+
+    The ratio still locks to Square by default everywhere, and
+    AdminDressController still hard-rejects a saved crop that isn't close
+    to square (see squareCropRule()) — a well-composed square crop looks
+    better under object-contain too (fills more of the box, less padding),
+    and it's what the Product Page still needs to avoid cutoffs.
 
     Expects:
     - $existingImageUrl: the dress's current main image URL, or null.
@@ -104,7 +109,7 @@
                     </select>
                 </div>
             </div>
-            <p class="text-xs text-bone-faint mb-3">Locked to Square by default so the crop fills its space edge-to-edge with nothing cut off — an uncropped dress falls back to showing its full photo instead. The panels on the right show exactly how this crop will look in each spot.</p>
+            <p class="text-xs text-bone-faint mb-3">Card Grid and New Arrivals always show the whole photo (nothing is ever cut off) — cropping here just zooms in on what should be featured. On the Product Page, a crop matching its shape also fills the image edge-to-edge. The panels on the right show exactly how this crop will look in each spot.</p>
             <div class="flex flex-col sm:flex-row gap-4">
                 <div class="flex-1 max-h-[60vh] overflow-hidden bg-ink rounded-lg">
                     <img x-ref="cropperImage" alt="Image to crop" class="block max-w-full">
