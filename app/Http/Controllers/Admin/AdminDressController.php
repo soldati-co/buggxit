@@ -261,17 +261,45 @@ class AdminDressController extends Controller
             'main_image' => 'nullable|file|max:9048',
             'gallery_images' => 'nullable|array',
             'gallery_images.*' => 'file|max:9048',
-            'card_image' => 'nullable|file|mimes:jpeg,jpg|max:9048',
+            'card_image' => ['nullable', 'file', 'mimes:jpeg,jpg', 'max:9048', $this->squareCropRule()],
             'remove_card_image' => 'nullable|boolean',
-            'card_image_new_arrivals' => 'nullable|file|mimes:jpeg,jpg|max:9048',
+            'card_image_new_arrivals' => ['nullable', 'file', 'mimes:jpeg,jpg', 'max:9048', $this->squareCropRule()],
             'remove_card_image_new_arrivals' => 'nullable|boolean',
-            'detail_image' => 'nullable|file|mimes:jpeg,jpg|max:9048',
+            'detail_image' => ['nullable', 'file', 'mimes:jpeg,jpg', 'max:9048', $this->squareCropRule()],
             'remove_detail_image' => 'nullable|boolean',
             'category_ids' => 'required|array|min:1',
             'category_ids.*' => 'exists:categories,id',
         ];
 
         return $request->validate($rules);
+    }
+
+    /**
+     * Card Grid, New Arrivals, and the Product Page all switch to
+     * object-cover once a crop exists, so a badly-shaped crop can slice
+     * content off (this is what caused visible cutoffs before the crop
+     * tool defaulted to a locked Square ratio). The tool warns client-side
+     * before saving a mismatched Free crop, but this is the hard backstop —
+     * uses getimagesize() (no GD/Imagick needed, just reads the file
+     * header) so it works on production where GD is unavailable.
+     */
+    private function squareCropRule(): \Closure
+    {
+        return function ($attribute, $value, $fail) {
+            if (! $value instanceof UploadedFile) {
+                return;
+            }
+
+            $size = @getimagesize($value->getRealPath());
+            if (! $size || empty($size[1])) {
+                return; // let the file/mimes rules handle a genuinely unreadable upload
+            }
+
+            $ratio = $size[0] / $size[1];
+            if (abs($ratio - 1) > 0.2) {
+                $fail('The image must be approximately square (close to a 1:1 ratio) so it displays correctly without empty space or cropping.');
+            }
+        };
     }
 
     /**

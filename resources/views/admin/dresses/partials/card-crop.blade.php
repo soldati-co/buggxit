@@ -14,12 +14,15 @@
     a deliberate crop is still better than none (and now that the boxes
     match, the Card Grid crop is also a perfectly good default there).
 
-    Card Grid and New Arrivals always render with object-contain (see
-    products/index.blade.php, pages/landing.blade.php) — nothing is ever
-    cut off there regardless of a crop's shape; cropping just chooses what's
-    zoomed in on. The Product Page image (products/show.blade.php) still
-    switches to object-cover when a crop exists, so its crop shape matters
-    more — see the mismatch warning in applyCrop() below.
+    All three switch to object-cover once a crop exists (object-contain
+    otherwise, showing the full main image) — see products/index.blade.php,
+    pages/landing.blade.php, products/show.blade.php. That's what gives a
+    cropped dress a clean, edge-to-edge card with no empty space, but it
+    also means a crop's shape has to actually match (1:1) or it'll get
+    zoomed/cut to fit — the ratio is locked to Square by default for
+    exactly that reason, and AdminDressController rejects a saved crop
+    that isn't close enough to square as a hard backstop (see the
+    mismatch warning in applyCrop() below for the client-side heads-up).
 
     Expects:
     - $existingImageUrl: the dress's current main image URL, or null.
@@ -101,7 +104,7 @@
                     </select>
                 </div>
             </div>
-            <p class="text-xs text-bone-faint mb-3">Card Grid and New Arrivals always show the whole photo (nothing is ever cut off) — cropping here just zooms in on what should be featured. On the Product Page, a crop matching its shape also fills the image edge-to-edge. The panels on the right show exactly how this crop will look in each spot.</p>
+            <p class="text-xs text-bone-faint mb-3">Locked to Square by default so the crop fills its space edge-to-edge with nothing cut off — an uncropped dress falls back to showing its full photo instead. The panels on the right show exactly how this crop will look in each spot.</p>
             <div class="flex flex-col sm:flex-row gap-4">
                 <div class="flex-1 max-h-[60vh] overflow-hidden bg-ink rounded-lg">
                     <img x-ref="cropperImage" alt="Image to crop" class="block max-w-full">
@@ -216,14 +219,13 @@
                 openModal(targetKey) {
                     if (!this.canCrop) return;
                     this.activeTarget = targetKey;
-                    // Card Grid/New Arrivals always show the full photo now
-                    // (object-contain, never cropped by the browser), so a
-                    // mismatched free-form crop there only affects framing —
-                    // default to Free for those. The Product Page image
-                    // still fills its box with object-cover when a crop
-                    // exists, so a badly-shaped crop there can genuinely
-                    // slice content off — keep that one locked by default.
-                    this.aspectRatio = targetKey === 'detail' ? '1' : 'free';
+                    // All three targets switch to object-cover once a crop
+                    // exists, so a mismatched shape can genuinely slice
+                    // content off — lock to Square by default everywhere.
+                    // Free is still available in the dropdown, but a bad
+                    // Free crop now gets a warning (and a hard server-side
+                    // reject on save) rather than silently shipping.
+                    this.aspectRatio = '1';
                     this.modalOpen = true;
                     this.$nextTick(() => {
                         const img = this.$refs.cropperImage;
@@ -263,14 +265,13 @@
                     if (!this.cropper || !this.activeTarget) return;
                     const target = this.targets[this.activeTarget];
 
-                    // Card Grid and New Arrivals always show the whole photo
-                    // now (object-contain, never cropped by the browser), so
-                    // a shape mismatch there only affects composition. The
-                    // Product Page image still fills its box with
-                    // object-cover when a crop exists, so a badly-shaped
-                    // Free crop there can still slice content off — warn
-                    // before saving rather than finding out on the live site.
-                    if (this.aspectRatio === 'free' && this.activeTarget === 'detail') {
+                    // All three targets switch to object-cover once a crop
+                    // exists, so a badly-shaped Free crop can genuinely
+                    // slice content off on any of them — warn before saving
+                    // rather than finding out on the live site. (The server
+                    // also hard-rejects a bad-enough mismatch on save, as a
+                    // backstop for whoever dismisses this.)
+                    if (this.aspectRatio === 'free') {
                         const expectedRatio = 1;
                         const data = this.cropper.getData();
                         const actualRatio = data.width / data.height;

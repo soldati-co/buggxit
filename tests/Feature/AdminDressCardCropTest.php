@@ -175,6 +175,66 @@ class AdminDressCardCropTest extends TestCase
         $this->assertSame(0, Dress::count());
     }
 
+    /**
+     * The hard server-side backstop: this is exactly the shape (923x1600,
+     * ratio ~0.58) actually found on a live dress's card crop that caused
+     * the subject to be sliced off once cards switched to object-cover —
+     * the tool's client-side warning can be dismissed, so this must reject
+     * outright regardless of what the browser did.
+     */
+    public function test_card_image_rejects_a_badly_non_square_crop(): void
+    {
+        $admin = Admin::factory()->create();
+
+        $response = $this->actingAs($admin, 'admin')->post(route('admin.dresses.store'), $this->validPayload([
+            'main_image' => UploadedFile::fake()->image('main.jpg'),
+            'card_image' => UploadedFile::fake()->image('card.jpg', 923, 1600),
+        ]));
+
+        $response->assertSessionHasErrors('card_image');
+        $this->assertSame(0, Dress::count());
+    }
+
+    public function test_card_image_new_arrivals_rejects_a_badly_non_square_crop(): void
+    {
+        $admin = Admin::factory()->create();
+
+        $response = $this->actingAs($admin, 'admin')->post(route('admin.dresses.store'), $this->validPayload([
+            'main_image' => UploadedFile::fake()->image('main.jpg'),
+            'card_image_new_arrivals' => UploadedFile::fake()->image('na.jpg', 800, 1600),
+        ]));
+
+        $response->assertSessionHasErrors('card_image_new_arrivals');
+        $this->assertSame(0, Dress::count());
+    }
+
+    public function test_detail_image_rejects_a_badly_non_square_crop(): void
+    {
+        $admin = Admin::factory()->create();
+
+        $response = $this->actingAs($admin, 'admin')->post(route('admin.dresses.store'), $this->validPayload([
+            'main_image' => UploadedFile::fake()->image('main.jpg'),
+            'detail_image' => UploadedFile::fake()->image('detail.jpg', 700, 1600),
+        ]));
+
+        $response->assertSessionHasErrors('detail_image');
+        $this->assertSame(0, Dress::count());
+    }
+
+    public function test_card_image_accepts_a_nearly_square_crop_within_tolerance(): void
+    {
+        $admin = Admin::factory()->create();
+
+        // 1000x1150 => ratio 0.87, within the 0.2 tolerance band.
+        $response = $this->actingAs($admin, 'admin')->post(route('admin.dresses.store'), $this->validPayload([
+            'main_image' => UploadedFile::fake()->image('main.jpg'),
+            'card_image' => UploadedFile::fake()->image('card.jpg', 1000, 1150),
+        ]));
+
+        $response->assertRedirect(route('admin.dresses.index'));
+        $this->assertTrue(Dress::firstOrFail()->has_card_crop);
+    }
+
     public function test_admin_can_upload_a_new_arrivals_crop_independently_of_the_card_grid_crop(): void
     {
         $admin = Admin::factory()->create();
