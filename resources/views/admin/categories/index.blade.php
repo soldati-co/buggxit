@@ -47,9 +47,9 @@
                                 </span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm">
-                                <div class="flex items-center space-x-3">
+                                <div class="flex items-center space-x-1">
                                     <a href="{{ route('admin.categories.edit', $category) }}"
-                                        class="text-bone-dim hover:text-gold transition-colors" title="Edit">
+                                        class="p-2 text-bone-dim hover:text-gold transition-colors" title="Edit">
                                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                                                 d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
@@ -60,7 +60,7 @@
                                         onsubmit="return confirm('Are you sure you want to delete this category? It will be removed from all dresses.')">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="text-bone-dim hover:text-bad transition-colors"
+                                        <button type="submit" class="p-2 text-bone-dim hover:text-bad transition-colors"
                                             title="Delete" {{ $category->dresses_count > 0 ? 'disabled' : '' }}>
                                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"

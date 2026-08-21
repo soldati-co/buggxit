@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <meta name="description" content="BUGGXIT Couture - Est 2018">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
@@ -60,12 +60,13 @@
             min-height: 100vh;
         }
 
-        /* Fraunces carries every heading and anything styled as a product/brand
-           name — the single highest-leverage move for the couture-editorial
-           feel. Individual pages can still opt out with font-sans if needed. */
+        /* Placeholder for the client's licensed Juana Light (buggxit.store) —
+           Cormorant Light is the closest free match until the real font files
+           are provided. Kept in sync with the same rule in app.css (@layer
+           base) so admin pages, which don't include this inline block, match. */
         h1, h2, h3, h4, h5, h6 {
-            font-family: 'Fraunces Variable', Georgia, serif;
-            font-weight: 600;
+            font-family: 'Cormorant', Georgia, serif;
+            font-weight: 300;
         }
 
         .font-numeric {
@@ -124,8 +125,10 @@
             width: 100%;
             margin-left: auto;
             margin-right: auto;
-            padding-left: 1rem;
-            padding-right: 1rem;
+            /* max() keeps the usual 1rem everywhere, but grows on notched iPhones
+               in landscape so content never sits under the camera cutout. */
+            padding-left: max(1rem, env(safe-area-inset-left));
+            padding-right: max(1rem, env(safe-area-inset-right));
         }
 
         /* Prevent horizontal overflow */

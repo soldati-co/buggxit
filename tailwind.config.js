@@ -15,6 +15,10 @@ export default {
                 sans: ['Manrope', ...defaultTheme.fontFamily.sans],
                 display: ['"Fraunces Variable"', 'Georgia', 'serif'],
                 mono: ['"JetBrains Mono"', ...defaultTheme.fontFamily.mono],
+                // Headings/subheadings (h1-h6) use this via a base-layer rule in
+                // app.css. Cormorant Light is a placeholder for the client's
+                // licensed Juana Light — swap once the real files are provided.
+                heading: ['Cormorant', 'Georgia', 'serif'],
             },
             colors: {
                 ink: {

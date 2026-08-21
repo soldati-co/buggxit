@@ -5,8 +5,33 @@
 @import "@fontsource-variable/fraunces/wght.css";
 @import "@fontsource-variable/fraunces/wght-italic.css";
 @import "@fontsource/jetbrains-mono/500.css";
+/* Placeholder for the client's licensed Juana Light (buggxit.store) heading font.
+   Cormorant Light is the closest free match — a genuine Light weight with the
+   same high-contrast display-serif feel. Swap this import and the font-family
+   below for the real self-hosted Juana Light files once they're provided. */
+@import "@fontsource/cormorant/300.css";
 @import "@fortawesome/fontawesome-free/css/all.min.css";
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+    h1, h2, h3, h4, h5, h6 {
+        font-family: 'Cormorant', Georgia, serif;
+        /* Force Light regardless of any font-bold/font-semibold utility already
+           on a heading — only the 300 weight is loaded, so anything else would
+           be browser-synthesized (faux) bold rather than a real font weight. */
+        font-weight: 300 !important;
+    }
+}
+
+/* iOS Safari auto-zooms the whole page when a focused input/select/textarea
+   computes to a font-size below 16px. Many form fields site-wide use text-sm
+   (14px) or text-xs (12px). Force 16px on small viewports only, so desktop's
+   tighter form typography is untouched. */
+@media (max-width: 767px) {
+    input, select, textarea {
+        font-size: 16px !important;
+    }
+}

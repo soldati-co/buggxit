@@ -12,7 +12,9 @@
     @endphp
     <a href="https://wa.me/{{ $digitsOnly }}" target="_blank" rel="noopener noreferrer"
         aria-label="Order on WhatsApp" title="Order on WhatsApp"
-        class="fixed z-40 {{ $isLeft ? 'left-6 bottom-6 md:left-8 md:bottom-8' : 'right-6 bottom-24 md:right-8 md:bottom-28' }}
+        class="fixed z-40 {{ $isLeft
+            ? 'left-[calc(1.5rem+env(safe-area-inset-left))] bottom-[calc(1.5rem+env(safe-area-inset-bottom))] md:left-[calc(2rem+env(safe-area-inset-left))] md:bottom-[calc(2rem+env(safe-area-inset-bottom))]'
+            : 'right-[calc(1.5rem+env(safe-area-inset-right))] bottom-[calc(6rem+env(safe-area-inset-bottom))] md:right-[calc(2rem+env(safe-area-inset-right))] md:bottom-[calc(7rem+env(safe-area-inset-bottom))]' }}
                group flex items-center justify-center w-14 h-14 rounded-full bg-[#25D366] text-white shadow-lg
                hover:scale-110 transition-transform duration-300">
         <span class="absolute inset-0 rounded-full bg-[#25D366] animate-ping opacity-40"></span>

@@ -33,7 +33,7 @@
         this.activeSlide = index;
     }
 }"
-class="relative w-full h-[60vh] md:h-[85vh] min-h-[450px] overflow-hidden bg-ink-raised2"
+class="relative w-full h-[60vh] md:h-[85vh] min-h-[min(450px,100vh)] overflow-hidden bg-ink-raised2"
 @mouseenter="stopAutoplay()"
 @mouseleave="startAutoplay()">
 
@@ -100,9 +100,11 @@ class="relative w-full h-[60vh] md:h-[85vh] min-h-[450px] overflow-hidden bg-ink
     {{-- Dot indicators --}}
     <div class="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 flex space-x-2">
         @foreach($slides as $index => $slide)
-        <button @click="goTo({{ $index }})"
-                :class="{ 'bg-gold': activeSlide === {{ $index }}, 'bg-white/50': activeSlide !== {{ $index }} }"
-                class="w-3 h-3 rounded-full transition-colors"></button>
+        <button @click="goTo({{ $index }})" aria-label="Go to slide {{ $index + 1 }}"
+                class="p-2 -m-2 flex items-center justify-center">
+            <span :class="{ 'bg-gold': activeSlide === {{ $index }}, 'bg-white/50': activeSlide !== {{ $index }} }"
+                  class="block w-3 h-3 rounded-full transition-colors"></span>
+        </button>
         @endforeach
     </div>
 </div>
