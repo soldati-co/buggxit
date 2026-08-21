@@ -20,15 +20,87 @@ class CartApiTest extends TestCase
 
     public function test_add_creates_a_cart_entry(): void
     {
-        $dress = Dress::factory()->create(['status' => 'active']);
+        $dress = Dress::factory()->create(['status' => 'active', 'sizes' => [34, 36], 'colors' => ['red', 'blue']]);
 
         $response = $this->postJson(route('api.cart.add'), [
             'product_id' => $dress->id,
             'quantity' => 2,
+            'size' => '34',
+            'color' => 'red',
         ]);
 
         $response->assertOk();
         $response->assertJson(['success' => true, 'cart_count' => 2]);
+    }
+
+    public function test_add_requires_a_size_when_the_dress_has_sizes_configured(): void
+    {
+        $dress = Dress::factory()->create(['status' => 'active', 'sizes' => [34, 36], 'colors' => []]);
+
+        $response = $this->postJson(route('api.cart.add'), [
+            'product_id' => $dress->id,
+            'quantity' => 1,
+        ]);
+
+        $response->assertStatus(422);
+        $response->assertJson(['success' => false]);
+        $this->assertStringContainsString('size', $response->json('message'));
+    }
+
+    public function test_add_requires_a_color_when_the_dress_has_colors_configured(): void
+    {
+        $dress = Dress::factory()->create(['status' => 'active', 'sizes' => [], 'colors' => ['red', 'blue']]);
+
+        $response = $this->postJson(route('api.cart.add'), [
+            'product_id' => $dress->id,
+            'quantity' => 1,
+        ]);
+
+        $response->assertStatus(422);
+        $response->assertJson(['success' => false]);
+        $this->assertStringContainsString('color', $response->json('message'));
+    }
+
+    public function test_add_succeeds_without_a_size_or_color_when_the_dress_has_none_configured(): void
+    {
+        $dress = Dress::factory()->create(['status' => 'active', 'sizes' => [], 'colors' => []]);
+
+        $response = $this->postJson(route('api.cart.add'), [
+            'product_id' => $dress->id,
+            'quantity' => 1,
+        ]);
+
+        $response->assertOk();
+        $response->assertJson(['success' => true]);
+    }
+
+    public function test_add_rejects_a_size_that_is_not_offered_for_the_dress(): void
+    {
+        $dress = Dress::factory()->create(['status' => 'active', 'sizes' => [34, 36], 'colors' => ['red']]);
+
+        $response = $this->postJson(route('api.cart.add'), [
+            'product_id' => $dress->id,
+            'quantity' => 1,
+            'size' => '99',
+            'color' => 'red',
+        ]);
+
+        $response->assertStatus(422);
+        $response->assertJson(['success' => false]);
+    }
+
+    public function test_same_dress_with_different_size_or_color_creates_separate_cart_lines(): void
+    {
+        $dress = Dress::factory()->create(['status' => 'active', 'sizes' => [34, 36], 'colors' => ['red', 'blue']]);
+
+        $this->postJson(route('api.cart.add'), ['product_id' => $dress->id, 'size' => '34', 'color' => 'red'])->assertOk();
+        $response = $this->postJson(route('api.cart.add'), ['product_id' => $dress->id, 'size' => '36', 'color' => 'blue']);
+
+        $response->assertOk();
+        $response->assertJson(['success' => true, 'cart_count' => 2]);
+
+        $items = $this->getJson(route('api.cart.index'))->json('items');
+        $this->assertCount(2, $items);
     }
 
     public function test_add_validates_product_id_and_quantity(): void
@@ -57,18 +129,19 @@ class CartApiTest extends TestCase
 
     public function test_add_caps_cumulative_quantity_and_reports_it_in_the_response(): void
     {
-        $dress = Dress::factory()->create(['status' => 'active']);
+        $dress = Dress::factory()->create(['status' => 'active', 'sizes' => [34], 'colors' => ['red']]);
         $max = CartService::MAX_QUANTITY_PER_ITEM;
+        $payload = ['product_id' => $dress->id, 'quantity' => 1, 'size' => '34', 'color' => 'red'];
 
         // Repeated single-unit adds (the real "Add to Cart" button flow) must
         // not be able to push the total past the cap just because each
         // individual request is within the per-request limit.
         for ($i = 0; $i < $max; $i++) {
-            $this->postJson(route('api.cart.add'), ['product_id' => $dress->id, 'quantity' => 1])
+            $this->postJson(route('api.cart.add'), $payload)
                 ->assertJson(['success' => true, 'capped' => false]);
         }
 
-        $response = $this->postJson(route('api.cart.add'), ['product_id' => $dress->id, 'quantity' => 1]);
+        $response = $this->postJson(route('api.cart.add'), $payload);
 
         $response->assertOk();
         $response->assertJson(['success' => true, 'capped' => true, 'cart_count' => $max]);

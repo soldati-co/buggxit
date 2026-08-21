@@ -70,7 +70,22 @@
                                                 <img src="{{ $item->dress->main_image_url }}"
                                                     class="w-10 h-10 rounded object-cover mr-3">
                                             @endif
-                                            <span class="text-bone">{{ $item->dress->name ?? 'Deleted' }}</span>
+                                            <div>
+                                                <span class="text-bone">{{ $item->dress->name ?? 'Deleted' }}</span>
+                                                @if ($item->attributes['size'] ?? $item->attributes['color'] ?? null)
+                                                    <div class="text-xs text-bone-faint mt-0.5">
+                                                        @if ($item->attributes['size'] ?? null)
+                                                            Size {{ $item->attributes['size'] }}
+                                                        @endif
+                                                        @if (($item->attributes['size'] ?? null) && ($item->attributes['color'] ?? null))
+                                                            &middot;
+                                                        @endif
+                                                        @if ($item->attributes['color'] ?? null)
+                                                            {{ ucfirst($item->attributes['color']) }}
+                                                        @endif
+                                                    </div>
+                                                @endif
+                                            </div>
                                         </div>
                                     </td>
                                     <td class="px-4 py-4 text-bone-dim font-numeric">R{{ number_format($item->price, 0) }}</td>

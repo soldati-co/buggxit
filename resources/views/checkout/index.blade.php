@@ -131,8 +131,13 @@
                     <div class="space-y-3 max-h-80 overflow-y-auto mb-4 pr-2">
                         @foreach ($items as $item)
                             <div class="flex justify-between text-sm">
-                                <span class="text-bone-dim">{{ $item['dress']->name }} <span
-                                        class="text-bone-faint">x{{ $item['quantity'] }}</span></span>
+                                <span class="text-bone-dim">
+                                    {{ $item['dress']->name }}
+                                    @if ($item['size'] || $item['color'])
+                                        <span class="text-bone-faint">({{ collect([$item['size'] ? "Size {$item['size']}" : null, $item['color'] ? ucfirst($item['color']) : null])->filter()->implode(', ') }})</span>
+                                    @endif
+                                    <span class="text-bone-faint">x{{ $item['quantity'] }}</span>
+                                </span>
                                 <span class="text-bone font-medium font-numeric">R{{ number_format($item['subtotal'], 0) }}</span>
                             </div>
                         @endforeach

@@ -34,7 +34,7 @@
                     @foreach ($items as $item)
                         @php $dress = $item['dress']; @endphp
                         <div class="cart-item bg-ink-raised/90 backdrop-blur-sm border border-line rounded-xl p-4 flex flex-col sm:flex-row gap-4 hover:border-gold/30 transition-colors"
-                            data-product-id="{{ $dress->id }}">
+                            data-product-id="{{ $dress->id }}" data-size="{{ $item['size'] }}" data-color="{{ $item['color'] }}">
                             {{-- Image --}}
                             <div class="w-20 h-20 sm:w-24 sm:h-24 rounded-lg overflow-hidden border border-line flex-shrink-0">
                                 @if ($dress->main_image_url)
@@ -60,6 +60,11 @@
                                         class="text-bone font-display font-medium text-lg hover:text-gold transition-colors">
                                         {{ $dress->name }}
                                     </a>
+                                    @if ($item['size'] || $item['color'])
+                                        <div class="text-xs text-bone-faint mt-0.5">
+                                            {{ collect([$item['size'] ? "Size {$item['size']}" : null, $item['color'] ? ucfirst($item['color']) : null])->filter()->implode(' · ') }}
+                                        </div>
+                                    @endif
                                     <div class="text-sm text-bone-dim font-numeric mt-1">
                                         R{{ number_format($dress->price, 0) }} each
                                     </div>
@@ -156,17 +161,22 @@
         const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
         const MAX_QUANTITY_PER_ITEM = {{ \App\Services\CartService::MAX_QUANTITY_PER_ITEM }};
 
+        // Cart entries are keyed by dress + size + color, so the same dress can
+        // appear as more than one line item — every lookup must match all three,
+        // not just the product id. Blade renders an unset size/color as an empty
+        // data-attribute, while the JSON API returns null, so normalize both.
+        const norm = (value) => value || null;
+
         // Quantity increase
         document.querySelectorAll('.quantity-increase').forEach(btn => {
             btn.addEventListener('click', function(e) {
                 e.preventDefault();
                 const container = this.closest('.cart-item');
-                const productId = container.dataset.productId;
                 const qtySpan = container.querySelector('.quantity-value');
                 let qty = parseInt(qtySpan.textContent);
                 if (qty < MAX_QUANTITY_PER_ITEM) {
                     qty++;
-                    updateCart(productId, qty, container);
+                    updateCart(qty, container);
                 }
             });
         });
@@ -176,12 +186,11 @@
             btn.addEventListener('click', function(e) {
                 e.preventDefault();
                 const container = this.closest('.cart-item');
-                const productId = container.dataset.productId;
                 const qtySpan = container.querySelector('.quantity-value');
                 let qty = parseInt(qtySpan.textContent);
                 if (qty > 1) {
                     qty--;
-                    updateCart(productId, qty, container);
+                    updateCart(qty, container);
                 }
             });
         });
@@ -191,7 +200,6 @@
             btn.addEventListener('click', function(e) {
                 e.preventDefault();
                 const container = this.closest('.cart-item');
-                const productId = container.dataset.productId;
 
                 fetch('{{ route('api.cart.remove', [], false) }}', {
                         method: 'POST',
@@ -200,7 +208,9 @@
                             'X-CSRF-TOKEN': csrfToken
                         },
                         body: JSON.stringify({
-                            product_id: productId
+                            product_id: container.dataset.productId,
+                            size: norm(container.dataset.size),
+                            color: norm(container.dataset.color),
                         })
                     })
                     .then(res => res.json())
@@ -223,7 +233,11 @@
             });
         });
 
-        function updateCart(productId, newQty, container) {
+        function updateCart(newQty, container) {
+            const productId = container.dataset.productId;
+            const size = norm(container.dataset.size);
+            const color = norm(container.dataset.color);
+
             fetch('{{ route('api.cart.update', [], false) }}', {
                     method: 'POST',
                     headers: {
@@ -232,7 +246,9 @@
                     },
                     body: JSON.stringify({
                         product_id: productId,
-                        quantity: newQty
+                        quantity: newQty,
+                        size: size,
+                        color: color,
                     })
                 })
                 .then(res => res.json())
@@ -244,7 +260,11 @@
                         // Read the line subtotal back from the server response instead
                         // of deriving it from DOM text (which broke down to 0/0 = Infinity
                         // when decreasing 2 -> 1, and was wrong on every increase).
-                        const updatedItem = data.items.find(item => item.dress.id === productId);
+                        const updatedItem = data.items.find(item =>
+                            item.dress.id === productId
+                            && norm(item.size) === size
+                            && norm(item.color) === color
+                        );
                         if (updatedItem) {
                             container.querySelector('.subtotal').textContent = 'R' + Number(updatedItem
                                 .subtotal).toLocaleString('en-ZA', {

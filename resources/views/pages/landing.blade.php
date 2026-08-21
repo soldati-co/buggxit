@@ -111,15 +111,7 @@
                                 </div>
                             </a>
                             <div class="px-5 pb-5">
-                                <div class="flex justify-between items-center">
-                                    <span class="text-2xl font-bold font-numeric text-gold">R<span x-text="dress.price.toLocaleString()"></span></span>
-                                    <button type="button" @click.prevent="addToCart(dress.id)"
-                                        class="p-3 bg-gold/10 rounded-xl text-gold hover:bg-gold hover:text-ink transition-all duration-300">
-                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
-                                        </svg>
-                                    </button>
-                                </div>
+                                <span class="text-2xl font-bold font-numeric text-gold">R<span x-text="dress.price.toLocaleString()"></span></span>
                             </div>
                         </div>
                     </template>
@@ -234,29 +226,6 @@
                         this.error = error.message || 'Something went wrong loading homepage content.';
                     } finally {
                         this.loading = false;
-                    }
-                },
-
-                async addToCart(productId) {
-                    try {
-                        const response = await fetch('{{ route('api.cart.add', [], false) }}', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-                            },
-                            body: JSON.stringify({ product_id: productId, quantity: 1 }),
-                        });
-                        const data = await response.json();
-                        if (data.success) {
-                            window.updateCartBadges(data.cart_count);
-                            window.showCartToast(data.message || 'Added to your cart.', data.capped === true);
-                        } else {
-                            window.showCartToast('Could not add this to your cart. Please try again.', true);
-                        }
-                    } catch (err) {
-                        console.error(err);
-                        window.showCartToast('Could not add this to your cart. Please try again.', true);
                     }
                 },
 

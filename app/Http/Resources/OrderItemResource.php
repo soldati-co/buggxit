@@ -17,6 +17,8 @@ class OrderItemResource extends JsonResource
             'quantity' => $this->quantity,
             'price' => $this->price,
             'total' => $this->price * $this->quantity,
+            'size' => $this->attributes['size'] ?? null,
+            'color' => $this->attributes['color'] ?? null,
             'dress' => new DressResource($this->whenLoaded('dress')),
         ];
     }

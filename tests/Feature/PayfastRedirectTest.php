@@ -44,7 +44,9 @@ class PayfastRedirectTest extends TestCase
     {
         $dress = Dress::factory()->create(['price' => 200, 'status' => 'active']);
 
-        $response = $this->withSession(['cart' => [$dress->id => 1]])
+        $cartEntry = ['dress_id' => $dress->id, 'size' => null, 'color' => null, 'quantity' => 1];
+
+        $response = $this->withSession(['cart' => [$cartEntry]])
             ->post(route('checkout.store'), [
                 'address_line1' => '1 Test St',
                 'city' => 'Johannesburg',

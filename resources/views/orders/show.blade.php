@@ -88,7 +88,22 @@
                                             <img src="{{ $item->dress->main_image_url }}" alt="{{ $item->dress->name }}"
                                                 class="w-12 h-12 rounded-lg object-cover mr-3">
                                         @endif
-                                        <span class="text-bone">{{ $item->dress->name ?? 'Product unavailable' }}</span>
+                                        <div>
+                                            <span class="text-bone">{{ $item->dress->name ?? 'Product unavailable' }}</span>
+                                            @if ($item->attributes['size'] ?? $item->attributes['color'] ?? null)
+                                                <div class="text-xs text-bone-faint mt-0.5">
+                                                    @if ($item->attributes['size'] ?? null)
+                                                        Size {{ $item->attributes['size'] }}
+                                                    @endif
+                                                    @if (($item->attributes['size'] ?? null) && ($item->attributes['color'] ?? null))
+                                                        &middot;
+                                                    @endif
+                                                    @if ($item->attributes['color'] ?? null)
+                                                        {{ ucfirst($item->attributes['color']) }}
+                                                    @endif
+                                                </div>
+                                            @endif
+                                        </div>
                                     </div>
                                 </td>
                                 <td class="px-4 py-4 text-bone-dim font-numeric">R{{ number_format($item->price, 0) }}</td>

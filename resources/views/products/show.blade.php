@@ -84,11 +84,13 @@
                             <p x-text="product.description"></p>
                         </div>
                         <div>
-                            <h3 class="text-bone font-semibold mb-3 flex items-center"><i class="fas fa-ruler-combined text-gold mr-2"></i> Available Sizes</h3>
+                            <h3 class="text-bone font-semibold mb-3 flex items-center"><i class="fas fa-ruler-combined text-gold mr-2"></i> Select Size</h3>
                             <div class="flex flex-wrap gap-2">
                                 <template x-if="product.sizes?.length">
                                     <template x-for="size in product.sizes" :key="size">
-                                        <span class="px-4 py-2 bg-ink-raised2/50 border border-line rounded-lg text-bone-dim text-sm hover:border-gold/30 transition-colors" x-text="`Size ${size}`"></span>
+                                        <button type="button" @click="selectedSize = size"
+                                            :class="selectedSize === size ? 'border-gold bg-gold/10 text-gold' : 'border-line bg-ink-raised2/50 text-bone-dim hover:border-gold/30'"
+                                            class="px-4 py-2 border rounded-lg text-sm transition-colors" x-text="`Size ${size}`"></button>
                                     </template>
                                 </template>
                                 <template x-if="!product.sizes?.length">
@@ -97,14 +99,16 @@
                             </div>
                         </div>
                         <div>
-                            <h3 class="text-bone font-semibold mb-3 flex items-center"><i class="fas fa-palette text-gold mr-2"></i> Available Colors</h3>
+                            <h3 class="text-bone font-semibold mb-3 flex items-center"><i class="fas fa-palette text-gold mr-2"></i> Select Color</h3>
                             <div class="flex flex-wrap gap-3">
                                 <template x-if="product.colors?.length">
                                     <template x-for="color in product.colors" :key="color">
-                                        <span class="flex items-center px-4 py-2 bg-ink-raised2/50 border border-line rounded-lg text-bone-dim text-sm">
+                                        <button type="button" @click="selectedColor = color"
+                                            :class="selectedColor === color ? 'border-gold bg-gold/10 text-gold' : 'border-line bg-ink-raised2/50 text-bone-dim hover:border-gold/30'"
+                                            class="flex items-center px-4 py-2 border rounded-lg text-sm transition-colors">
                                             <span class="w-3 h-3 rounded-full mr-2" :style="color === 'multi' ? 'background: linear-gradient(90deg, #f87171, #60a5fa, #facc15)' : `background-color: ${color};`"></span>
                                             <span x-text="color === 'multi' ? 'Multi' : color.charAt(0).toUpperCase() + color.slice(1)"></span>
-                                        </span>
+                                        </button>
                                     </template>
                                 </template>
                                 <template x-if="!product.colors?.length">
@@ -129,10 +133,15 @@
                             </div>
                         </div>
                         <div class="pt-6">
-                            <button type="button" @click="addToCart(product.id)" class="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-gold to-gold-dim text-ink font-bold rounded-xl hover:from-gold-bright hover:to-gold transition-all duration-300 shadow-2xl shadow-gold/25 flex items-center justify-center space-x-3 text-lg">
+                            <button type="button" @click="addToCart()" :disabled="!canAddToCart"
+                                :class="canAddToCart ? 'hover:from-gold-bright hover:to-gold' : 'opacity-50 cursor-not-allowed'"
+                                class="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-gold to-gold-dim text-ink font-bold rounded-xl transition-all duration-300 shadow-2xl shadow-gold/25 flex items-center justify-center space-x-3 text-lg">
                                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
-                                <span>Add to Collection</span>
+                                <span>Add to Cart</span>
                             </button>
+                            <template x-if="!canAddToCart">
+                                <p class="text-bad text-sm mt-2" x-text="missingSelectionText"></p>
+                            </template>
                         </div>
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-2 pt-4 border-t border-line/50 text-sm text-bone-dim">
                             <div class="flex items-center gap-2">
@@ -169,9 +178,26 @@
                 product: null,
                 selectedImage: null,
                 galleryImages: [],
+                selectedSize: null,
+                selectedColor: null,
 
                 init() {
                     this.fetchProduct(productIdentifier);
+                },
+
+                get canAddToCart() {
+                    if (!this.product) return false;
+                    return !(this.product.sizes?.length && !this.selectedSize)
+                        && !(this.product.colors?.length && !this.selectedColor);
+                },
+
+                get missingSelectionText() {
+                    const needsSize = this.product?.sizes?.length && !this.selectedSize;
+                    const needsColor = this.product?.colors?.length && !this.selectedColor;
+                    if (needsSize && needsColor) return 'Please select a size and color.';
+                    if (needsSize) return 'Please select a size.';
+                    if (needsColor) return 'Please select a color.';
+                    return '';
                 },
 
                 async fetchProduct(identifier) {
@@ -197,7 +223,11 @@
                     }
                 },
 
-                async addToCart(productId) {
+                async addToCart() {
+                    if (!this.canAddToCart) {
+                        window.showCartToast(this.missingSelectionText, true);
+                        return;
+                    }
                     try {
                         const response = await fetch('{{ route('api.cart.add', [], false) }}', {
                             method: 'POST',
@@ -205,14 +235,23 @@
                                 'Content-Type': 'application/json',
                                 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
                             },
-                            body: JSON.stringify({ product_id: productId, quantity: 1 }),
+                            body: JSON.stringify({
+                                product_id: this.product.id,
+                                quantity: 1,
+                                // product.sizes comes through as JSON numbers (e.g. 34),
+                                // but the API validates size as a string — stringify here
+                                // rather than earlier, so the strict `selectedSize === size`
+                                // comparison driving the button highlight still matches.
+                                size: this.selectedSize !== null ? String(this.selectedSize) : null,
+                                color: this.selectedColor,
+                            }),
                         });
                         const data = await response.json();
                         if (data.success) {
                             window.updateCartBadges(data.cart_count);
                             window.showCartToast(data.message || 'Added to your cart.', data.capped === true);
                         } else {
-                            window.showCartToast('Could not add this to your cart. Please try again.', true);
+                            window.showCartToast(data.message || 'Could not add this to your cart. Please try again.', true);
                         }
                     } catch (error) {
                         console.error(error);

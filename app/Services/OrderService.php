@@ -60,6 +60,10 @@ class OrderService
                     'dress_id' => $item['dress']->id,
                     'quantity' => $item['quantity'],
                     'price' => $item['dress']->price,
+                    'attributes' => array_filter([
+                        'size' => $item['size'] ?? null,
+                        'color' => $item['color'] ?? null,
+                    ]) ?: null,
                 ]);
             }
 
