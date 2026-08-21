@@ -46,8 +46,8 @@
     </div>
 
     <div x-show="hasCrop" class="mt-3">
-        <p class="text-sm text-bone-dim mb-2">Card preview:</p>
-        <img :src="previewUrl" alt="Card crop preview" class="w-40 h-40 object-cover bg-ink-raised2/50 rounded-lg border border-line">
+        <p class="text-sm text-bone-dim mb-2">Saved crop:</p>
+        <img :src="previewUrl" alt="Card crop preview" class="max-w-[10rem] max-h-40 object-contain bg-ink-raised2/50 rounded-lg border border-line">
     </div>
 
     <input type="file" name="card_image" x-ref="cardImageInput" class="hidden">
@@ -59,18 +59,30 @@
             <div class="flex items-center justify-between mb-4">
                 <h4 class="text-bone font-semibold">Crop Card Image</h4>
                 <div class="flex items-center gap-2">
-                    <label class="text-xs text-bone-faint">Aspect</label>
-                    <select x-model.number="aspectRatio" @change="setAspectRatio()"
+                    <label class="text-xs text-bone-faint">Snap to</label>
+                    <select x-model="aspectRatio" @change="setAspectRatio()"
                         class="bg-ink-raised2/50 border border-line rounded-lg text-sm text-bone px-2 py-1">
-                        <option value="1.3333333333333333">4:3 (Recommended)</option>
-                        <option value="1">1:1 (Square)</option>
-                        <option value="1.5">3:2 (Wide)</option>
+                        <option value="free">Free (drag freely)</option>
+                        <option value="1">Card Grid — Square</option>
+                        <option value="1.3333333333333333">New Arrivals</option>
                     </select>
                 </div>
             </div>
-            <p class="text-xs text-bone-faint mb-3">Leave generous margin around the subject — narrow mobile screens crop a little tighter from the sides.</p>
-            <div class="max-h-[60vh] overflow-hidden bg-ink rounded-lg">
-                <img x-ref="cropperImage" alt="Image to crop" class="block max-w-full">
+            <p class="text-xs text-bone-faint mb-3">Drag any corner freely, or pick a shape above to snap to it. The panels on the right show exactly how this crop will look in each card.</p>
+            <div class="flex flex-col sm:flex-row gap-4">
+                <div class="flex-1 max-h-[60vh] overflow-hidden bg-ink rounded-lg">
+                    <img x-ref="cropperImage" alt="Image to crop" class="block max-w-full">
+                </div>
+                <div class="flex sm:flex-col gap-3 shrink-0">
+                    <div>
+                        <p class="text-xs text-bone-faint mb-1">Card Grid</p>
+                        <div class="w-24 h-24 overflow-hidden rounded-lg border border-line bg-ink-raised2/50" x-ref="previewGrid"></div>
+                    </div>
+                    <div>
+                        <p class="text-xs text-bone-faint mb-1">New Arrivals</p>
+                        <div class="w-24 h-[72px] overflow-hidden rounded-lg border border-line bg-ink-raised2/50" x-ref="previewNewArrivals"></div>
+                    </div>
+                </div>
             </div>
             <div class="mt-4 flex justify-end gap-3">
                 <button type="button" @click="closeModal()" class="px-4 py-2 border border-line rounded-lg text-bone-dim hover:text-bone">Cancel</button>
@@ -92,7 +104,10 @@
                 hasCrop: !!existingCardImageUrl,
                 hadExistingCardImage: !!existingCardImageUrl,
                 previewUrl: existingCardImageUrl || existingMainImageUrl || null,
-                aspectRatio: 4 / 3,
+                // Free-form by default (no locked ratio) — the "Snap to"
+                // dropdown lets the admin lock to a specific card shape when
+                // they want precision instead.
+                aspectRatio: 'free',
                 cropper: null,
                 mainImageInput: null,
                 supported: typeof window.DataTransfer !== 'undefined' && typeof window.Cropper !== 'undefined',
@@ -127,20 +142,26 @@
                         img.onload = () => {
                             if (this.cropper) this.cropper.destroy();
                             this.cropper = new window.Cropper(img, {
-                                aspectRatio: this.aspectRatio,
+                                aspectRatio: this.numericAspectRatio(),
                                 viewMode: 1,
                                 autoCropArea: 1,
                                 responsive: true,
                                 background: false,
                                 checkCrossOrigin: false,
+                                preview: [this.$refs.previewGrid, this.$refs.previewNewArrivals],
                             });
                         };
                         img.src = this.currentSourceUrl();
                     });
                 },
 
+                // 'free' means no locked ratio (Cropper.js expects NaN for that).
+                numericAspectRatio() {
+                    return this.aspectRatio === 'free' ? NaN : Number(this.aspectRatio);
+                },
+
                 setAspectRatio() {
-                    if (this.cropper) this.cropper.setAspectRatio(Number(this.aspectRatio));
+                    if (this.cropper) this.cropper.setAspectRatio(this.numericAspectRatio());
                 },
 
                 closeModal() {
