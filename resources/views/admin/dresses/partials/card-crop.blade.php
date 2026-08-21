@@ -1,16 +1,18 @@
 {{--
     Shared by create.blade.php and edit.blade.php. Lets an admin manually
     crop the dress's main image for display in three INDEPENDENT contexts —
-    the "Card Grid" (products listing + homepage featured, which share a box
-    shape), the homepage "New Arrivals" section (a different box shape), and
-    the product detail page's large hero image (a true 1:1 square). One crop
-    can't serve all three well. Each is separate from 'main'
-    (Dress::cardImage() / cardImageNewArrivals() / detailImage()), so the
-    product detail page's gallery still shows true, uncropped photos.
-    Cropping is optional for each: an uncropped target falls back to the
-    full main image — New Arrivals falls back further to the Card Grid crop
-    if only that one has been set, since a deliberate crop is still better
-    than none.
+    "Card Grid" (products listing + homepage featured), the homepage
+    "New Arrivals" section, and the product detail page's large hero image.
+    All three now render as a 1:1 square box (unified so a single square
+    photo, ~1200-1600px, works everywhere without letterboxing). Each is
+    still a separate crop from 'main' (Dress::cardImage() /
+    cardImageNewArrivals() / detailImage()), so the product detail page's
+    gallery still shows true, uncropped photos, and each context can have
+    its own composition if wanted. Cropping is optional for each: an
+    uncropped target falls back to the full main image — New Arrivals falls
+    back further to the Card Grid crop if only that one has been set, since
+    a deliberate crop is still better than none (and now that the boxes
+    match, the Card Grid crop is also a perfectly good default there).
 
     Card Grid and New Arrivals always render with object-contain (see
     products/index.blade.php, pages/landing.blade.php) — nothing is ever
@@ -48,8 +50,8 @@
     <p class="text-xs text-bone-faint mb-3">
         <i class="fas fa-circle-info mr-1"></i>
         For the best fit, upload a square main photo (1:1) around 1200–1600px, with the dress centered and some
-        space around it — that matches the Card Grid and Product Page directly, and crops cleanly for the
-        New Arrivals section (4:3) too.
+        space around it — that matches Card Grid, New Arrivals, and the Product Page directly, with no empty
+        space on any of them.
     </p>
 
     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -95,8 +97,7 @@
                     <select x-model="aspectRatio" @change="setAspectRatio()"
                         class="bg-ink-raised2/50 border border-line rounded-lg text-sm text-bone px-2 py-1">
                         <option value="1">Square (1:1)</option>
-                        <option value="1.3333333333333333">Landscape (4:3)</option>
-                        <option value="free">Free (not recommended)</option>
+                        <option value="free">Free</option>
                     </select>
                 </div>
             </div>
@@ -112,7 +113,7 @@
                     </div>
                     <div>
                         <p class="text-xs text-bone-faint mb-1">New Arrivals</p>
-                        <div class="w-24 h-[72px] overflow-hidden rounded-lg border border-line bg-ink-raised2/50" x-ref="previewNewArrivals"></div>
+                        <div class="w-24 h-24 overflow-hidden rounded-lg border border-line bg-ink-raised2/50" x-ref="previewNewArrivals"></div>
                     </div>
                     <div>
                         <p class="text-xs text-bone-faint mb-1">Product Page</p>
