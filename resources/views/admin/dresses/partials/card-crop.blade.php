@@ -8,9 +8,16 @@
     (Dress::cardImage() / cardImageNewArrivals() / detailImage()), so the
     product detail page's gallery still shows true, uncropped photos.
     Cropping is optional for each: an uncropped target falls back to the
-    full main image (object-contain) — New Arrivals falls back further to
-    the Card Grid crop if only that one has been set, since a deliberate
-    crop is still better than none.
+    full main image — New Arrivals falls back further to the Card Grid crop
+    if only that one has been set, since a deliberate crop is still better
+    than none.
+
+    Card Grid and New Arrivals always render with object-contain (see
+    products/index.blade.php, pages/landing.blade.php) — nothing is ever
+    cut off there regardless of a crop's shape; cropping just chooses what's
+    zoomed in on. The Product Page image (products/show.blade.php) still
+    switches to object-cover when a crop exists, so its crop shape matters
+    more — see the mismatch warning in applyCrop() below.
 
     Expects:
     - $existingImageUrl: the dress's current main image URL, or null.
@@ -35,9 +42,15 @@
         </p>
     </template>
 
-    <label class="block text-sm font-medium text-bone-dim mb-3">
+    <label class="block text-sm font-medium text-bone-dim mb-1">
         Image Crops <span class="text-bone-faint">(Optional — controls how this dress looks in cards and on its own page)</span>
     </label>
+    <p class="text-xs text-bone-faint mb-3">
+        <i class="fas fa-circle-info mr-1"></i>
+        For the best fit, upload a square main photo (1:1) around 1200–1600px, with the dress centered and some
+        space around it — that matches the Card Grid and Product Page directly, and crops cleanly for the
+        New Arrivals section (4:3) too.
+    </p>
 
     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <template x-for="key in ['grid', 'newArrivals', 'detail']" :key="key">
@@ -87,7 +100,7 @@
                     </select>
                 </div>
             </div>
-            <p class="text-xs text-bone-faint mb-3">Locked to the shape this crop is actually displayed at, so it always fills the space correctly — switching to Free can leave it mismatched and badly cropped on the live site. The panels on the right show exactly how this crop will look in each spot.</p>
+            <p class="text-xs text-bone-faint mb-3">Card Grid and New Arrivals always show the whole photo (nothing is ever cut off) — cropping here just zooms in on what should be featured. On the Product Page, a crop matching its shape also fills the image edge-to-edge. The panels on the right show exactly how this crop will look in each spot.</p>
             <div class="flex flex-col sm:flex-row gap-4">
                 <div class="flex-1 max-h-[60vh] overflow-hidden bg-ink rounded-lg">
                     <img x-ref="cropperImage" alt="Image to crop" class="block max-w-full">
@@ -202,15 +215,14 @@
                 openModal(targetKey) {
                     if (!this.canCrop) return;
                     this.activeTarget = targetKey;
-                    // Default to the ratio that matches where this crop
-                    // actually gets displayed. Free-form invites a crop
-                    // shaped nothing like its box (e.g. a tall portrait
-                    // crop of someone standing, dropped into a near-square
-                    // card) — object-cover then has to zoom in hard to fill
-                    // the box, slicing off most of the image. "Free" is
-                    // still available in the dropdown for when that's
-                    // genuinely wanted, just not the default anymore.
-                    this.aspectRatio = targetKey === 'newArrivals' ? '1.3333333333333333' : '1';
+                    // Card Grid/New Arrivals always show the full photo now
+                    // (object-contain, never cropped by the browser), so a
+                    // mismatched free-form crop there only affects framing —
+                    // default to Free for those. The Product Page image
+                    // still fills its box with object-cover when a crop
+                    // exists, so a badly-shaped crop there can genuinely
+                    // slice content off — keep that one locked by default.
+                    this.aspectRatio = targetKey === 'detail' ? '1' : 'free';
                     this.modalOpen = true;
                     this.$nextTick(() => {
                         const img = this.$refs.cropperImage;
@@ -250,14 +262,15 @@
                     if (!this.cropper || !this.activeTarget) return;
                     const target = this.targets[this.activeTarget];
 
-                    // Free mode has no ratio lock, so a badly-shaped crop
-                    // (e.g. a tall portrait selection for a near-square
-                    // card) is still possible — object-cover would then
-                    // zoom in hard to fill the box and slice most of the
-                    // image off. Catch that before saving rather than
-                    // finding out on the live site.
-                    if (this.aspectRatio === 'free') {
-                        const expectedRatio = this.activeTarget === 'newArrivals' ? 4 / 3 : 1;
+                    // Card Grid and New Arrivals always show the whole photo
+                    // now (object-contain, never cropped by the browser), so
+                    // a shape mismatch there only affects composition. The
+                    // Product Page image still fills its box with
+                    // object-cover when a crop exists, so a badly-shaped
+                    // Free crop there can still slice content off — warn
+                    // before saving rather than finding out on the live site.
+                    if (this.aspectRatio === 'free' && this.activeTarget === 'detail') {
+                        const expectedRatio = 1;
                         const data = this.cropper.getData();
                         const actualRatio = data.width / data.height;
                         const mismatch = Math.abs(actualRatio - expectedRatio) / expectedRatio;
