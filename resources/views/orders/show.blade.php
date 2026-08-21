@@ -86,7 +86,7 @@
                                     <div class="flex items-center">
                                         @if ($item->dress && $item->dress->main_image_url)
                                             <img src="{{ $item->dress->main_image_url }}" alt="{{ $item->dress->name }}"
-                                                class="w-12 h-12 rounded-lg object-cover mr-3">
+                                                class="w-12 h-12 rounded-lg object-contain bg-ink-raised2/50 mr-3">
                                         @endif
                                         <div>
                                             <span class="text-bone">{{ $item->dress->name ?? 'Product unavailable' }}</span>

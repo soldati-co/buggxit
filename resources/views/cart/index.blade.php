@@ -36,10 +36,10 @@
                         <div class="cart-item bg-ink-raised/90 backdrop-blur-sm border border-line rounded-xl p-4 flex flex-col sm:flex-row gap-4 hover:border-gold/30 transition-colors"
                             data-product-id="{{ $dress->id }}" data-size="{{ $item['size'] }}" data-color="{{ $item['color'] }}">
                             {{-- Image --}}
-                            <div class="w-20 h-20 sm:w-24 sm:h-24 rounded-lg overflow-hidden border border-line flex-shrink-0">
+                            <div class="w-20 h-20 sm:w-24 sm:h-24 rounded-lg overflow-hidden border border-line bg-ink-raised2/50 flex-shrink-0">
                                 @if ($dress->main_image_url)
                                     <img src="{{ $dress->main_image_url }}" alt="{{ $dress->name }}"
-                                        class="w-full h-full object-cover">
+                                        class="w-full h-full object-contain">
                                 @else
                                     <div class="w-full h-full bg-ink-raised2 flex items-center justify-center">
                                         <svg class="w-8 h-8 text-bone-faint" fill="currentColor" viewBox="0 0 24 24">

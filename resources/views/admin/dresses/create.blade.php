@@ -282,7 +282,7 @@
                     <div id="main-image-preview" class="mt-3 hidden">
                         <p class="text-sm text-bone-dim mb-2">Preview:</p>
                         <img id="main-image-thumb" src="#" alt="Main image preview"
-                            class="w-48 h-48 object-cover rounded-lg border border-line">
+                            class="w-48 h-48 object-contain bg-ink-raised2/50 rounded-lg border border-line">
                     </div>
                 </div>
 

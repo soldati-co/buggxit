@@ -126,10 +126,10 @@
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <div class="flex items-center">
                                     @if ($dress->main_image_url)
-                                        <div class="flex-shrink-0 h-10 w-10 rounded-lg border border-line overflow-hidden">
+                                        <div class="flex-shrink-0 h-10 w-10 rounded-lg bg-ink-raised2/50 border border-line overflow-hidden">
                                             <img src="{{ $dress->main_image_url }}?t={{ time() }}"
                                                 alt="{{ $dress->name }}"
-                                                class="h-10 w-10 object-cover">
+                                                class="h-10 w-10 object-contain">
                                         </div>
                                     @else
                                         <div class="flex-shrink-0 h-10 w-10 rounded-lg bg-ink-raised2/50 border border-line flex items-center justify-center">

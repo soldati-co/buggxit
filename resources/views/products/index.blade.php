@@ -88,7 +88,7 @@
                             <a :href="getProductUrl(dress)" class="block">
                                 <div class="relative h-72 overflow-hidden">
                                     <div class="absolute inset-0 bg-gradient-to-t from-ink-raised/80 via-transparent to-transparent z-10"></div>
-                                    <img :src="dress.main_image_url" :alt="dress.name" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                                    <img :src="dress.main_image_url" :alt="dress.name" class="w-full h-full object-contain group-hover:scale-110 transition-transform duration-700">
                                     <template x-if="dress.is_featured">
                                         <span class="absolute top-4 left-4 z-20 px-3 py-1.5 text-xs font-medium bg-gold/90 text-ink rounded-full backdrop-blur-sm"><i class="fas fa-star mr-1"></i> Featured</span>
                                     </template>

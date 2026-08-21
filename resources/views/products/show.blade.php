@@ -49,7 +49,7 @@
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16">
                     <div class="space-y-4">
                         <div class="relative aspect-square rounded-2xl overflow-hidden border border-line bg-ink-raised/90 backdrop-blur-sm group">
-                            <img :src="selectedImage" :alt="product.name" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                            <img :src="selectedImage" :alt="product.name" class="w-full h-full object-contain transition-transform duration-700 group-hover:scale-105">
                             <template x-if="product.is_featured">
                                 <span class="absolute top-4 left-4 z-20 px-3 py-1.5 text-xs font-medium bg-gold/90 text-ink rounded-full backdrop-blur-sm">
                                     <i class="fas fa-star mr-1"></i> Featured
@@ -60,8 +60,8 @@
                         <template x-if="product.gallery_image_urls?.length">
                             <div class="grid grid-cols-4 gap-2">
                                 <template x-for="image in galleryImages" :key="image">
-                                    <button type="button" @click="selectedImage = image" class="aspect-square rounded-lg overflow-hidden border border-line hover:border-gold/50 transition-colors">
-                                        <img :src="image" alt="Gallery thumbnail" class="w-full h-full object-cover">
+                                    <button type="button" @click="selectedImage = image" class="aspect-square rounded-lg overflow-hidden border border-line bg-ink-raised2/50 hover:border-gold/50 transition-colors">
+                                        <img :src="image" alt="Gallery thumbnail" class="w-full h-full object-contain">
                                     </button>
                                 </template>
                             </div>

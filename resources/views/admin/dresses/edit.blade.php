@@ -242,7 +242,7 @@
                         <p class="text-sm font-medium text-bone-dim mb-2">Current Main Image</p>
                                 <img src="{{ $dress->main_image_url }}?t={{ time() }}"
                             alt="{{ $dress->name }}"
-                            class="w-48 h-48 object-cover rounded-lg border border-line">
+                            class="w-48 h-48 object-contain bg-ink-raised2/50 rounded-lg border border-line">
                     </div>
                 @endif
 

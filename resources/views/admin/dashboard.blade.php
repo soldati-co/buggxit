@@ -198,7 +198,7 @@
                                             class="w-12 h-12 rounded-lg bg-ink-raised2/50 border border-line overflow-hidden flex-shrink-0">
                                             @if ($dress->main_image_url)
                                                 <img src="{{ $dress->main_image_url }}" alt="{{ $dress->name }}"
-                                                    class="w-full h-full object-cover">
+                                                    class="w-full h-full object-contain">
                                             @else
                                                 <div class="w-full h-full flex items-center justify-center">
                                                     <svg class="w-6 h-6 text-bone-faint" fill="currentColor"

@@ -94,7 +94,7 @@
                 <!-- Main Image -->
                 <div class="bg-ink-raised/90 backdrop-blur-sm border border-line rounded-xl overflow-hidden">
                     @if ($dress->main_image_url)
-                        <img src="{{ $dress->main_image_url }}?t={{ time() }}" alt="{{ $dress->name }}" class="w-full h-96 object-cover">
+                        <img src="{{ $dress->main_image_url }}?t={{ time() }}" alt="{{ $dress->name }}" class="w-full h-96 object-contain">
                     @else
                         <div class="w-full h-96 bg-ink-raised2 flex items-center justify-center">
                             <svg class="w-24 h-24 text-bone-faint" fill="currentColor" viewBox="0 0 24 24">
@@ -115,8 +115,8 @@
                         </h3>
                         <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
                             @foreach ($dress->gallery_image_urls as $image)
-                                <div class="rounded-lg overflow-hidden border border-line">
-                                    <img src="{{ $image }}" alt="{{ $dress->name }}" class="w-full h-40 object-cover hover:scale-105 transition-transform duration-300">
+                                <div class="rounded-lg overflow-hidden border border-line bg-ink-raised2/50">
+                                    <img src="{{ $image }}" alt="{{ $dress->name }}" class="w-full h-40 object-contain hover:scale-105 transition-transform duration-300">
                                 </div>
                             @endforeach
                         </div>
