@@ -139,8 +139,8 @@
                         <template x-for="dress in newArrivals" :key="dress.id">
                             <a :href="getProductUrl(dress)" class="group">
                                 <div class="relative h-56 rounded-xl overflow-hidden border border-line group-hover:border-gold/50 transition-colors mb-3">
-                                    <img :src="dress.card_image_url" :alt="dress.name"
-                                         :class="dress.has_card_crop ? 'object-cover' : 'object-contain'"
+                                    <img :src="dress.card_image_new_arrivals_url" :alt="dress.name"
+                                         :class="dress.has_card_crop_new_arrivals ? 'object-cover' : 'object-contain'"
                                          class="w-full h-full group-hover:scale-105 transition-transform duration-500">
                                 </div>
                                 <h4 class="text-bone font-medium group-hover:text-gold transition-colors" x-text="dress.name"></h4>

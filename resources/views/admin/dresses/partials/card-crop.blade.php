@@ -1,20 +1,26 @@
 {{--
     Shared by create.blade.php and edit.blade.php. Lets an admin manually
-    crop the dress's main image for use as its card/grid thumbnail — a
-    separate 'card' image (Dress::cardImage()) from 'main', so the product
-    detail page keeps showing the true, uncropped photo. Cropping is
-    optional: a dress with no card crop just keeps showing the full main
-    image (object-contain) on cards until one is set.
+    crop the dress's main image for card display — as two INDEPENDENT crops,
+    since the "Card Grid" (products listing + homepage featured) and
+    "New Arrivals" sections render different box shapes and one crop can't
+    serve both well. Both are separate from 'main' (Dress::cardImage() /
+    cardImageNewArrivals()), so the product detail page keeps showing the
+    true, uncropped photo. Cropping is optional for each: an uncropped
+    target falls back to the full main image (object-contain) — New
+    Arrivals falls back further to the Card Grid crop if only that one has
+    been set, since a deliberate crop is still better than none.
 
     Expects:
-    - $existingImageUrl: the dress's current main image URL, or null (create
-      page, or a dress with no real photo yet).
-    - $existingCardImageUrl: the dress's current card-crop URL, or null.
+    - $existingImageUrl: the dress's current main image URL, or null.
+    - $existingCardImageUrl: the dress's current Card Grid crop URL, or null.
+    - $existingCardImageNewArrivalsUrl: the dress's current dedicated New
+      Arrivals crop URL, or null (may still show a preview via fallback).
 --}}
 <div class="mt-6 pt-6 border-t border-line"
     x-data="dressCardCropper({
         existingMainImageUrl: @js($existingImageUrl ?? null),
         existingCardImageUrl: @js($existingCardImageUrl ?? null),
+        existingCardImageNewArrivalsUrl: @js($existingCardImageNewArrivalsUrl ?? null),
     })"
     x-init="init()">
 
@@ -24,40 +30,46 @@
         </p>
     </template>
 
-    <div class="flex items-center justify-between mb-2">
-        <label class="block text-sm font-medium text-bone-dim">
-            Card Crop <span class="text-bone-faint">(Optional — controls how this dress looks in grid cards)</span>
-        </label>
-        <span class="text-xs" :class="hasCrop ? 'text-good' : 'text-bone-faint'"
-            x-text="hasCrop ? 'Cropped for cards' : 'Using full image (may show empty space in cards)'"></span>
-    </div>
+    <label class="block text-sm font-medium text-bone-dim mb-3">
+        Card Crops <span class="text-bone-faint">(Optional — controls how this dress looks in grid cards)</span>
+    </label>
 
-    <div class="flex flex-wrap items-center gap-3">
-        <button type="button" @click="openModal()" :disabled="!canCrop"
-            class="px-4 py-2 bg-ink-raised2/50 border border-line rounded-lg text-sm text-bone-dim hover:text-gold hover:border-gold/50 transition-colors disabled:opacity-40 disabled:cursor-not-allowed">
-            <i class="fas fa-crop-alt mr-2"></i>
-            <span x-text="hasCrop ? 'Edit Card Crop' : 'Crop for Card'"></span>
-        </button>
-        <button type="button" x-show="hasCrop" @click="clearCrop()"
-            class="px-4 py-2 text-sm text-bad hover:text-bad/80 transition-colors">
-            Remove Crop
-        </button>
-        <p x-show="!canCrop" class="text-xs text-bone-faint">Upload or keep a main image first.</p>
-    </div>
-
-    <div x-show="hasCrop" class="mt-3">
-        <p class="text-sm text-bone-dim mb-2">Saved crop:</p>
-        <img :src="previewUrl" alt="Card crop preview" class="max-w-[10rem] max-h-40 object-contain bg-ink-raised2/50 rounded-lg border border-line">
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <template x-for="key in ['grid', 'newArrivals']" :key="key">
+            <div class="border border-line rounded-lg p-4">
+                <div class="flex items-center justify-between mb-2">
+                    <span class="text-sm text-bone font-medium" x-text="targets[key].label"></span>
+                    <span class="text-xs" :class="targets[key].hasCrop ? 'text-good' : 'text-bone-faint'"
+                        x-text="statusText(key)"></span>
+                </div>
+                <div class="flex flex-wrap items-center gap-3">
+                    <button type="button" @click="openModal(key)" :disabled="!canCrop"
+                        class="px-3 py-1.5 bg-ink-raised2/50 border border-line rounded-lg text-xs text-bone-dim hover:text-gold hover:border-gold/50 transition-colors disabled:opacity-40 disabled:cursor-not-allowed">
+                        <i class="fas fa-crop-alt mr-1"></i>
+                        <span x-text="targets[key].hasCrop ? 'Edit Crop' : 'Crop Image'"></span>
+                    </button>
+                    <button type="button" x-show="targets[key].hasCrop" @click="clearCrop(key)"
+                        class="text-xs text-bad hover:text-bad/80 transition-colors">
+                        Remove
+                    </button>
+                </div>
+                <p x-show="!canCrop" class="text-xs text-bone-faint mt-2">Upload or keep a main image first.</p>
+                <img x-show="targets[key].previewUrl" :src="targets[key].previewUrl" alt="Crop preview"
+                    class="mt-3 max-w-full max-h-32 object-contain bg-ink-raised2/50 rounded-lg border border-line">
+            </div>
+        </template>
     </div>
 
     <input type="file" name="card_image" x-ref="cardImageInput" class="hidden">
     <input type="hidden" name="remove_card_image" x-ref="removeCardImageFlag" value="0">
+    <input type="file" name="card_image_new_arrivals" x-ref="cardImageNewArrivalsInput" class="hidden">
+    <input type="hidden" name="remove_card_image_new_arrivals" x-ref="removeCardImageNewArrivalsFlag" value="0">
 
     <div x-show="modalOpen" x-cloak class="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-ink/80 backdrop-blur-sm"
         @keydown.escape.window="closeModal()">
         <div class="bg-ink-raised border border-line rounded-xl p-6 w-full max-w-2xl" @click.outside="closeModal()">
             <div class="flex items-center justify-between mb-4">
-                <h4 class="text-bone font-semibold">Crop Card Image</h4>
+                <h4 class="text-bone font-semibold" x-text="activeTarget ? 'Crop for ' + targets[activeTarget].label : 'Crop Image'"></h4>
                 <div class="flex items-center gap-2">
                     <label class="text-xs text-bone-faint">Snap to</label>
                     <select x-model="aspectRatio" @change="setAspectRatio()"
@@ -98,29 +110,58 @@
             options = options || {};
             const existingMainImageUrl = options.existingMainImageUrl || null;
             const existingCardImageUrl = options.existingCardImageUrl || null;
+            const existingCardImageNewArrivalsUrl = options.existingCardImageNewArrivalsUrl || null;
 
             return {
                 modalOpen: false,
-                hasCrop: !!existingCardImageUrl,
-                hadExistingCardImage: !!existingCardImageUrl,
-                previewUrl: existingCardImageUrl || existingMainImageUrl || null,
-                // Free-form by default (no locked ratio) — the "Snap to"
-                // dropdown lets the admin lock to a specific card shape when
-                // they want precision instead.
+                activeTarget: null,
                 aspectRatio: 'free',
                 cropper: null,
                 mainImageInput: null,
                 supported: typeof window.DataTransfer !== 'undefined' && typeof window.Cropper !== 'undefined',
+
+                targets: {
+                    grid: {
+                        label: 'Card Grid',
+                        hasCrop: !!existingCardImageUrl,
+                        hadExisting: !!existingCardImageUrl,
+                        previewUrl: existingCardImageUrl || existingMainImageUrl || null,
+                        fallbackLabel: null,
+                        fileInputRef: 'cardImageInput',
+                        removeFlagRef: 'removeCardImageFlag',
+                    },
+                    newArrivals: {
+                        label: 'New Arrivals',
+                        hasCrop: !!existingCardImageNewArrivalsUrl,
+                        hadExisting: !!existingCardImageNewArrivalsUrl,
+                        previewUrl: existingCardImageNewArrivalsUrl || existingCardImageUrl || existingMainImageUrl || null,
+                        // Only used for the status label when this target has
+                        // no dedicated crop of its own but Card Grid does.
+                        fallbackLabel: (!existingCardImageNewArrivalsUrl && existingCardImageUrl) ? 'Using Card Grid crop' : null,
+                        fileInputRef: 'cardImageNewArrivalsInput',
+                        removeFlagRef: 'removeCardImageNewArrivalsFlag',
+                    },
+                },
 
                 init() {
                     this.mainImageInput = document.getElementById('main_image');
                     if (this.mainImageInput) {
                         // Picking a new main image invalidates any crop made
                         // against the old source, so the admin is forced to
-                        // consciously re-crop rather than silently keeping a
-                        // crop that no longer matches the photo.
-                        this.mainImageInput.addEventListener('change', () => this.clearCrop());
+                        // consciously re-crop rather than silently keeping
+                        // crops that no longer match the photo.
+                        this.mainImageInput.addEventListener('change', () => {
+                            this.clearCrop('grid');
+                            this.clearCrop('newArrivals');
+                        });
                     }
+                },
+
+                statusText(key) {
+                    const target = this.targets[key];
+                    if (target.hasCrop) return 'Cropped';
+                    if (target.fallbackLabel) return target.fallbackLabel;
+                    return 'Using full image';
                 },
 
                 get canCrop() {
@@ -134,8 +175,9 @@
                     return existingMainImageUrl;
                 },
 
-                openModal() {
+                openModal(targetKey) {
                     if (!this.canCrop) return;
+                    this.activeTarget = targetKey;
                     this.modalOpen = true;
                     this.$nextTick(() => {
                         const img = this.$refs.cropperImage;
@@ -166,12 +208,14 @@
 
                 closeModal() {
                     this.modalOpen = false;
+                    this.activeTarget = null;
                     if (this.cropper) this.cropper.destroy();
                     this.cropper = null;
                 },
 
                 applyCrop() {
-                    if (!this.cropper) return;
+                    if (!this.cropper || !this.activeTarget) return;
+                    const target = this.targets[this.activeTarget];
                     const canvas = this.cropper.getCroppedCanvas({
                         maxWidth: 1600,
                         maxHeight: 1600,
@@ -183,29 +227,32 @@
                         const file = new File([blob], 'card-crop.jpg', { type: 'image/jpeg' });
                         const dt = new DataTransfer();
                         dt.items.add(file);
-                        this.$refs.cardImageInput.files = dt.files;
+                        this.$refs[target.fileInputRef].files = dt.files;
 
-                        if (this.previewUrl && this.previewUrl.indexOf('blob:') === 0) {
-                            URL.revokeObjectURL(this.previewUrl);
+                        if (target.previewUrl && target.previewUrl.indexOf('blob:') === 0) {
+                            URL.revokeObjectURL(target.previewUrl);
                         }
-                        this.previewUrl = URL.createObjectURL(blob);
-                        this.hasCrop = true;
-                        if (this.$refs.removeCardImageFlag) this.$refs.removeCardImageFlag.value = '0';
+                        target.previewUrl = URL.createObjectURL(blob);
+                        target.hasCrop = true;
+                        target.fallbackLabel = null;
+                        if (this.$refs[target.removeFlagRef]) this.$refs[target.removeFlagRef].value = '0';
                         this.closeModal();
                     }, 'image/jpeg', 0.9);
                 },
 
-                clearCrop() {
-                    this.hasCrop = false;
-                    if (this.$refs.cardImageInput) this.$refs.cardImageInput.value = '';
+                clearCrop(key) {
+                    const target = this.targets[key];
+                    target.hasCrop = false;
+                    target.fallbackLabel = null;
+                    if (this.$refs[target.fileInputRef]) this.$refs[target.fileInputRef].value = '';
                     // Only tell the server to delete something if there WAS a
                     // persisted crop when the page loaded (edit page). On
                     // create, or when clearing a not-yet-submitted local
                     // crop, there's nothing server-side to remove.
-                    if (this.hadExistingCardImage && this.$refs.removeCardImageFlag) {
-                        this.$refs.removeCardImageFlag.value = '1';
+                    if (target.hadExisting && this.$refs[target.removeFlagRef]) {
+                        this.$refs[target.removeFlagRef].value = '1';
                     }
-                    this.previewUrl = null;
+                    target.previewUrl = null;
                 },
             };
         }

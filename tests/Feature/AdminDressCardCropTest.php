@@ -50,7 +50,8 @@ class AdminDressCardCropTest extends TestCase
         $response = $this->actingAs($admin, 'admin')->get(route('admin.dresses.create'));
 
         $response->assertOk();
-        $response->assertSee('Crop for Card');
+        $response->assertSee('Card Grid');
+        $response->assertSee('New Arrivals');
     }
 
     public function test_admin_can_view_the_edit_page_for_a_dress_with_no_images_yet(): void
@@ -61,7 +62,8 @@ class AdminDressCardCropTest extends TestCase
         $response = $this->actingAs($admin, 'admin')->get(route('admin.dresses.edit', $dress));
 
         $response->assertOk();
-        $response->assertSee('Crop for Card');
+        $response->assertSee('Card Grid');
+        $response->assertSee('New Arrivals');
     }
 
     public function test_admin_can_view_the_edit_page_for_a_dress_with_a_main_image_and_card_crop(): void
@@ -74,7 +76,7 @@ class AdminDressCardCropTest extends TestCase
         $response = $this->actingAs($admin, 'admin')->get(route('admin.dresses.edit', $dress));
 
         $response->assertOk();
-        $response->assertSee('Edit Card Crop');
+        $response->assertSee('Edit Crop');
     }
 
     public function test_admin_can_upload_a_card_image_when_creating_a_dress(): void
@@ -171,6 +173,74 @@ class AdminDressCardCropTest extends TestCase
         $this->assertSame(0, Dress::count());
     }
 
+    public function test_admin_can_upload_a_new_arrivals_crop_independently_of_the_card_grid_crop(): void
+    {
+        $admin = Admin::factory()->create();
+
+        $response = $this->actingAs($admin, 'admin')->post(route('admin.dresses.store'), $this->validPayload([
+            'main_image' => UploadedFile::fake()->image('main.jpg'),
+            'card_image' => UploadedFile::fake()->image('grid.jpg'),
+            'card_image_new_arrivals' => UploadedFile::fake()->image('new-arrivals.jpg'),
+        ]));
+
+        $response->assertRedirect(route('admin.dresses.index'));
+        $dress = Dress::firstOrFail();
+
+        $this->assertTrue($dress->has_card_crop);
+        $this->assertTrue($dress->has_card_crop_new_arrivals);
+        $this->assertNotSame($dress->card_image_url, $dress->card_image_new_arrivals_url);
+    }
+
+    public function test_updating_new_arrivals_crop_replaces_the_old_one_not_appends(): void
+    {
+        $admin = Admin::factory()->create();
+        $dress = Dress::factory()->create();
+        app(\App\Services\ImageStorageService::class)->store($dress, UploadedFile::fake()->image('main.jpg'), 'main');
+        app(\App\Services\ImageStorageService::class)->store($dress, UploadedFile::fake()->image('na-v1.jpg'), 'card_new_arrivals');
+
+        $this->actingAs($admin, 'admin')->put(route('admin.dresses.update', $dress), $this->validPayload([
+            'card_image_new_arrivals' => UploadedFile::fake()->image('na-v2.jpg'),
+        ]))->assertRedirect(route('admin.dresses.index'));
+
+        $this->assertSame(1, $dress->fresh()->images()->where('collection', 'card_new_arrivals')->count());
+    }
+
+    public function test_admin_can_remove_a_new_arrivals_crop_and_it_falls_back_to_the_card_grid_crop(): void
+    {
+        $admin = Admin::factory()->create();
+        $dress = Dress::factory()->create();
+        app(\App\Services\ImageStorageService::class)->store($dress, UploadedFile::fake()->image('main.jpg'), 'main');
+        app(\App\Services\ImageStorageService::class)->store($dress, UploadedFile::fake()->image('grid.jpg'), 'card');
+        app(\App\Services\ImageStorageService::class)->store($dress, UploadedFile::fake()->image('na.jpg'), 'card_new_arrivals');
+
+        $this->actingAs($admin, 'admin')->put(route('admin.dresses.update', $dress), $this->validPayload([
+            'remove_card_image_new_arrivals' => '1',
+        ]))->assertRedirect(route('admin.dresses.index'));
+
+        $dress->refresh();
+        // Falls back to the Card Grid crop, not all the way to the raw image.
+        $this->assertTrue($dress->has_card_crop_new_arrivals);
+        $this->assertSame($dress->card_image_url, $dress->card_image_new_arrivals_url);
+    }
+
+    public function test_removing_main_image_crops_are_independent_of_each_other(): void
+    {
+        $admin = Admin::factory()->create();
+        $dress = Dress::factory()->create();
+        app(\App\Services\ImageStorageService::class)->store($dress, UploadedFile::fake()->image('main.jpg'), 'main');
+        app(\App\Services\ImageStorageService::class)->store($dress, UploadedFile::fake()->image('grid.jpg'), 'card');
+        app(\App\Services\ImageStorageService::class)->store($dress, UploadedFile::fake()->image('na.jpg'), 'card_new_arrivals');
+
+        $this->actingAs($admin, 'admin')->put(route('admin.dresses.update', $dress), $this->validPayload([
+            'remove_card_image' => '1',
+        ]))->assertRedirect(route('admin.dresses.index'));
+
+        $dress->refresh();
+        $this->assertFalse($dress->has_card_crop);
+        // The New Arrivals crop is untouched by removing the Card Grid one.
+        $this->assertSame(1, $dress->images()->where('collection', 'card_new_arrivals')->count());
+    }
+
     public function test_dress_resource_exposes_card_image_url_and_has_card_crop(): void
     {
         $dress = Dress::factory()->create(['status' => 'active']);
@@ -184,5 +254,20 @@ class AdminDressCardCropTest extends TestCase
         $this->assertNotNull($item);
         $this->assertTrue($item['has_card_crop']);
         $this->assertNotSame($item['main_image_url'], $item['card_image_url']);
+    }
+
+    public function test_dress_resource_exposes_new_arrivals_crop_fields(): void
+    {
+        $dress = Dress::factory()->create(['status' => 'active']);
+        app(\App\Services\ImageStorageService::class)->store($dress, UploadedFile::fake()->image('main.jpg'), 'main');
+        app(\App\Services\ImageStorageService::class)->store($dress, UploadedFile::fake()->image('na.jpg'), 'card_new_arrivals');
+
+        $response = $this->getJson(route('api.products.index'));
+
+        $response->assertOk();
+        $item = collect($response->json('data'))->firstWhere('id', $dress->id);
+        $this->assertNotNull($item);
+        $this->assertTrue($item['has_card_crop_new_arrivals']);
+        $this->assertNotSame($item['main_image_url'], $item['card_image_new_arrivals_url']);
     }
 }

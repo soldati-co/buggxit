@@ -50,7 +50,11 @@ class AdminDressController extends Controller
             $validated['is_featured'] = $validated['is_featured'] ?? false;
 
             // Remove image fields from validated data (we handle them separately)
-            unset($validated['main_image'], $validated['gallery_images'], $validated['card_image'], $validated['remove_card_image']);
+            unset(
+                $validated['main_image'], $validated['gallery_images'],
+                $validated['card_image'], $validated['remove_card_image'],
+                $validated['card_image_new_arrivals'], $validated['remove_card_image_new_arrivals'],
+            );
 
             $dress = Dress::create($validated);
 
@@ -59,9 +63,12 @@ class AdminDressController extends Controller
                 $this->storeMainImage($request->file('main_image'), $dress);
             }
 
-            // Handle card-crop image upload
+            // Handle card-crop image uploads
             if ($request->hasFile('card_image')) {
                 $this->storeCardImage($request->file('card_image'), $dress);
+            }
+            if ($request->hasFile('card_image_new_arrivals')) {
+                $this->storeCardImageNewArrivals($request->file('card_image_new_arrivals'), $dress);
             }
 
             // Handle gallery images upload
@@ -113,7 +120,11 @@ class AdminDressController extends Controller
             }
 
             // Remove image fields from validated data
-            unset($validated['main_image'], $validated['gallery_images'], $validated['card_image'], $validated['remove_card_image']);
+            unset(
+                $validated['main_image'], $validated['gallery_images'],
+                $validated['card_image'], $validated['remove_card_image'],
+                $validated['card_image_new_arrivals'], $validated['remove_card_image_new_arrivals'],
+            );
 
             // Handle main image replacement
             if ($request->hasFile('main_image')) {
@@ -125,10 +136,11 @@ class AdminDressController extends Controller
                 $this->storeMainImage($request->file('main_image'), $dress);
             }
 
-            // A card crop is deliberately (a) removed via the "Remove Crop"
+            // A card crop is deliberately (a) removed via its "Remove Crop"
             // button, or (b) replaced by a fresh crop — both delete the old
-            // 'card' image row first, same delete-before-replace convention
-            // as main_image/gallery above.
+            // image row first, same delete-before-replace convention as
+            // main_image/gallery above. The two crops (card grid / new
+            // arrivals) are independent, each with its own remove-flag.
             if ($request->boolean('remove_card_image') || $request->hasFile('card_image')) {
                 $cardImage = $dress->cardImage()->first();
                 if ($cardImage) {
@@ -137,6 +149,16 @@ class AdminDressController extends Controller
             }
             if ($request->hasFile('card_image')) {
                 $this->storeCardImage($request->file('card_image'), $dress);
+            }
+
+            if ($request->boolean('remove_card_image_new_arrivals') || $request->hasFile('card_image_new_arrivals')) {
+                $cardImageNewArrivals = $dress->cardImageNewArrivals()->first();
+                if ($cardImageNewArrivals) {
+                    $cardImageNewArrivals->delete();
+                }
+            }
+            if ($request->hasFile('card_image_new_arrivals')) {
+                $this->storeCardImageNewArrivals($request->file('card_image_new_arrivals'), $dress);
             }
 
             // Handle gallery images replacement
@@ -226,6 +248,8 @@ class AdminDressController extends Controller
             'gallery_images.*' => 'file|max:9048',
             'card_image' => 'nullable|file|mimes:jpeg,jpg|max:9048',
             'remove_card_image' => 'nullable|boolean',
+            'card_image_new_arrivals' => 'nullable|file|mimes:jpeg,jpg|max:9048',
+            'remove_card_image_new_arrivals' => 'nullable|boolean',
             'category_ids' => 'required|array|min:1',
             'category_ids.*' => 'exists:categories,id',
         ];
@@ -242,12 +266,22 @@ class AdminDressController extends Controller
     }
 
     /**
-     * Store the admin's manually-cropped card image (a separate collection
-     * from 'main' — see Dress::cardImage()).
+     * Store the admin's manually-cropped card-grid image (a separate
+     * collection from 'main' — see Dress::cardImage()).
      */
     private function storeCardImage(UploadedFile $file, Dress $dress): void
     {
         $this->images->store($dress, $file, 'card');
+    }
+
+    /**
+     * Store the admin's manually-cropped New Arrivals image — independent
+     * of storeCardImage() since that section renders a different box shape
+     * (see Dress::cardImageNewArrivals()).
+     */
+    private function storeCardImageNewArrivals(UploadedFile $file, Dress $dress): void
+    {
+        $this->images->store($dress, $file, 'card_new_arrivals');
     }
 
     /**

@@ -6,6 +6,7 @@ namespace App\Models;
  * @property-read \Illuminate\Database\Eloquent\Collection|Image[] $images
  * @property-read Image|null $mainImage
  * @property-read Image|null $cardImage
+ * @property-read Image|null $cardImageNewArrivals
  * @property-read \Illuminate\Database\Eloquent\Collection|Image[] $galleryImages
  * @property-read \Illuminate\Database\Eloquent\Collection|Category[] $categories
  * @property string $id
@@ -42,6 +43,8 @@ namespace App\Models;
  * @property-read array $gallery_image_urls
  * @property-read string $card_image_url
  * @property-read bool $has_card_crop
+ * @property-read string $card_image_new_arrivals_url
+ * @property-read bool $has_card_crop_new_arrivals
  * @property-read bool $has_main_image
  * @property-read int|null $images_count
  * @method static Builder<static>|Dress active()
@@ -194,13 +197,24 @@ class Dress extends Model
     }
 
     /**
-     * The admin's deliberately-cropped image for card/grid display —
-     * distinct from mainImage() so the product detail page can keep
-     * showing the true, uncropped original.
+     * The admin's deliberately-cropped image for the main card grid
+     * (products listing + homepage featured section — both render an
+     * identical box shape) — distinct from mainImage() so the product
+     * detail page can keep showing the true, uncropped original.
      */
     public function cardImage(): MorphOne
     {
         return $this->morphOne(Image::class, 'imageable')->where('collection', 'card')->latest('id');
+    }
+
+    /**
+     * A second, independent crop for the homepage "New Arrivals" section,
+     * which renders a different box shape than the main card grid — one
+     * crop can't serve both contexts well.
+     */
+    public function cardImageNewArrivals(): MorphOne
+    {
+        return $this->morphOne(Image::class, 'imageable')->where('collection', 'card_new_arrivals')->latest('id');
     }
 
     public function galleryImages(): MorphMany
@@ -226,6 +240,9 @@ class Dress extends Model
                 ->whereNotNull('image_data')
                 ->where('image_data', '!=', ''),
             'cardImage' => fn($q) => $q->select('id', 'imageable_id', 'imageable_type', 'collection')
+                ->whereNotNull('image_data')
+                ->where('image_data', '!=', ''),
+            'cardImageNewArrivals' => fn($q) => $q->select('id', 'imageable_id', 'imageable_type', 'collection')
                 ->whereNotNull('image_data')
                 ->where('image_data', '!=', ''),
             'galleryImages' => fn($q) => $q->select('id', 'imageable_id', 'imageable_type', 'collection', 'sort_order'),
@@ -317,6 +334,46 @@ class Dress extends Model
         }
 
         return $this->cardImage()->whereNotNull('image_data')->where('image_data', '!=', '')->exists();
+    }
+
+    /**
+     * API URL for the New Arrivals crop. Cascades: dedicated New Arrivals
+     * crop -> the main card-grid crop (still a deliberate composition,
+     * better than nothing) -> the full main image (object-contain-safe).
+     */
+    public function getCardImageNewArrivalsUrlAttribute(): string
+    {
+        if (! static::imagesTableExists()) {
+            return $this->main_image_url;
+        }
+
+        $imageId = $this->relationLoaded('cardImageNewArrivals')
+            ? $this->cardImageNewArrivals?->id
+            : $this->cardImageNewArrivals()->whereNotNull('image_data')->where('image_data', '!=', '')->value('id');
+
+        if ($imageId) {
+            return route('api.image.show', $imageId);
+        }
+
+        return $this->card_image_url;
+    }
+
+    /**
+     * True when the New Arrivals card is showing some deliberate crop
+     * (its own dedicated crop, or falling back to the card-grid crop) —
+     * either way it's safe to object-cover rather than object-contain.
+     */
+    public function getHasCardCropNewArrivalsAttribute(): bool
+    {
+        if (! static::imagesTableExists()) {
+            return false;
+        }
+
+        $hasDedicated = $this->relationLoaded('cardImageNewArrivals')
+            ? (bool) $this->cardImageNewArrivals
+            : $this->cardImageNewArrivals()->whereNotNull('image_data')->where('image_data', '!=', '')->exists();
+
+        return $hasDedicated || $this->has_card_crop;
     }
 
     /**

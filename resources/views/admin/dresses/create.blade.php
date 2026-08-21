@@ -288,6 +288,7 @@
                     @include('admin.dresses.partials.card-crop', [
                         'existingImageUrl' => null,
                         'existingCardImageUrl' => null,
+                        'existingCardImageNewArrivalsUrl' => null,
                     ])
                 </div>
 
