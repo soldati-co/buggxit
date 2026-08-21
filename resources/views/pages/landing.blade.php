@@ -95,11 +95,11 @@
                     <template x-for="dress in featured" :key="dress.id">
                         <div class="group bg-ink-raised/90 backdrop-blur-sm border border-line rounded-2xl overflow-hidden hover:border-gold/50 transition-all duration-500 hover:shadow-2xl hover:shadow-gold/10">
                             <a :href="getProductUrl(dress)" class="block">
-                                <div class="relative h-72 overflow-hidden">
+                                <div class="relative aspect-square overflow-hidden">
                                     <div class="absolute inset-0 bg-gradient-to-t from-ink-raised/80 via-transparent to-transparent z-10"></div>
                                     <img :src="dress.card_image_url" :alt="dress.name"
                                          :class="dress.has_card_crop ? 'object-cover' : 'object-contain'"
-                                         class="w-full h-full group-hover:scale-110 transition-transform duration-700">
+                                         class="w-full h-full">
                                     <template x-if="dress.is_featured">
                                         <span class="absolute top-4 left-4 z-20 px-3 py-1.5 text-xs font-medium bg-gold/90 text-ink rounded-full backdrop-blur-sm">
                                             <i class="fas fa-star mr-1"></i> Featured
@@ -138,10 +138,10 @@
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
                         <template x-for="dress in newArrivals" :key="dress.id">
                             <a :href="getProductUrl(dress)" class="group">
-                                <div class="relative h-56 rounded-xl overflow-hidden border border-line group-hover:border-gold/50 transition-colors mb-3">
+                                <div class="relative aspect-[4/3] rounded-xl overflow-hidden border border-line group-hover:border-gold/50 transition-colors mb-3">
                                     <img :src="dress.card_image_new_arrivals_url" :alt="dress.name"
                                          :class="dress.has_card_crop_new_arrivals ? 'object-cover' : 'object-contain'"
-                                         class="w-full h-full group-hover:scale-105 transition-transform duration-500">
+                                         class="w-full h-full">
                                 </div>
                                 <h4 class="text-bone font-medium group-hover:text-gold transition-colors" x-text="dress.name"></h4>
                                 <p class="text-gold font-bold font-numeric mt-1">R<span x-text="dress.price.toLocaleString()"></span></p>

@@ -51,7 +51,7 @@
                         <div class="relative aspect-square rounded-2xl overflow-hidden border border-line bg-ink-raised/90 backdrop-blur-sm group">
                             <img :src="selectedImage" :alt="product.name"
                                 :class="selectedImage === product.detail_image_url && product.has_detail_crop ? 'object-cover' : 'object-contain'"
-                                class="w-full h-full transition-transform duration-700 group-hover:scale-105">
+                                class="w-full h-full">
                             <template x-if="product.is_featured">
                                 <span class="absolute top-4 left-4 z-20 px-3 py-1.5 text-xs font-medium bg-gold/90 text-ink rounded-full backdrop-blur-sm">
                                     <i class="fas fa-star mr-1"></i> Featured

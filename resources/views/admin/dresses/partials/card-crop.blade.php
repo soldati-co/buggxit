@@ -81,13 +81,13 @@
                     <label class="text-xs text-bone-faint">Snap to</label>
                     <select x-model="aspectRatio" @change="setAspectRatio()"
                         class="bg-ink-raised2/50 border border-line rounded-lg text-sm text-bone px-2 py-1">
-                        <option value="free">Free (drag freely)</option>
                         <option value="1">Square (1:1)</option>
                         <option value="1.3333333333333333">Landscape (4:3)</option>
+                        <option value="free">Free (not recommended)</option>
                     </select>
                 </div>
             </div>
-            <p class="text-xs text-bone-faint mb-3">Drag any corner freely, or pick a shape above to snap to it. The panels on the right show exactly how this crop will look in each spot on the site.</p>
+            <p class="text-xs text-bone-faint mb-3">Locked to the shape this crop is actually displayed at, so it always fills the space correctly — switching to Free can leave it mismatched and badly cropped on the live site. The panels on the right show exactly how this crop will look in each spot.</p>
             <div class="flex flex-col sm:flex-row gap-4">
                 <div class="flex-1 max-h-[60vh] overflow-hidden bg-ink rounded-lg">
                     <img x-ref="cropperImage" alt="Image to crop" class="block max-w-full">
@@ -127,7 +127,9 @@
             return {
                 modalOpen: false,
                 activeTarget: null,
-                aspectRatio: 'free',
+                // Overwritten by openModal() to match whichever target is
+                // being cropped — this initial value is never actually used.
+                aspectRatio: '1',
                 cropper: null,
                 mainImageInput: null,
                 supported: typeof window.DataTransfer !== 'undefined' && typeof window.Cropper !== 'undefined',
@@ -200,6 +202,15 @@
                 openModal(targetKey) {
                     if (!this.canCrop) return;
                     this.activeTarget = targetKey;
+                    // Default to the ratio that matches where this crop
+                    // actually gets displayed. Free-form invites a crop
+                    // shaped nothing like its box (e.g. a tall portrait
+                    // crop of someone standing, dropped into a near-square
+                    // card) — object-cover then has to zoom in hard to fill
+                    // the box, slicing off most of the image. "Free" is
+                    // still available in the dropdown for when that's
+                    // genuinely wanted, just not the default anymore.
+                    this.aspectRatio = targetKey === 'newArrivals' ? '1.3333333333333333' : '1';
                     this.modalOpen = true;
                     this.$nextTick(() => {
                         const img = this.$refs.cropperImage;
@@ -238,6 +249,27 @@
                 applyCrop() {
                     if (!this.cropper || !this.activeTarget) return;
                     const target = this.targets[this.activeTarget];
+
+                    // Free mode has no ratio lock, so a badly-shaped crop
+                    // (e.g. a tall portrait selection for a near-square
+                    // card) is still possible — object-cover would then
+                    // zoom in hard to fill the box and slice most of the
+                    // image off. Catch that before saving rather than
+                    // finding out on the live site.
+                    if (this.aspectRatio === 'free') {
+                        const expectedRatio = this.activeTarget === 'newArrivals' ? 4 / 3 : 1;
+                        const data = this.cropper.getData();
+                        const actualRatio = data.width / data.height;
+                        const mismatch = Math.abs(actualRatio - expectedRatio) / expectedRatio;
+                        if (mismatch > 0.25) {
+                            const proceed = confirm(
+                                `This crop's shape doesn't closely match where it's displayed (${target.label}). ` +
+                                `It may get zoomed in and cropped further to fit, cutting off part of the image. Use it anyway?`
+                            );
+                            if (!proceed) return;
+                        }
+                    }
+
                     const canvas = this.cropper.getCroppedCanvas({
                         maxWidth: 1600,
                         maxHeight: 1600,

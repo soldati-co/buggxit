@@ -73,7 +73,7 @@
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                     <template x-for="n in 8" :key="n">
                         <div class="space-y-4">
-                            <div class="h-72 rounded-3xl bg-ink-raised2/90 animate-pulse"></div>
+                            <div class="aspect-square rounded-3xl bg-ink-raised2/90 animate-pulse"></div>
                             <div class="h-8 rounded-xl bg-ink-raised2/90 animate-pulse"></div>
                             <div class="h-6 rounded-xl bg-ink-raised2/90 animate-pulse"></div>
                         </div>
@@ -86,11 +86,11 @@
                     <template x-for="dress in dresses" :key="dress.id">
                         <div class="group bg-ink-raised/90 backdrop-blur-sm border border-line rounded-2xl overflow-hidden hover:border-gold/50 transition-all duration-500 hover:shadow-2xl hover:shadow-gold/10">
                             <a :href="getProductUrl(dress)" class="block">
-                                <div class="relative h-72 overflow-hidden">
+                                <div class="relative aspect-square overflow-hidden">
                                     <div class="absolute inset-0 bg-gradient-to-t from-ink-raised/80 via-transparent to-transparent z-10"></div>
                                     <img :src="dress.card_image_url" :alt="dress.name"
                                          :class="dress.has_card_crop ? 'object-cover' : 'object-contain'"
-                                         class="w-full h-full group-hover:scale-110 transition-transform duration-700">
+                                         class="w-full h-full">
                                     <template x-if="dress.is_featured">
                                         <span class="absolute top-4 left-4 z-20 px-3 py-1.5 text-xs font-medium bg-gold/90 text-ink rounded-full backdrop-blur-sm"><i class="fas fa-star mr-1"></i> Featured</span>
                                     </template>
