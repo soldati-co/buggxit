@@ -20,24 +20,7 @@
                     <img src="{{ asset('Buggxit_Submark_Gold.svg') }}" alt="BUGGXIT Logo" class="h-12 w-auto md:h-14">
                 </div>
                 <p class="text-bone-dim text-sm">Ceremony-ready fashion. Proudly South African.</p>
-                <div class="flex flex-wrap gap-3">
-                    <a href="https://www.instagram.com/buggxit_couture/"
-                        class="p-2.5 bg-ink-raised2/50 rounded-full text-bone-dim hover:text-gold hover:bg-ink-raised2/80 transition-all duration-300 group">
-                        <i class="fab fa-instagram text-lg group-hover:scale-110"></i>
-                    </a>
-                    <a href="https://www.facebook.com/p/Buggxit-Couture-Clothing-Accessories-100053004263016/"
-                        class="p-2.5 bg-ink-raised2/50 rounded-full text-bone-dim hover:text-gold hover:bg-ink-raised2/80 transition-all duration-300 group">
-                        <i class="fab fa-facebook text-lg group-hover:scale-110"></i>
-                    </a>
-                    <a href="#"
-                        class="p-2.5 bg-ink-raised2/50 rounded-full text-bone-dim hover:text-gold hover:bg-ink-raised2/80 transition-all duration-300 group">
-                        <i class="fab fa-twitter text-lg group-hover:scale-110"></i>
-                    </a>
-                    <a href="#"
-                        class="p-2.5 bg-ink-raised2/50 rounded-full text-bone-dim hover:text-gold hover:bg-ink-raised2/80 transition-all duration-300 group">
-                        <i class="fab fa-tiktok text-lg group-hover:scale-110"></i>
-                    </a>
-                </div>
+                <x-social-links variant="footer" />
             </div>
 
             <!-- Collections -->
@@ -155,6 +138,10 @@
                     <a href="{{ route('shipping-policy') }}"
                         class="text-bone-dim hover:text-gold text-sm transition-colors duration-300">
                         Exchange Policy
+                    </a>
+                    <a href="{{ route('admin.login') }}"
+                        class="text-bone-dim hover:text-gold text-sm transition-colors duration-300">
+                        Admin
                     </a>
                 </div>
 

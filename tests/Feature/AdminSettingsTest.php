@@ -123,4 +123,74 @@ class AdminSettingsTest extends TestCase
         $this->assertSame('1', Setting::get('popup_banner_enabled'));
         $this->assertSame('Pop-up in Durban this Saturday!', Setting::get('popup_banner_text'));
     }
+
+    public function test_admin_can_set_and_toggle_social_media_links(): void
+    {
+        $admin = Admin::factory()->create();
+
+        $response = $this->actingAs($admin, 'admin')->put(route('admin.settings.update'), [
+            'whatsapp_position' => 'right',
+            'social_instagram_url' => 'https://www.instagram.com/buggxit_couture/',
+            'social_instagram_enabled' => '1',
+            'social_facebook_url' => 'https://www.facebook.com/p/Buggxit-Couture-Clothing-Accessories-100053004263016/',
+            'social_facebook_enabled' => '1',
+            'social_twitter_url' => 'https://twitter.com/buggxit_couture',
+            'social_twitter_enabled' => '0',
+        ]);
+
+        $response->assertRedirect();
+        $response->assertSessionHas('success');
+
+        $this->assertSame('https://www.instagram.com/buggxit_couture/', Setting::get('social_instagram_url'));
+        $this->assertSame('1', Setting::get('social_instagram_enabled'));
+        $this->assertSame('https://twitter.com/buggxit_couture', Setting::get('social_twitter_url'));
+        $this->assertSame('0', Setting::get('social_twitter_enabled'));
+        $this->assertSame('0', Setting::get('social_tiktok_enabled'));
+    }
+
+    public function test_invalid_social_media_url_is_rejected(): void
+    {
+        $admin = Admin::factory()->create();
+
+        $response = $this->actingAs($admin, 'admin')->put(route('admin.settings.update'), [
+            'whatsapp_position' => 'right',
+            'social_instagram_url' => 'javascript:alert(1)',
+        ]);
+
+        $response->assertSessionHasErrors('social_instagram_url');
+        $this->assertNull(Setting::get('social_instagram_url'));
+    }
+
+    public function test_social_link_is_hidden_on_the_site_when_no_url_is_set(): void
+    {
+        Setting::set('social_twitter_enabled', '1');
+        Setting::set('social_twitter_url', null);
+
+        $response = $this->get(route('home'));
+
+        $response->assertOk();
+        $response->assertDontSee('fa-twitter', false);
+    }
+
+    public function test_social_link_is_hidden_on_the_site_when_disabled_even_with_a_url_set(): void
+    {
+        Setting::set('social_tiktok_enabled', '0');
+        Setting::set('social_tiktok_url', 'https://www.tiktok.com/@buggxit_couture');
+
+        $response = $this->get(route('home'));
+
+        $response->assertOk();
+        $response->assertDontSee('tiktok.com/@buggxit_couture', false);
+    }
+
+    public function test_social_link_appears_on_the_site_once_enabled_with_a_url(): void
+    {
+        Setting::set('social_facebook_enabled', '1');
+        Setting::set('social_facebook_url', 'https://www.facebook.com/p/Buggxit-Couture-Clothing-Accessories-100053004263016/');
+
+        $response = $this->get(route('home'));
+
+        $response->assertOk();
+        $response->assertSee('https://www.facebook.com/p/Buggxit-Couture-Clothing-Accessories-100053004263016/', false);
+    }
 }

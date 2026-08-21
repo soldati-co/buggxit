@@ -116,6 +116,47 @@
                 </div>
             </div>
 
+            <div class="bg-ink-raised/90 backdrop-blur-sm border border-line rounded-xl p-6">
+                <h2 class="text-lg font-semibold text-bone mb-1 flex items-center">
+                    <i class="fas fa-share-nodes text-gold mr-2"></i> Social Media
+                </h2>
+                <p class="text-sm text-bone-dim mb-6">
+                    Add a link for each platform and switch it on to show its icon on the site. A platform stays
+                    hidden until it has both a link and is switched on.
+                </p>
+
+                <div class="space-y-6">
+                    @foreach ([
+                        'instagram' => ['label' => 'Instagram', 'icon' => 'fa-instagram', 'placeholder' => 'https://www.instagram.com/your-handle/'],
+                        'facebook' => ['label' => 'Facebook', 'icon' => 'fa-facebook', 'placeholder' => 'https://www.facebook.com/your-page/'],
+                        'twitter' => ['label' => 'Twitter / X', 'icon' => 'fa-twitter', 'placeholder' => 'https://twitter.com/your-handle'],
+                        'tiktok' => ['label' => 'TikTok', 'icon' => 'fa-tiktok', 'placeholder' => 'https://www.tiktok.com/@your-handle'],
+                    ] as $platform => $meta)
+                        <div class="border border-line rounded-lg p-4">
+                            <div class="flex items-center justify-between mb-3">
+                                <span class="flex items-center text-bone font-medium">
+                                    <i class="fab {{ $meta['icon'] }} mr-2 text-gold"></i> {{ $meta['label'] }}
+                                </span>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="checkbox" name="social_{{ $platform }}_enabled" value="1"
+                                        {{ old("social_{$platform}_enabled", $settings["social_{$platform}_enabled"]) ? 'checked' : '' }}
+                                        class="h-4 w-4 rounded bg-ink-raised2 border-line text-gold focus:ring-gold">
+                                    <span class="ml-2 text-sm text-bone-dim">Visible</span>
+                                </label>
+                            </div>
+                            <input type="url" name="social_{{ $platform }}_url"
+                                value="{{ old("social_{$platform}_url", $settings["social_{$platform}_url"]) }}"
+                                placeholder="{{ $meta['placeholder'] }}"
+                                class="w-full bg-ink-raised2 border border-line rounded-lg px-4 py-3 text-bone focus:border-gold focus:ring-gold">
+                            @error("social_{$platform}_url")
+                                <p class="text-bad text-xs mt-1">{{ $message }}</p>
+                            @enderror
+                        </div>
+                    @endforeach
+                    <p class="text-xs text-bone-faint">Leave a link blank to remove that platform from the site regardless of the toggle.</p>
+                </div>
+            </div>
+
             <div class="pt-2 flex justify-end">
                 <button type="submit"
                     class="px-6 py-3 bg-gradient-to-r from-gold to-gold-dim text-ink font-semibold rounded-lg hover:from-gold-bright hover:to-gold transition">

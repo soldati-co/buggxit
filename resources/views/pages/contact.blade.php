@@ -169,15 +169,7 @@
                     {{-- Social Media --}}
                     <div>
                         <h3 class="text-bone font-semibold text-xl mb-4">Connect Socially</h3>
-                        <div class="flex gap-4">
-                            @foreach (['instagram', 'facebook-f', 'twitter', 'tiktok'] as $icon)
-                                <a href="https://www.{{ $icon == 'instagram' ? 'instagram.com/buggxit_couture/' : ($icon == 'facebook-f' ? 'facebook.com/p/Buggxit-Couture-Clothing-Accessories-100053004263016/' : ($icon == 'twitter' ? 'twitter.com/' : ($icon == 'tiktok' ? 'tiktok.com/' : ''))) }}"
-                                    class="w-12 h-12 bg-ink-raised/50 border border-line rounded-full flex items-center justify-center hover:border-gold hover:bg-gold/10 transition-all duration-300 group">
-                                    <i
-                                        class="fab fa-{{ $icon }} text-bone-dim group-hover:text-gold text-lg"></i>
-                                </a>
-                            @endforeach
-                        </div>
+                        <x-social-links variant="contact" />
                     </div>
                 </div>
             </div>
