@@ -284,6 +284,11 @@
                         <img id="main-image-thumb" src="#" alt="Main image preview"
                             class="w-48 h-48 object-contain bg-ink-raised2/50 rounded-lg border border-line">
                     </div>
+
+                    @include('admin.dresses.partials.card-crop', [
+                        'existingImageUrl' => null,
+                        'existingCardImageUrl' => null,
+                    ])
                 </div>
 
                 <!-- Gallery Images -->

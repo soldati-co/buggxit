@@ -11,6 +11,7 @@
    below for the real self-hosted Juana Light files once they're provided. */
 @import "@fontsource/cormorant/300.css";
 @import "@fortawesome/fontawesome-free/css/all.min.css";
+@import "cropperjs/dist/cropper.css";
 
 @tailwind base;
 @tailwind components;

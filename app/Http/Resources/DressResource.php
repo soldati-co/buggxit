@@ -33,6 +33,8 @@ class DressResource extends JsonResource
             'meta_description' => $this->meta_description,
             'main_image_url' => $this->main_image_url,
             'gallery_image_urls' => $this->gallery_image_urls,
+            'card_image_url' => $this->card_image_url,
+            'has_card_crop' => $this->has_card_crop,
             'categories' => CategoryResource::collection($this->whenLoaded('categories')),
             'created_at' => $this->created_at?->toIso8601String(),
             'updated_at' => $this->updated_at?->toIso8601String(),

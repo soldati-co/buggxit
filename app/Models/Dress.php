@@ -5,6 +5,7 @@ namespace App\Models;
 /**
  * @property-read \Illuminate\Database\Eloquent\Collection|Image[] $images
  * @property-read Image|null $mainImage
+ * @property-read Image|null $cardImage
  * @property-read \Illuminate\Database\Eloquent\Collection|Image[] $galleryImages
  * @property-read \Illuminate\Database\Eloquent\Collection|Category[] $categories
  * @property string $id
@@ -39,6 +40,9 @@ namespace App\Models;
  * @property-read mixed $display_colors
  * @property-read mixed $display_sku
  * @property-read array $gallery_image_urls
+ * @property-read string $card_image_url
+ * @property-read bool $has_card_crop
+ * @property-read bool $has_main_image
  * @property-read int|null $images_count
  * @method static Builder<static>|Dress active()
  * @method static Builder<static>|Dress featured()
@@ -189,6 +193,16 @@ class Dress extends Model
         return $this->morphOne(Image::class, 'imageable')->where('collection', 'main')->latest('id');
     }
 
+    /**
+     * The admin's deliberately-cropped image for card/grid display —
+     * distinct from mainImage() so the product detail page can keep
+     * showing the true, uncropped original.
+     */
+    public function cardImage(): MorphOne
+    {
+        return $this->morphOne(Image::class, 'imageable')->where('collection', 'card')->latest('id');
+    }
+
     public function galleryImages(): MorphMany
     {
         return $this->morphMany(Image::class, 'imageable')
@@ -209,6 +223,9 @@ class Dress extends Model
 
         return $query->with([
             'mainImage' => fn($q) => $q->select('id', 'imageable_id', 'imageable_type', 'collection')
+                ->whereNotNull('image_data')
+                ->where('image_data', '!=', ''),
+            'cardImage' => fn($q) => $q->select('id', 'imageable_id', 'imageable_type', 'collection')
                 ->whereNotNull('image_data')
                 ->where('image_data', '!=', ''),
             'galleryImages' => fn($q) => $q->select('id', 'imageable_id', 'imageable_type', 'collection', 'sort_order'),
@@ -241,6 +258,65 @@ class Dress extends Model
         }
 
         return asset('logo.webp');
+    }
+
+    /**
+     * Whether a real main image exists — main_image_url always falls back
+     * to a placeholder logo, so this is needed anywhere that distinction
+     * matters (e.g. deciding whether there's anything to crop).
+     */
+    public function getHasMainImageAttribute(): bool
+    {
+        if (! static::imagesTableExists()) {
+            return false;
+        }
+
+        if ($this->relationLoaded('mainImage')) {
+            return (bool) $this->mainImage;
+        }
+
+        return $this->mainImage()->whereNotNull('image_data')->where('image_data', '!=', '')->exists();
+    }
+
+    /**
+     * API URL for the card-crop image. Falls back to the full main image
+     * (still object-contain-safe) when no deliberate crop exists yet — a
+     * dress is never left with a broken image just because it hasn't been
+     * cropped for cards.
+     */
+    public function getCardImageUrlAttribute(): string
+    {
+        if (! static::imagesTableExists()) {
+            return $this->main_image_url;
+        }
+
+        $cardImageId = $this->relationLoaded('cardImage')
+            ? $this->cardImage?->id
+            : $this->cardImage()->whereNotNull('image_data')->where('image_data', '!=', '')->value('id');
+
+        if ($cardImageId) {
+            return route('api.image.show', $cardImageId);
+        }
+
+        return $this->main_image_url;
+    }
+
+    /**
+     * True only when a dedicated 'card' collection image exists — templates
+     * use this to pick object-cover (safe, deliberate crop) vs
+     * object-contain (unmodified original, may letterbox).
+     */
+    public function getHasCardCropAttribute(): bool
+    {
+        if (! static::imagesTableExists()) {
+            return false;
+        }
+
+        if ($this->relationLoaded('cardImage')) {
+            return (bool) $this->cardImage;
+        }
+
+        return $this->cardImage()->whereNotNull('image_data')->where('image_data', '!=', '')->exists();
     }
 
     /**
