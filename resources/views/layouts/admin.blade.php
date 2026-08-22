@@ -10,7 +10,7 @@
     <link rel="icon" type="image/svg+xml" href="{{ asset('Favicon_Gold.svg') }}">
     <link rel="shortcut icon" type="image/svg+xml" href="{{ asset('Favicon_Gold.svg') }}">
 
-    <title>{{ trim($__env->yieldContent('title', 'BUGGXIT Admin')) }}</title>
+    <title>{!! trim($__env->yieldContent('title', 'BUGGXIT Admin')) !!}</title>
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @stack('styles')
