@@ -1,6 +1,8 @@
 @extends('layouts.app')
 
-@section('title', 'Contact Us | BUGGXIT Couture')
+@section('title', 'Contact Buggxit Couture | Orders, Custom Enquiries & Support')
+
+@section('meta_description', 'Get in touch with Buggxit Couture for order help, custom design enquiries, or general questions. We respond within 24-48 hours.')
 
 @section('content')
     {{-- Hero Section --}}

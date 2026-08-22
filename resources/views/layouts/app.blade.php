@@ -4,14 +4,35 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-    <meta name="description" content="BUGGXIT Couture - Est 2018">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+
+    @php
+        $metaTitle = trim($__env->yieldContent('title', config('app.name', 'Buggxit Couture Est 2018')));
+        $metaDescription = trim($__env->yieldContent('meta_description', 'Shop ready-made Makoti dresses, Shweshwe designs, and African ceremony wear. Crafted with cultural pride and delivered nationwide across South Africa.'));
+        $metaImage = trim($__env->yieldContent('meta_image', asset('logo.webp')));
+    @endphp
+
+    <meta name="description" content="{{ $metaDescription }}">
+
+    <!-- Open Graph / social link previews -->
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Buggxit Couture">
+    <meta property="og:title" content="{{ $metaTitle }}">
+    <meta property="og:description" content="{{ $metaDescription }}">
+    <meta property="og:image" content="{{ $metaImage }}">
+    <meta property="og:url" content="{{ url()->current() }}">
+
+    <!-- Twitter/X card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{{ $metaTitle }}">
+    <meta name="twitter:description" content="{{ $metaDescription }}">
+    <meta name="twitter:image" content="{{ $metaImage }}">
 
     <!-- Favicon/Logo for browser tab -->
     <link rel="icon" type="image/svg+xml" href="{{ asset('Favicon_Gold.svg') }}">
     <link rel="shortcut icon" type="image/svg+xml" href="{{ asset('Favicon_Gold.svg') }}">
 
-    <title>@yield('title', config('app.name', 'Buggxit Couture Est 2018'))</title>
+    <title>{{ $metaTitle }}</title>
 
     {{-- Preload the first active hero slide image (LCP) --}}
     @if(Route::is('home'))

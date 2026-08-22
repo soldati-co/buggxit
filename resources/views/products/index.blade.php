@@ -1,6 +1,8 @@
 @extends('layouts.app')
 
-@section('title', 'All Dresses – BUGGXIT Couture')
+@section('title', 'Shop Traditional Wear | Buggxit Couture Collections')
+
+@section('meta_description', "Explore Buggxit Couture's ready-to-wear collections — Makoti dresses, Shweshwe sets, and ceremony wear for the modern African woman. Nationwide delivery from R150.")
 
 @section('content')
     <div x-data="productsPage(@json($newArrivals ?? false))" x-init="init()" x-cloak class="space-y-12 pb-16">

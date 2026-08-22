@@ -1,6 +1,8 @@
 @extends('layouts.app')
 
-@section('title', 'Size Guide – BUGGXIT Couture')
+@section('title', 'Size Guide | Buggxit Couture Traditional Wear')
+
+@section('meta_description', 'Find your perfect fit with the Buggxit Couture size guide. Measure at home and shop ready-made traditional ceremony wear with confidence.')
 
 @section('content')
     @php

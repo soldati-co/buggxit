@@ -1,6 +1,8 @@
 @extends('layouts.app')
 
-@section('title', 'Buggxit Couture')
+@section('title', 'Buggxit Couture | Traditional Ceremony Wear for the Modern African Woman')
+
+@section('meta_description', 'Shop ready-made Makoti dresses, Shweshwe designs, and African ceremony wear. Crafted with cultural pride and delivered nationwide across South Africa.')
 
 @section('content')
     @include('components.popup-banner')

@@ -11,7 +11,7 @@
     <link rel="icon" type="image/svg+xml" href="{{ asset('Favicon_Gold.svg') }}">
     <link rel="shortcut icon" type="image/svg+xml" href="{{ asset('Favicon_Gold.svg') }}">
 
-    <title>@yield('title', 'Admin Login - BUGGXIT Admin')</title>
+    <title>{{ trim($__env->yieldContent('title', 'Admin Login - BUGGXIT Admin')) }}</title>
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 

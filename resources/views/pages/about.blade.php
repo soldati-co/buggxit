@@ -1,6 +1,8 @@
 @extends('layouts.app')
 
-@section('title', 'About BUGGXIT Couture | Southern African Heritage Fashion')
+@section('title', 'About Buggxit Couture | Our Story, Our Craft')
+
+@section('meta_description', 'Founded in 2018 by Siyasanga Magabuko-Soldati in Durban, Buggxit Couture celebrates Southern African heritage through contemporary traditional fashion.')
 
 @section('content')
     {{-- Hero Section --}}
