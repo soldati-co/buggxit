@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('title', 'My Dashboard – BUGGXIT Couture')
+
 @section('header')
     <h1 class="text-3xl md:text-4xl font-bold text-bone">My Dashboard</h1>
     <p class="mt-2 text-bone-dim max-w-3xl">Welcome back, {{ Auth::user()->name ?? 'valued customer' }}. Manage your account, view orders, and discover the latest collections.</p>

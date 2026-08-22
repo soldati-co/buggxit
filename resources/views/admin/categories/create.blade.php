@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Create Category')
+@section('title', 'Create Category - BUGGXIT Admin')
 @section('page-title', 'Add New Category')
 @section('page-description', 'Create a new dress category')
 

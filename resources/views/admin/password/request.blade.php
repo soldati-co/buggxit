@@ -1,5 +1,7 @@
 @extends('layouts.admin-auth')
 
+@section('title', 'Reset Password - BUGGXIT Admin')
+
 @section('header')
     <div class="flex flex-col items-center justify-center text-center">
         <h1 class="text-3xl md:text-4xl font-bold text-bone mb-2">

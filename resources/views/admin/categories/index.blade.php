@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Manage Categories')
+@section('title', 'Manage Categories - BUGGXIT Admin')
 @section('page-title', 'Categories')
 @section('page-description', 'Manage your dress categories')
 

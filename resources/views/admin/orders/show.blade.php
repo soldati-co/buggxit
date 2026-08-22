@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Order ' . $order->order_number)
+@section('title', 'Order ' . $order->order_number . ' - BUGGXIT Admin')
 @section('page-title', 'Order Details')
 @section('page-description', 'Order #' . $order->order_number)
 

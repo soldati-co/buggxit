@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Manage Orders')
+@section('title', 'Manage Orders - BUGGXIT Admin')
 @section('page-title', 'Orders')
 @section('page-description', 'Manage customer orders')
 

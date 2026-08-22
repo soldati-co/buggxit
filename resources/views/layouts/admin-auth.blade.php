@@ -8,10 +8,10 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <!-- Favicon/Logo for browser tab -->
-    <link rel="icon" type="image/x-icon" href="{{ asset('Buggxit_Submark_Gold.svg') }}">
-    <link rel="shortcut icon" type="image/svg" href="{{ asset('Buggxit_Submark_Gold.svg') }}">
+    <link rel="icon" type="image/svg+xml" href="{{ asset('Favicon_Gold.svg') }}">
+    <link rel="shortcut icon" type="image/svg+xml" href="{{ asset('Favicon_Gold.svg') }}">
 
-    <title>Admin Login</title>
+    <title>@yield('title', 'Admin Login - BUGGXIT Admin')</title>
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 

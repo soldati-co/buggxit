@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('title', 'Confirm Password – BUGGXIT Couture')
+
 @section('content')
     <div class="min-h-screen flex items-center justify-center px-4 py-8 bg-[#0a0a0a]">
         <div class="w-full max-w-md bg-ink-raised/90 border border-line rounded-xl p-8">

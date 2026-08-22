@@ -6,7 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>@yield('title', 'BUGGXIT Admin') – Buggxit Couture</title>
+    <!-- Favicon/Logo for browser tab -->
+    <link rel="icon" type="image/svg+xml" href="{{ asset('Favicon_Gold.svg') }}">
+    <link rel="shortcut icon" type="image/svg+xml" href="{{ asset('Favicon_Gold.svg') }}">
+
+    <title>@yield('title', 'BUGGXIT Admin')</title>
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @stack('styles')

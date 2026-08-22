@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Edit Dress: ' . $dress->name)
+@section('title', 'Edit Dress: ' . $dress->name . ' - BUGGXIT Admin')
 @section('page-title', 'Edit Dress')
 @section('page-description', 'Update dress information')
 

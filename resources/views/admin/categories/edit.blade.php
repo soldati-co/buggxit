@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Edit Category: ' . $category->name)
+@section('title', 'Edit Category: ' . $category->name . ' - BUGGXIT Admin')
 @section('page-title', 'Edit Category')
 @section('page-description', 'Update category details')
 

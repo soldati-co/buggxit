@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Order ' . $order->order_number)
+@section('title', 'Order ' . $order->order_number . ' – BUGGXIT Couture')
 
 @section('content')
     <div class="container-wide px-4 sm:px-6 lg:px-8 py-12 mx-auto">

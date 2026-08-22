@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Edit Hero Slide')
+@section('title', 'Edit Hero Slide - BUGGXIT Admin')
 @section('page-title', 'Edit Hero Slide')
 @section('page-description', 'Update this hero carousel slide')
 

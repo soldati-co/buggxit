@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('title', 'My Profile – BUGGXIT Couture')
+
 @section('header')
     <h2 class="font-semibold text-xl text-bone leading-tight">
         Profile
