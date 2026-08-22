@@ -135,9 +135,13 @@
                         class="text-bone-dim hover:text-gold text-sm transition-colors duration-300">
                         Terms of Use
                     </a>
+                    <a href="{{ route('returns-refund') }}"
+                        class="text-bone-dim hover:text-gold text-sm transition-colors duration-300">
+                        ReturnsRefund
+                    </a>
                     <a href="{{ route('shipping-policy') }}"
                         class="text-bone-dim hover:text-gold text-sm transition-colors duration-300">
-                        Exchange Policy
+                        Shipping Policy
                     </a>
                     <a href="{{ route('admin.login') }}"
                         class="text-bone-dim hover:text-gold text-sm transition-colors duration-300">

@@ -31,6 +31,11 @@ class PageController extends Controller
         return view('pages.shipping-policy');
     }
 
+    public function returnsRefund()
+    {
+        return view('pages.returns-refund');
+    }
+
     public function sizeGuide()
     {
         return view('pages.size-guide');

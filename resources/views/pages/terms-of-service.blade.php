@@ -113,7 +113,7 @@
             <div>
                 <h2 class="text-2xl font-bold text-bone mb-3">Returns and Exchanges</h2>
                 <div class="space-y-2">
-                    <p>Returns and exchanges are governed by our Returns &amp; Exchange Policy. Please review that policy before purchasing.</p>
+                    <p>Returns and exchanges are governed by our <a href="{{ route('returns-refund') }}" class="text-gold hover:text-gold-bright transition-colors">Returns &amp; Exchange Policy</a>. Please review that policy before purchasing.</p>
                     <p>Certain products, including sale items and custom garments, may not qualify for exchange or return.</p>
                 </div>
             </div>
