@@ -93,7 +93,7 @@ jobs:
       - name: Verify site is healthy
         run: |
           for i in 1 2 3 4 5 6; do
-            code=$(curl -s -o /dev/null -w "%{http_code}" --max-time 15 "https://app.buggxit.store/up")
+            code=$(curl -s -o /dev/null -w "%{http_code}" --max-time 15 "https://buggxit.store/up")
             if [ "$code" = "200" ]; then
               echo "Site healthy (HTTP $code)"
               exit 0

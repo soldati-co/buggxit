@@ -55,7 +55,7 @@ return [
     */
 
     'url' => env('APP_URL', 'http://localhost'), // FOR LOCAL DEV
-    // 'url' => env('APP_URL', 'https://app.buggxit.store/'), // FOR PRODUCTION (DOMAIN)
+    // 'url' => env('APP_URL', 'https://buggxit.store/'), // FOR PRODUCTION (DOMAIN)
 
     /*
     |--------------------------------------------------------------------------
