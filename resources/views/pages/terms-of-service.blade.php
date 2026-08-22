@@ -147,7 +147,7 @@
 
             <div>
                 <h2 class="text-2xl font-bold text-bone mb-3">Privacy</h2>
-                <p>Your use of our website is also governed by our <a href="{{ route('privacy-policy') }}" class="text-gold hover:text-gold-bright transition-colors">Privacy Policy</a>. Please review it to understand how we collect and protect your information.</p>
+                <p>Your use of our website is also governed by our <a href="{{ route('privacy-policy') }}" class="text-gold hover:text-gold-bright transition-colors">Privacy</a> policy. Please review it to understand how we collect and protect your information.</p>
             </div>
 
             <div>

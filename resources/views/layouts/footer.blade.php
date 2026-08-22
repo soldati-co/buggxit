@@ -129,7 +129,7 @@
                 <div class="flex items-center justify-center space-x-6">
                     <a href="{{ route('privacy-policy') }}"
                         class="text-bone-dim hover:text-gold text-sm transition-colors duration-300">
-                        Privacy Policy
+                        Privacy
                     </a>
                     <a href="{{ route('terms-of-service') }}"
                         class="text-bone-dim hover:text-gold text-sm transition-colors duration-300">
