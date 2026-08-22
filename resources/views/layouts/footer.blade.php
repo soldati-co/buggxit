@@ -133,7 +133,7 @@
                     </a>
                     <a href="{{ route('terms-of-service') }}"
                         class="text-bone-dim hover:text-gold text-sm transition-colors duration-300">
-                        Terms of Service
+                        Terms of Use
                     </a>
                     <a href="{{ route('shipping-policy') }}"
                         class="text-bone-dim hover:text-gold text-sm transition-colors duration-300">
