@@ -115,4 +115,18 @@ return [
         'name' => env('MAIL_FROM_NAME', 'Example'),
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Store Owner Notification Address
+    |--------------------------------------------------------------------------
+    |
+    | Where staff-facing notifications (new paid orders, contact form
+    | submissions) are sent. Deliberately separate from 'from.address' above:
+    | that's the sender identity on outgoing mail (e.g. a noreply@ address),
+    | which isn't necessarily an inbox anyone reads.
+    |
+    */
+
+    'store_notification_address' => env('STORE_NOTIFICATION_EMAIL', 'info@buggxit.store'),
+
 ];

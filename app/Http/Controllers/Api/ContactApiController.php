@@ -11,7 +11,7 @@ class ContactApiController extends Controller
 {
     public function submit(ContactRequest $request)
     {
-        Mail::to(config('mail.from.address'))->send(new ContactMail($request->validated()));
+        Mail::to(config('mail.store_notification_address'))->send(new ContactMail($request->validated()));
 
         return response()->json([
             'success' => true,

@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\NewOrderNotificationMail;
+use App\Mail\OrderConfirmationMail;
 use App\Models\Order;
 use App\Services\PayfastService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 
 class PayfastWebhookController extends Controller
 {
@@ -38,7 +41,7 @@ class PayfastWebhookController extends Controller
         }
 
         match ($payload['payment_status'] ?? null) {
-            'COMPLETE' => $order->update(['payment_status' => 'paid', 'status' => 'processing']),
+            'COMPLETE' => $this->markPaidAndNotify($order),
             'FAILED', 'CANCELLED' => $order->update(['payment_status' => 'failed']),
             default => Log::info('PayFast ITN with unhandled payment_status', [
                 'order' => $order->order_number,
@@ -47,5 +50,29 @@ class PayfastWebhookController extends Controller
         };
 
         return response('', 200);
+    }
+
+    private function markPaidAndNotify(Order $order): void
+    {
+        $order->update(['payment_status' => 'paid', 'status' => 'processing']);
+
+        $order->load('items.dress', 'shippingAddress', 'user');
+
+        $customerEmail = $order->email ?? $order->user?->email;
+
+        try {
+            if ($customerEmail) {
+                Mail::to($customerEmail)->send(new OrderConfirmationMail($order));
+            }
+
+            Mail::to(config('mail.store_notification_address'))->send(new NewOrderNotificationMail($order));
+        } catch (\Throwable $e) {
+            // Payment is already confirmed and recorded above -- a mail delivery
+            // failure shouldn't turn into a PayFast retry of the whole ITN.
+            Log::error('Order confirmation/notification email failed to send', [
+                'order' => $order->order_number,
+                'message' => $e->getMessage(),
+            ]);
+        }
     }
 }

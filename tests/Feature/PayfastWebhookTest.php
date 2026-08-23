@@ -2,9 +2,12 @@
 
 namespace Tests\Feature;
 
+use App\Mail\NewOrderNotificationMail;
+use App\Mail\OrderConfirmationMail;
 use App\Models\Order;
 use App\Services\PayfastService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Mail;
 use Mockery\MockInterface;
 use Tests\TestCase;
 
@@ -21,11 +24,18 @@ class PayfastWebhookTest extends TestCase
 
     public function test_complete_payment_marks_the_order_paid_and_processing(): void
     {
+        Mail::fake();
+
         $this->mock(PayfastService::class, function (MockInterface $mock) {
             $mock->shouldReceive('verifyItn')->once()->andReturn(true);
         });
 
-        $order = Order::factory()->create(['order_number' => 'ORD-ITN1', 'payment_status' => 'pending', 'status' => 'pending']);
+        $order = Order::factory()->create([
+            'order_number' => 'ORD-ITN1',
+            'email' => 'buyer@example.com',
+            'payment_status' => 'pending',
+            'status' => 'pending',
+        ]);
 
         $response = $this->post(route('payfast.notify'), [
             'm_payment_id' => 'ORD-ITN1',
@@ -35,6 +45,9 @@ class PayfastWebhookTest extends TestCase
         $response->assertOk();
         $this->assertSame('paid', $order->fresh()->payment_status);
         $this->assertSame('processing', $order->fresh()->status);
+
+        Mail::assertSent(OrderConfirmationMail::class, fn ($mail) => $mail->hasTo('buyer@example.com'));
+        Mail::assertSent(NewOrderNotificationMail::class, fn ($mail) => $mail->hasTo(config('mail.store_notification_address')));
     }
 
     public function test_failed_payment_marks_the_order_payment_failed(): void
