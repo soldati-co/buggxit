@@ -189,6 +189,12 @@
             <td class="meta-label">Order Status</td>
             <td>{{ ucfirst($order->status) }}</td>
         </tr>
+        @if ($order->courier_method)
+            <tr>
+                <td class="meta-label">Courier</td>
+                <td>{{ $order->courier_method === 'pep' ? 'PEP' : 'The Courier Guy' }}</td>
+            </tr>
+        @endif
     </table>
 
     <table class="parties-table">
@@ -204,16 +210,22 @@
                 @endif
             </td>
             <td>
-                <div class="party-title">Shipped To</div>
-                @if ($order->shippingAddress)
-                    {{ $order->shippingAddress->address_line1 }}<br>
-                    @if ($order->shippingAddress->address_line2)
-                        {{ $order->shippingAddress->address_line2 }}<br>
-                    @endif
-                    {{ $order->shippingAddress->city }}@if ($order->shippingAddress->state), {{ $order->shippingAddress->state }}@endif<br>
-                    {{ $order->shippingAddress->postal_code }}, {{ $order->shippingAddress->country }}
+                @if ($order->courier_method === 'pep' && $order->pep_point)
+                    <div class="party-title">PEP Point (Collection)</div>
+                    {{ $order->pep_point['name'] ?? '' }}<br>
+                    {{ $order->pep_point['address'] ?? '' }}
                 @else
-                    No shipping address on file.
+                    <div class="party-title">Shipped To</div>
+                    @if ($order->shippingAddress)
+                        {{ $order->shippingAddress->address_line1 }}<br>
+                        @if ($order->shippingAddress->address_line2)
+                            {{ $order->shippingAddress->address_line2 }}<br>
+                        @endif
+                        {{ $order->shippingAddress->city }}@if ($order->shippingAddress->state), {{ $order->shippingAddress->state }}@endif<br>
+                        {{ $order->shippingAddress->postal_code }}, {{ $order->shippingAddress->country }}
+                    @else
+                        No shipping address on file.
+                    @endif
                 @endif
             </td>
         </tr>

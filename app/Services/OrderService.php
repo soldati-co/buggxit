@@ -28,6 +28,8 @@ class OrderService
         ?string $notes = null,
         ?string $email = null,
         ?string $name = null,
+        ?string $courierMethod = null,
+        ?array $pepPoint = null,
     ): Order {
         $items = $this->cart->itemsWithDress();
 
@@ -37,7 +39,7 @@ class OrderService
 
         $billingAddress ??= $shippingAddress;
 
-        return DB::transaction(function () use ($items, $shippingAddress, $billingAddress, $paymentMethod, $userId, $notes, $email, $name) {
+        return DB::transaction(function () use ($items, $shippingAddress, $billingAddress, $paymentMethod, $userId, $notes, $email, $name, $courierMethod, $pepPoint) {
             $subtotal = array_reduce($items, fn ($carry, $item) => $carry + $item['subtotal'], 0);
             $shippingCost = 0;
             $total = $subtotal + $shippingCost;
@@ -56,6 +58,8 @@ class OrderService
                 'payment_method' => $paymentMethod,
                 'payment_status' => 'pending',
                 'notes' => $notes,
+                'courier_method' => $courierMethod,
+                'pep_point' => $pepPoint,
             ]);
 
             foreach ($items as $item) {

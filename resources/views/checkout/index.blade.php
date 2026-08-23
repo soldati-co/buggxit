@@ -6,7 +6,7 @@
     <div class="container-wide px-4 sm:px-6 lg:px-8 py-12 mx-auto">
         <h1 class="text-3xl md:text-4xl font-bold text-bone mb-8">Checkout</h1>
 
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8" x-data="checkoutCourier(@json(old('state', '')), @json(old('courier_method', 'courier_guy')), @json(old('pep_point_code', '')))">
             {{-- Checkout Form (left column) --}}
             <div class="lg:col-span-2">
                 <form method="POST" action="{{ route('checkout.store') }}" id="checkout-form">
@@ -67,8 +67,8 @@
                                         class="w-full px-4 py-3 bg-ink-raised2/50 border border-line rounded-lg text-bone">
                                 </div>
                                 <div>
-                                    <label class="block text-sm font-medium text-bone-dim mb-1">Province</label>
-                                    <select name="state"
+                                    <label class="block text-sm font-medium text-bone-dim mb-1">Province <span x-show="courierMethod === 'pep'" class="text-gold">*</span></label>
+                                    <select name="state" x-model="province"
                                         class="w-full px-4 py-3 bg-ink-raised2/50 border border-line rounded-lg text-bone">
                                         <option value="">Select a province</option>
                                         @foreach ([
@@ -135,6 +135,57 @@
                         {{-- You could add separate billing address fields here if needed --}}
                     </div>
 
+                    {{-- Courier Method --}}
+                    <div class="bg-ink-raised/90 backdrop-blur-sm border border-line rounded-xl p-6 mb-6">
+                        <h2 class="text-xl font-semibold text-bone mb-4 flex items-center">
+                            <i class="fas fa-truck-fast text-gold mr-2"></i>
+                            Courier Method
+                        </h2>
+
+                        <div>
+                            <label class="block text-sm font-medium text-bone-dim mb-1">Select courier <span class="text-gold">*</span></label>
+                            <select name="courier_method" x-model="courierMethod"
+                                class="w-full px-4 py-3 bg-ink-raised2/50 border border-line rounded-lg text-bone">
+                                <option value="courier_guy">The Courier Guy (delivered to your shipping address)</option>
+                                <option value="pep">PEP (collect from a PEP store)</option>
+                            </select>
+                        </div>
+
+                        <template x-if="courierMethod === 'courier_guy'">
+                            <p class="text-xs text-bone-faint mt-2">Your order will be delivered to the shipping address above.</p>
+                        </template>
+
+                        <template x-if="courierMethod === 'pep'">
+                            <div class="mt-4">
+                                <template x-if="!province">
+                                    <p class="text-sm text-bad">Please select a province above first.</p>
+                                </template>
+
+                                <template x-if="province">
+                                    <div>
+                                        <label class="block text-sm font-medium text-bone-dim mb-1">PEP Point <span class="text-gold">*</span></label>
+                                        <template x-if="pepLoading">
+                                            <p class="text-sm text-bone-faint">Loading PEP points in <span x-text="province"></span>...</p>
+                                        </template>
+                                        <template x-if="!pepLoading && pepError">
+                                            <p class="text-sm text-bad" x-text="pepError"></p>
+                                        </template>
+                                        <template x-if="!pepLoading && !pepError && pepPoints.length">
+                                            <select name="pep_point_code" x-model="pepPointCode"
+                                                class="w-full px-4 py-3 bg-ink-raised2/50 border border-line rounded-lg text-bone">
+                                                <option value="">Select a PEP point</option>
+                                                <template x-for="point in pepPoints" :key="point.code">
+                                                    <option :value="point.code" x-text="point.name + ' — ' + point.address"></option>
+                                                </template>
+                                            </select>
+                                        </template>
+                                        <p class="text-xs text-bone-faint mt-1">Your order will be sent to this store for you to collect.</p>
+                                    </div>
+                                </template>
+                            </div>
+                        </template>
+                    </div>
+
                     {{-- Order Notes --}}
                     <div class="bg-ink-raised/90 backdrop-blur-sm border border-line rounded-xl p-6">
                         <h2 class="text-xl font-semibold text-bone mb-4 flex items-center">
@@ -199,3 +250,61 @@
         </div>
     </div>
 @endsection
+
+@push('scripts')
+    <script>
+        function checkoutCourier(initialProvince, initialCourierMethod, initialPepPointCode) {
+            return {
+                province: initialProvince || '',
+                courierMethod: initialCourierMethod || 'courier_guy',
+                pepPointCode: initialPepPointCode || '',
+                pepPoints: [],
+                pepLoading: false,
+                pepError: null,
+
+                init() {
+                    this.$watch('province', () => this.maybeFetchPepPoints());
+                    this.$watch('courierMethod', () => this.maybeFetchPepPoints());
+
+                    if (this.courierMethod === 'pep' && this.province) {
+                        this.fetchPepPoints();
+                    }
+                },
+
+                maybeFetchPepPoints() {
+                    if (this.courierMethod !== 'pep') {
+                        return;
+                    }
+                    if (!this.province) {
+                        this.pepPoints = [];
+                        this.pepError = null;
+                        return;
+                    }
+                    this.fetchPepPoints();
+                },
+
+                async fetchPepPoints() {
+                    this.pepLoading = true;
+                    this.pepError = null;
+                    this.pepPoints = [];
+
+                    try {
+                        const response = await fetch(`{{ route('api.pep-points.index', [], false) }}?province=${encodeURIComponent(this.province)}`);
+                        const data = await response.json();
+                        this.pepPoints = data.data || [];
+                        if (!this.pepPoints.length) {
+                            this.pepError = 'No open PEP points found for this province.';
+                        } else if (!this.pepPoints.some((point) => point.code === this.pepPointCode)) {
+                            this.pepPointCode = '';
+                        }
+                    } catch (error) {
+                        console.error(error);
+                        this.pepError = 'Could not load PEP points. Please try again.';
+                    } finally {
+                        this.pepLoading = false;
+                    }
+                },
+            };
+        }
+    </script>
+@endpush

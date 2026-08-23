@@ -7,6 +7,7 @@ use App\Models\Address;
 use App\Models\Order;
 use App\Services\CartService;
 use App\Services\OrderService;
+use App\Services\PaxiPointService;
 use App\Services\ReceiptService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\URL;
@@ -34,10 +35,23 @@ class CheckoutController extends Controller
         return view('checkout.index', compact('items', 'subtotal', 'addresses'));
     }
 
-    public function store(CheckoutRequest $request)
+    public function store(CheckoutRequest $request, PaxiPointService $paxi)
     {
         if ($this->cart->isEmpty()) {
             return back()->with('error', 'Your cart is empty.');
+        }
+
+        $pepPoint = null;
+
+        if ($request->input('courier_method') === 'pep') {
+            // Never trust client-submitted point name/address text -- look the
+            // code up server-side against PEP's own data so what we ship to is
+            // always a real, currently-open point.
+            $pepPoint = $paxi->findByCode((string) $request->input('pep_point_code'));
+
+            if (! $pepPoint) {
+                return back()->with('error', 'Please select a valid PEP point.')->withInput();
+            }
         }
 
         try {
@@ -55,6 +69,8 @@ class CheckoutController extends Controller
                 notes: $request->input('notes'),
                 email: $request->input('email') ?: auth()->user()?->email,
                 name: $fullName !== '' ? $fullName : auth()->user()?->name,
+                courierMethod: $request->input('courier_method'),
+                pepPoint: $pepPoint,
             );
 
             // Guests need a way back to their own order confirmation without

@@ -70,6 +70,22 @@
                         {{ match ($order->payment_method) { 'eft' => 'Bank Transfer (EFT)', 'cash_on_delivery' => 'Cash on Delivery', 'payfast' => 'PayFast', 'whatsapp' => 'WhatsApp Order', 'other' => 'Other', default => ucfirst($order->payment_method ?? 'Unknown') } }}
                     </div>
                 </div>
+                @if ($order->courier_method)
+                    <div>
+                        <h3 class="text-bone font-semibold mb-3 flex items-center">
+                            <i class="fas fa-truck-fast text-gold mr-2"></i> Courier
+                        </h3>
+                        <div class="text-bone-dim text-sm border border-line rounded-lg p-4 bg-ink-raised2/30">
+                            @if ($order->courier_method === 'pep' && $order->pep_point)
+                                PEP — collect from:<br>
+                                {{ $order->pep_point['name'] ?? '' }}<br>
+                                {{ $order->pep_point['address'] ?? '' }}
+                            @else
+                                The Courier Guy — delivered to your shipping address.
+                            @endif
+                        </div>
+                    </div>
+                @endif
             </div>
 
             <h3 class="text-bone font-semibold mb-4 flex items-center">

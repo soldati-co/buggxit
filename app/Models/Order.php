@@ -57,7 +57,7 @@ class Order extends Model
     protected $fillable = [
         'order_number', 'user_id', 'name', 'email', 'shipping_address_id', 'billing_address_id',
         'subtotal', 'shipping_cost', 'discount_amount', 'total', 'status', 'payment_method',
-        'payment_status', 'notes'
+        'payment_status', 'notes', 'courier_method', 'pep_point'
     ];
 
     protected $casts = [
@@ -65,6 +65,7 @@ class Order extends Model
         'shipping_cost' => 'decimal:2',
         'discount_amount' => 'decimal:2',
         'total' => 'decimal:2',
+        'pep_point' => 'array',
     ];
 
     public function user()

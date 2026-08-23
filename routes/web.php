@@ -13,6 +13,7 @@ use App\Http\Controllers\Api\DressApiController;
 use App\Http\Controllers\Api\HomeApiController;
 use App\Http\Controllers\Api\OrderApiController;
 use App\Http\Controllers\Api\ProductApiController;
+use App\Http\Controllers\Api\PepPointsApiController;
 use App\Http\Controllers\Admin\HeroSlideController;
 use App\Http\Controllers\ImageController;
 use App\Http\Controllers\PayfastController;
@@ -92,6 +93,8 @@ Route::prefix('api')->name('api.')->middleware(['web', 'throttle:60,1'])->group(
     Route::post('/cart/remove', [CartApiController::class, 'remove'])->name('cart.remove');
 
     Route::post('/contact', [ContactApiController::class, 'submit'])->name('contact.submit')->middleware('throttle:10,1');
+
+    Route::get('/pep-points', [PepPointsApiController::class, 'index'])->name('pep-points.index');
 
     Route::get('/orders', [OrderApiController::class, 'index'])->name('orders.index')->middleware('auth');
     Route::get('/orders/{order}', [OrderApiController::class, 'show'])->name('orders.show')->middleware('auth');

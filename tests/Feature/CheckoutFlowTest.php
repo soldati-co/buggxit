@@ -8,6 +8,8 @@ use App\Models\User;
 use App\Services\CartService;
 use App\Services\OrderService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Http;
 use Tests\TestCase;
 
 /**
@@ -20,6 +22,16 @@ use Tests\TestCase;
 class CheckoutFlowTest extends TestCase
 {
     use RefreshDatabase;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        // The 'array' cache driver persists for the whole test run, not per
+        // method -- flush so PaxiPointService's Http::fake() setups below
+        // are actually exercised instead of hitting another test's cache.
+        Cache::flush();
+    }
 
     public function test_guest_can_create_an_order_from_cart_with_a_new_address(): void
     {
@@ -115,6 +127,7 @@ class CheckoutFlowTest extends TestCase
                 'phone' => '0111234567',
                 'email' => 'guest@example.com',
                 'payment_method' => 'payfast',
+                'courier_method' => 'courier_guy',
             ]);
 
         $this->assertDatabaseCount('orders', 1);
@@ -124,6 +137,8 @@ class CheckoutFlowTest extends TestCase
         $order = \App\Models\Order::first();
         $this->assertSame('guest@example.com', $order->email);
         $this->assertSame('Test Guest', $order->name);
+        $this->assertSame('courier_guy', $order->courier_method);
+        $this->assertNull($order->pep_point);
         $response->assertRedirect();
         $this->assertStringContainsString('signature=', $response->headers->get('Location'));
         $this->assertStringContainsString((string) $order->id, $response->headers->get('Location'));
@@ -187,5 +202,90 @@ class CheckoutFlowTest extends TestCase
         $this->actingAs($user)
             ->get(route('checkout.receipt', $order->id))
             ->assertOk();
+    }
+
+    public function test_checkout_with_pep_courier_and_a_valid_point_stores_the_point_on_the_order(): void
+    {
+        Http::fake(['map.paxi.co.za/*' => Http::response([
+            ['nc' => 'A0001', 'sn' => 'PEP SANDTON', 'nd' => 'PEP SANDTON', 'a1' => 'SHOP 1', 'a4' => 'SANDTON', 'a6' => 'GAUTENG', 'pc' => '2196', 'ns' => 'open'],
+        ], 200)]);
+
+        $dress = Dress::factory()->create(['price' => 300, 'status' => 'active']);
+        $cartEntry = ['dress_id' => $dress->id, 'size' => null, 'color' => null, 'quantity' => 1];
+
+        $response = $this->withSession(['cart' => [$cartEntry]])
+            ->post(route('checkout.store'), [
+                'name' => 'Test',
+                'surname' => 'Guest',
+                'address_line1' => '456 Test Ave',
+                'city' => 'Cape Town',
+                'state' => 'Gauteng',
+                'postal_code' => '8001',
+                'country' => 'South Africa',
+                'phone' => '0111234567',
+                'email' => 'guest@example.com',
+                'payment_method' => 'payfast',
+                'courier_method' => 'pep',
+                'pep_point_code' => 'A0001',
+            ]);
+
+        $response->assertRedirect();
+        $order = \App\Models\Order::first();
+        $this->assertSame('pep', $order->courier_method);
+        $this->assertSame('A0001', $order->pep_point['code']);
+        $this->assertSame('PEP SANDTON', $order->pep_point['name']);
+    }
+
+    public function test_checkout_with_pep_courier_and_an_invalid_point_fails_gracefully(): void
+    {
+        Http::fake(['map.paxi.co.za/*' => Http::response([
+            ['nc' => 'A0001', 'sn' => 'PEP SANDTON', 'nd' => 'PEP SANDTON', 'a1' => 'SHOP 1', 'a4' => 'SANDTON', 'a6' => 'GAUTENG', 'pc' => '2196', 'ns' => 'open'],
+        ], 200)]);
+
+        $dress = Dress::factory()->create(['price' => 300, 'status' => 'active']);
+        $cartEntry = ['dress_id' => $dress->id, 'size' => null, 'color' => null, 'quantity' => 1];
+
+        $response = $this->withSession(['cart' => [$cartEntry]])
+            ->post(route('checkout.store'), [
+                'name' => 'Test',
+                'surname' => 'Guest',
+                'address_line1' => '456 Test Ave',
+                'city' => 'Cape Town',
+                'state' => 'Gauteng',
+                'postal_code' => '8001',
+                'country' => 'South Africa',
+                'phone' => '0111234567',
+                'email' => 'guest@example.com',
+                'payment_method' => 'payfast',
+                'courier_method' => 'pep',
+                'pep_point_code' => 'DOES-NOT-EXIST',
+            ]);
+
+        $response->assertSessionHas('error');
+        $this->assertDatabaseCount('orders', 0);
+    }
+
+    public function test_pep_point_code_is_required_when_pep_courier_selected(): void
+    {
+        $dress = Dress::factory()->create(['price' => 300, 'status' => 'active']);
+        $cartEntry = ['dress_id' => $dress->id, 'size' => null, 'color' => null, 'quantity' => 1];
+
+        $response = $this->withSession(['cart' => [$cartEntry]])
+            ->post(route('checkout.store'), [
+                'name' => 'Test',
+                'surname' => 'Guest',
+                'address_line1' => '456 Test Ave',
+                'city' => 'Cape Town',
+                'state' => 'Gauteng',
+                'postal_code' => '8001',
+                'country' => 'South Africa',
+                'phone' => '0111234567',
+                'email' => 'guest@example.com',
+                'payment_method' => 'payfast',
+                'courier_method' => 'pep',
+            ]);
+
+        $response->assertSessionHasErrors('pep_point_code');
+        $this->assertDatabaseCount('orders', 0);
     }
 }

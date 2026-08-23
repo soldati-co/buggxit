@@ -41,6 +41,14 @@
         </div>
         <h2 style="color:#D4AF37;margin-top:0;">New paid order: {{ $order->order_number }}</h2>
         <p style="color:#ffffff;"><span style="color:#D4AF37;font-weight:bold;">Customer:</span> <span style="color:#ffffff;">{{ $order->user?->name ?? $order->name ?? 'Guest (no name given)' }} ({{ $order->email ?? $order->user?->email ?? 'no email on file' }})</span></p>
+        @if ($order->courier_method)
+            <p style="color:#ffffff;"><span style="color:#D4AF37;font-weight:bold;">Courier:</span> <span style="color:#ffffff;">{{ $order->courier_method === 'pep' ? 'PEP' : 'The Courier Guy' }}</span></p>
+        @endif
+        @if ($order->courier_method === 'pep' && $order->pep_point)
+            <p style="color:#ffffff;"><span style="color:#D4AF37;font-weight:bold;">Collect at:</span><br>
+                <span style="color:#ffffff;">{{ $order->pep_point['name'] ?? '' }}<br>{{ $order->pep_point['address'] ?? '' }}</span>
+            </p>
+        @endif
 
         <table style="width:100%;border-collapse:collapse;margin:16px 0;">
             @foreach ($order->items as $item)

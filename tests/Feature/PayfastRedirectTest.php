@@ -57,6 +57,7 @@ class PayfastRedirectTest extends TestCase
                 'phone' => '0123456789',
                 'email' => 'guest@example.com',
                 'payment_method' => 'payfast',
+                'courier_method' => 'courier_guy',
             ]);
 
         $order = Order::first();

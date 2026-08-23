@@ -65,7 +65,14 @@
             </tr>
         </table>
 
-        @if ($order->shippingAddress)
+        @if ($order->courier_method === 'pep' && $order->pep_point)
+            <p style="color:#ffffff;"><span style="color:#D4AF37;font-weight:bold;">Collect from PEP:</span><br>
+                <span style="color:#ffffff;">
+                    {{ $order->pep_point['name'] ?? '' }}<br>
+                    {{ $order->pep_point['address'] ?? '' }}
+                </span>
+            </p>
+        @elseif ($order->shippingAddress)
             <p style="color:#ffffff;"><span style="color:#D4AF37;font-weight:bold;">Shipping to:</span><br>
                 <span style="color:#ffffff;">
                     {{ $order->shippingAddress->address_line1 }}@if ($order->shippingAddress->address_line2), {{ $order->shippingAddress->address_line2 }}@endif<br>
