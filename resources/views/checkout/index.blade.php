@@ -68,8 +68,16 @@
                                 </div>
                                 <div>
                                     <label class="block text-sm font-medium text-bone-dim mb-1">State/Province</label>
-                                    <input type="text" name="state" value="{{ old('state') }}"
+                                    <select name="state"
                                         class="w-full px-4 py-3 bg-ink-raised2/50 border border-line rounded-lg text-bone">
+                                        <option value="">Select a province</option>
+                                        @foreach ([
+                                            'Eastern Cape', 'Free State', 'Gauteng', 'KwaZulu-Natal', 'Limpopo',
+                                            'Mpumalanga', 'Northern Cape', 'North West', 'Western Cape',
+                                        ] as $province)
+                                            <option value="{{ $province }}" @selected(old('state') === $province)>{{ $province }}</option>
+                                        @endforeach
+                                    </select>
                                 </div>
                                 <div>
                                     <label class="block text-sm font-medium text-bone-dim mb-1">Postal Code *</label>
