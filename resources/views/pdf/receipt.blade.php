@@ -161,7 +161,7 @@
         </tr>
         <tr>
             <td class="meta-label">Payment Method</td>
-            <td>{{ ucfirst($order->payment_method ?? '-') }}</td>
+            <td>{{ match ($order->payment_method) { 'eft' => 'Bank Transfer (EFT)', 'cash_on_delivery' => 'Cash on Delivery', 'payfast' => 'PayFast', 'whatsapp' => 'WhatsApp Order', 'other' => 'Other', default => ucfirst($order->payment_method ?? '-') } }}</td>
         </tr>
         <tr>
             <td class="meta-label">Payment Status</td>

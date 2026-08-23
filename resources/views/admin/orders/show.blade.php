@@ -152,7 +152,7 @@
 
             <div class="bg-ink-raised/90 backdrop-blur-sm border border-line rounded-xl p-6">
                 <h3 class="text-bone font-semibold mb-3">Payment Method</h3>
-                <p class="text-bone-dim">{{ match ($order->payment_method) { 'eft' => 'Bank Transfer (EFT)', 'cash_on_delivery' => 'Cash on Delivery', 'payfast' => 'PayFast', default => ucfirst($order->payment_method ?? 'Unknown') } }}
+                <p class="text-bone-dim">{{ match ($order->payment_method) { 'eft' => 'Bank Transfer (EFT)', 'cash_on_delivery' => 'Cash on Delivery', 'payfast' => 'PayFast', 'whatsapp' => 'WhatsApp Order', 'other' => 'Other', default => ucfirst($order->payment_method ?? 'Unknown') } }}
                 </p>
             </div>
 

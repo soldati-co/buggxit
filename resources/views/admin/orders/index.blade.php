@@ -4,6 +4,18 @@
 @section('page-title', 'Orders')
 @section('page-description', 'Manage customer orders')
 
+@section('header-actions')
+    <div class="mt-4 md:mt-0">
+        <a href="{{ route('admin.orders.create') }}"
+            class="inline-flex items-center px-4 py-2.5 bg-gradient-to-r from-gold to-gold-dim text-ink font-semibold rounded-lg hover:from-gold-bright hover:to-gold transition-all duration-300 text-sm shadow-lg shadow-gold/20">
+            <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 4v16m8-8H4" />
+            </svg>
+            Record Manual Order
+        </a>
+    </div>
+@endsection
+
 @section('content')
     <div class="bg-ink-raised/90 backdrop-blur-sm border border-line rounded-xl overflow-hidden">
         <div class="overflow-x-auto">

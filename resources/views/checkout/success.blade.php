@@ -29,7 +29,7 @@
                 <div class="flex justify-between">
                     <span class="text-bone-dim">Payment Method</span>
                     <span
-                        class="text-bone">{{ match ($order->payment_method) { 'eft' => 'Bank Transfer (EFT)', 'cash_on_delivery' => 'Cash on Delivery', 'payfast' => 'PayFast', default => ucfirst($order->payment_method ?? 'Unknown') } }}</span>
+                        class="text-bone">{{ match ($order->payment_method) { 'eft' => 'Bank Transfer (EFT)', 'cash_on_delivery' => 'Cash on Delivery', 'payfast' => 'PayFast', 'whatsapp' => 'WhatsApp Order', 'other' => 'Other', default => ucfirst($order->payment_method ?? 'Unknown') } }}</span>
                 </div>
             </div>
 
