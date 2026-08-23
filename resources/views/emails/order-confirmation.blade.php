@@ -37,7 +37,7 @@
 <body style="font-family:'Manrope',sans-serif;background:#0a0a0a;color:#ffffff;padding:20px;">
     <div class="container" style="max-width:600px;margin:0 auto;background:#111111;border:1px solid #D4AF37;border-radius:10px;padding:20px;">
         <div style="text-align:center;margin-bottom:20px;">
-            <img src="{{ asset('logo.webp') }}" alt="Buggxit Couture" width="140" style="max-width:140px;height:auto;">
+            <img src="{{ asset('logo-removebg-preview.png') }}" alt="Buggxit Couture" width="140" style="max-width:140px;height:auto;">
         </div>
         <h2 style="color:#D4AF37;margin-top:0;">Thank you for your order</h2>
         <p style="color:#ffffff;">Hi{{ ($order->name ?? $order->user?->name) ? ' '.($order->name ?? $order->user->name) : '' }}, your order has been confirmed and payment received. Here's a summary:</p>
