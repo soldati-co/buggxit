@@ -32,6 +32,18 @@ class AppServiceProvider extends ServiceProvider
         // on proxy header forwarding we don't fully control.
         if (str_starts_with(config('app.url'), 'https://')) {
             URL::forceScheme('https');
+
+            // forceScheme() above only affects URL *generation* (route()/asset()/
+            // signed URLs) -- it does nothing for hasValidSignature(), which reads
+            // the *current* request's own detected scheme via $request->url(). If
+            // X-Forwarded-Proto didn't survive the proxy chain (see above), that
+            // detection resolves to http, while the signed link was generated as
+            // https -- the signatures then never match and every guest checkout's
+            // PayFast redirect/return link 403s. Force detection to match generation.
+            if (! $this->app->runningInConsole()) {
+                request()->server->set('HTTPS', 'on');
+                request()->headers->set('X-Forwarded-Proto', 'https');
+            }
         }
 
         // Share cart count with all views
