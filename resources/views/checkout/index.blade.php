@@ -6,7 +6,7 @@
     <div class="container-wide px-4 sm:px-6 lg:px-8 py-12 mx-auto">
         <h1 class="text-3xl md:text-4xl font-bold text-bone mb-8">Checkout</h1>
 
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8" x-data="checkoutCourier(@json(old('state', '')), @json(old('courier_method', 'courier_guy')), @json(old('pep_point_code', '')))">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8" x-data='checkoutCourier(@json(old("state", "")), @json(old("courier_method", "courier_guy")), @json(old("pep_point_code", "")))'>
             {{-- Checkout Form (left column) --}}
             <div class="lg:col-span-2">
                 <form method="POST" action="{{ route('checkout.store') }}" id="checkout-form">
@@ -129,7 +129,7 @@
                         <label
                             class="flex items-center p-3 border border-line rounded-lg cursor-pointer hover:border-gold/50 transition-colors">
                             <input type="checkbox" name="same_as_shipping" value="1"
-                                class="h-4 w-4 text-gold rounded" checked>
+                                class="h-4 w-4 text-gold rounded">
                             <span class="ml-3 text-bone">Same as shipping address</span>
                         </label>
                         {{-- You could add separate billing address fields here if needed --}}
