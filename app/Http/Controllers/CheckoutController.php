@@ -44,6 +44,8 @@ class CheckoutController extends Controller
 
             // Billing address: a separate billing-address form isn't implemented yet,
             // so we always bill to the shipping address regardless of same_as_shipping.
+            $fullName = trim($request->input('name').' '.$request->input('surname'));
+
             $order = $this->orders->createOrderFromCart(
                 shippingAddress: $shippingAddress,
                 billingAddress: null,
@@ -51,6 +53,7 @@ class CheckoutController extends Controller
                 userId: auth()->id(),
                 notes: $request->input('notes'),
                 email: $request->input('email') ?: auth()->user()?->email,
+                name: $fullName !== '' ? $fullName : auth()->user()?->name,
             );
 
             // Guests need a way back to their own order confirmation without

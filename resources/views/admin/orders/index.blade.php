@@ -24,8 +24,8 @@
                         <tr class="hover:bg-ink-raised2/30">
                             <td class="px-6 py-4 text-sm font-mono text-bone">{{ $order->order_number }}</td>
                             <td class="px-6 py-4 text-sm text-bone-dim">
-                                {{ $order->user->name ?? 'Guest' }}<br>
-                                <span class="text-xs text-bone-faint">{{ $order->user->email ?? 'No email' }}</span>
+                                {{ $order->user->name ?? $order->name ?? 'Guest' }}<br>
+                                <span class="text-xs text-bone-faint">{{ $order->user->email ?? $order->email ?? 'No email' }}</span>
                             </td>
                             <td class="px-6 py-4 text-sm text-bone-dim">{{ $order->created_at->format('d M Y') }}</td>
                             <td class="px-6 py-4 text-sm font-semibold text-gold font-numeric">

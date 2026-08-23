@@ -14,6 +14,8 @@ class CheckoutRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'name' => 'required|string|max:255',
+            'surname' => 'required|string|max:255',
             'shipping_address_id' => 'nullable|exists:addresses,id',
             'address_line1' => 'required_without:shipping_address_id|string|max:255',
             'address_line2' => 'nullable|string|max:255',

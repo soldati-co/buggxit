@@ -36,7 +36,7 @@ class PayfastService
     public function paymentFormHtml(Order $order): string
     {
         $user = $order->user;
-        [$firstName, $lastName] = $this->splitName($user?->name);
+        [$firstName, $lastName] = $this->splitName($order->name ?? $user?->name);
 
         $data = array_filter([
             'return_url' => URL::temporarySignedRoute('checkout.success', now()->addHours(48), ['order' => $order->id]),

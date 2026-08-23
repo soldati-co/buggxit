@@ -52,8 +52,11 @@
 
 <body>
     <div class="container">
+        <div style="text-align:center;margin-bottom:20px;">
+            <img src="{{ asset('logo.webp') }}" alt="Buggxit Couture" width="140" style="max-width:140px;height:auto;">
+        </div>
         <h2>Thank you for your order</h2>
-        <p>Hi{{ $order->user?->name ? ' '.$order->user->name : '' }}, your order has been confirmed and payment received. Here's a summary:</p>
+        <p>Hi{{ ($order->name ?? $order->user?->name) ? ' '.($order->name ?? $order->user->name) : '' }}, your order has been confirmed and payment received. Here's a summary:</p>
 
         <p><span class="label">Order number:</span> {{ $order->order_number }}</p>
 

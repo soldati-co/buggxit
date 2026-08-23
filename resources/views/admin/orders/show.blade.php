@@ -123,7 +123,7 @@
                     <p class="text-bone-dim">{{ $order->user->name }}</p>
                     <p class="text-bone-dim text-sm">{{ $order->user->email }}</p>
                 @else
-                    <p class="text-bone-dim">Guest checkout</p>
+                    <p class="text-bone-dim">{{ $order->name ?? 'Guest checkout' }} <span class="text-bone-faint text-xs">(guest)</span></p>
                     @if ($order->email)
                         <p class="text-bone-dim text-sm">{{ $order->email }}</p>
                     @endif

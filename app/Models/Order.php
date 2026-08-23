@@ -55,7 +55,7 @@ class Order extends Model
     protected $keyType = 'string';
 
     protected $fillable = [
-        'order_number', 'user_id', 'email', 'shipping_address_id', 'billing_address_id',
+        'order_number', 'user_id', 'name', 'email', 'shipping_address_id', 'billing_address_id',
         'subtotal', 'shipping_cost', 'discount_amount', 'total', 'status', 'payment_method',
         'payment_status', 'notes'
     ];

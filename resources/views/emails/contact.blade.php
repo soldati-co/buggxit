@@ -33,6 +33,9 @@
 
 <body>
     <div class="container">
+        <div style="text-align:center;margin-bottom:20px;">
+            <img src="{{ asset('logo.webp') }}" alt="Buggxit Couture" width="140" style="max-width:140px;height:auto;">
+        </div>
         <h2>New message from {{ $data['name'] }}</h2>
         <p><span class="label">Email:</span> {{ $data['email'] }}</p>
         <p><span class="label">Subject:</span> {{ $data['subject'] }}</p>

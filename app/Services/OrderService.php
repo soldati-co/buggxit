@@ -27,6 +27,7 @@ class OrderService
         ?string $userId,
         ?string $notes = null,
         ?string $email = null,
+        ?string $name = null,
     ): Order {
         $items = $this->cart->itemsWithDress();
 
@@ -36,7 +37,7 @@ class OrderService
 
         $billingAddress ??= $shippingAddress;
 
-        return DB::transaction(function () use ($items, $shippingAddress, $billingAddress, $paymentMethod, $userId, $notes, $email) {
+        return DB::transaction(function () use ($items, $shippingAddress, $billingAddress, $paymentMethod, $userId, $notes, $email, $name) {
             $subtotal = array_reduce($items, fn ($carry, $item) => $carry + $item['subtotal'], 0);
             $shippingCost = 0;
             $total = $subtotal + $shippingCost;
@@ -44,6 +45,7 @@ class OrderService
             $order = Order::create([
                 'order_number' => 'ORD-'.strtoupper(Str::random(8)),
                 'user_id' => $userId,
+                'name' => $name,
                 'email' => $email,
                 'shipping_address_id' => $shippingAddress->id,
                 'billing_address_id' => $billingAddress->id,

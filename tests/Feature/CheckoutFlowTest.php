@@ -106,6 +106,8 @@ class CheckoutFlowTest extends TestCase
 
         $response = $this->withSession(['cart' => [$cartEntry]])
             ->post(route('checkout.store'), [
+                'name' => 'Test',
+                'surname' => 'Guest',
                 'address_line1' => '456 Test Ave',
                 'city' => 'Cape Town',
                 'postal_code' => '8001',
@@ -121,6 +123,7 @@ class CheckoutFlowTest extends TestCase
 
         $order = \App\Models\Order::first();
         $this->assertSame('guest@example.com', $order->email);
+        $this->assertSame('Test Guest', $order->name);
         $response->assertRedirect();
         $this->assertStringContainsString('signature=', $response->headers->get('Location'));
         $this->assertStringContainsString((string) $order->id, $response->headers->get('Location'));

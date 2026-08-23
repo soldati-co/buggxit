@@ -48,6 +48,8 @@ class PayfastRedirectTest extends TestCase
 
         $response = $this->withSession(['cart' => [$cartEntry]])
             ->post(route('checkout.store'), [
+                'name' => 'Test',
+                'surname' => 'Guest',
                 'address_line1' => '1 Test St',
                 'city' => 'Johannesburg',
                 'postal_code' => '2000',

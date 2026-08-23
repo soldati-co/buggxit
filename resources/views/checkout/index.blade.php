@@ -37,6 +37,19 @@
 
                         <div id="new-address-fields">
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                @php
+                                    $nameParts = auth()->check() ? explode(' ', auth()->user()->name, 2) : [];
+                                @endphp
+                                <div>
+                                    <label class="block text-sm font-medium text-bone-dim mb-1">Name *</label>
+                                    <input type="text" name="name" value="{{ old('name', $nameParts[0] ?? '') }}"
+                                        class="w-full px-4 py-3 bg-ink-raised2/50 border border-line rounded-lg text-bone focus:border-gold">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-bone-dim mb-1">Surname *</label>
+                                    <input type="text" name="surname" value="{{ old('surname', $nameParts[1] ?? '') }}"
+                                        class="w-full px-4 py-3 bg-ink-raised2/50 border border-line rounded-lg text-bone focus:border-gold">
+                                </div>
                                 <div class="md:col-span-2">
                                     <label class="block text-sm font-medium text-bone-dim mb-1">Address Line 1 *</label>
                                     <input type="text" name="address_line1" value="{{ old('address_line1') }}"

@@ -63,8 +63,11 @@
 
 <body>
     <div class="container">
+        <div style="text-align:center;margin-bottom:20px;">
+            <img src="{{ asset('logo.webp') }}" alt="Buggxit Couture" width="140" style="max-width:140px;height:auto;">
+        </div>
         <h2>New paid order: {{ $order->order_number }}</h2>
-        <p><span class="label">Customer:</span> {{ $order->user?->name ?? 'Guest' }} ({{ $order->email ?? $order->user?->email ?? 'no email on file' }})</p>
+        <p><span class="label">Customer:</span> {{ $order->user?->name ?? $order->name ?? 'Guest (no name given)' }} ({{ $order->email ?? $order->user?->email ?? 'no email on file' }})</p>
 
         <table>
             @foreach ($order->items as $item)
