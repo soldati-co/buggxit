@@ -39,6 +39,13 @@
                 </div>
             </div>
 
+            <div class="mb-8">
+                <a href="{{ route('orders.receipt', $order) }}" target="_blank"
+                    class="inline-flex items-center px-4 py-2 bg-ink-raised2/50 border border-line rounded-lg text-bone-dim hover:text-gold hover:border-gold/50 transition-colors text-sm">
+                    <i class="fas fa-file-pdf mr-2 text-gold"></i> Download Receipt
+                </a>
+            </div>
+
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                 <div>
                     <h3 class="text-bone font-semibold mb-3 flex items-center">

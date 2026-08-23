@@ -34,6 +34,29 @@ class ZeptoMailTransportTest extends TestCase
         });
     }
 
+    public function test_it_sends_attachments_as_base64_with_mime_type_and_filename(): void
+    {
+        Http::fake(['api.zeptomail.com/*' => Http::response(['message' => 'OK'], 200)]);
+
+        $email = (new Email())
+            ->from('noreply@buggxit.store')
+            ->to('buyer@example.com')
+            ->subject('Your receipt')
+            ->html('<p>Attached.</p>')
+            ->attach('%PDF-1.4 fake pdf content', 'Receipt-ORD-1.pdf', 'application/pdf');
+
+        (new ZeptoMailTransport('Zoho-enczapikey test-token'))->send($email);
+
+        Http::assertSent(function ($request) {
+            $attachment = $request['attachments'][0] ?? null;
+
+            return $attachment
+                && $attachment['name'] === 'Receipt-ORD-1.pdf'
+                && $attachment['mime_type'] === 'application/pdf'
+                && base64_decode($attachment['content']) === '%PDF-1.4 fake pdf content';
+        });
+    }
+
     public function test_it_throws_a_transport_exception_when_the_api_call_fails(): void
     {
         Http::fake(['api.zeptomail.com/*' => Http::response(['error' => ['message' => 'Invalid token']], 401)]);

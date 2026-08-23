@@ -8,6 +8,7 @@ use Symfony\Component\Mailer\SentMessage;
 use Symfony\Component\Mailer\Transport\AbstractTransport;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Mime\Email;
+use Symfony\Component\Mime\Part\DataPart;
 
 /**
  * Sends via ZeptoMail's HTTP API (https://api.zeptomail.com/v1.1/email)
@@ -42,6 +43,7 @@ class ZeptoMailTransport extends AbstractTransport
             'subject' => $email->getSubject(),
             'htmlbody' => $email->getHtmlBody(),
             'textbody' => $email->getTextBody(),
+            'attachments' => $this->attachmentsPayload($email) ?: null,
         ]);
 
         $response = Http::withHeaders([
@@ -54,6 +56,25 @@ class ZeptoMailTransport extends AbstractTransport
                 "ZeptoMail API error ({$response->status()}): {$response->body()}"
             );
         }
+    }
+
+    private function attachmentsPayload(Email $email): array
+    {
+        $attachments = [];
+
+        foreach ($email->getAttachments() as $part) {
+            if (! $part instanceof DataPart) {
+                continue;
+            }
+
+            $attachments[] = [
+                'content' => base64_encode($part->getBody()),
+                'mime_type' => $part->getContentType(),
+                'name' => $part->getFilename() ?? 'attachment',
+            ];
+        }
+
+        return $attachments;
     }
 
     private function addressPayload(Address $address): array

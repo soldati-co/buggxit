@@ -24,7 +24,7 @@ class OrderMailTest extends TestCase
     {
         $order = $this->orderWithItemsAndAddress();
 
-        $html = (new OrderConfirmationMail($order))->render();
+        $html = (new OrderConfirmationMail($order, '%PDF-fake'))->render();
 
         $this->assertStringContainsString($order->order_number, $html);
         $this->assertStringContainsString('Zimbini Dress', $html);
@@ -36,7 +36,7 @@ class OrderMailTest extends TestCase
     {
         $order = $this->orderWithItemsAndAddress();
 
-        $html = (new NewOrderNotificationMail($order))->render();
+        $html = (new NewOrderNotificationMail($order, '%PDF-fake'))->render();
 
         $this->assertStringContainsString($order->order_number, $html);
         $this->assertStringContainsString('buyer@example.com', $html);

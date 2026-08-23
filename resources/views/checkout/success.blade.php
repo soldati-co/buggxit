@@ -37,6 +37,10 @@
                 once your dress is ready.</p>
 
             <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="{{ $receiptUrl }}" target="_blank"
+                    class="inline-flex items-center px-6 py-3 bg-ink-raised2/50 border border-line text-bone rounded-lg hover:bg-ink-raised2 transition-colors">
+                    <i class="fas fa-file-pdf mr-2"></i> Download Receipt
+                </a>
                 <a href="{{ route('products.index') }}"
                     class="inline-flex items-center px-6 py-3 bg-ink-raised2/50 border border-line text-bone rounded-lg hover:bg-ink-raised2 transition-colors">
                     <i class="fas fa-tshirt mr-2"></i> Continue Shopping

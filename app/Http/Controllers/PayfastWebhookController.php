@@ -6,6 +6,7 @@ use App\Mail\NewOrderNotificationMail;
 use App\Mail\OrderConfirmationMail;
 use App\Models\Order;
 use App\Services\PayfastService;
+use App\Services\ReceiptService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
@@ -61,11 +62,14 @@ class PayfastWebhookController extends Controller
         $customerEmail = $order->email ?? $order->user?->email;
 
         try {
+            $receipts = app(ReceiptService::class);
+
             if ($customerEmail) {
-                Mail::to($customerEmail)->send(new OrderConfirmationMail($order));
+                Mail::to($customerEmail)->send(new OrderConfirmationMail($order, $receipts->render($order, 'customer')));
             }
 
-            Mail::to(config('mail.store_notification_address'))->send(new NewOrderNotificationMail($order));
+            Mail::to(config('mail.store_notification_address'))
+                ->send(new NewOrderNotificationMail($order, $receipts->render($order, 'store')));
         } catch (\Throwable $e) {
             // Payment is already confirmed and recorded above -- a mail delivery
             // failure shouldn't turn into a PayFast retry of the whole ITN.

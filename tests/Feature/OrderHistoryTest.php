@@ -78,4 +78,26 @@ class OrderHistoryTest extends TestCase
     {
         $this->get(route('orders.index'))->assertRedirect(route('login'));
     }
+
+    public function test_user_can_download_their_own_receipt(): void
+    {
+        $user = User::factory()->create();
+        $order = $this->createOrderFor($user);
+
+        $response = $this->actingAs($user)->get(route('orders.receipt', $order));
+
+        $response->assertOk();
+        $response->assertHeader('Content-Type', 'application/pdf');
+    }
+
+    public function test_user_cannot_download_another_users_receipt(): void
+    {
+        $owner = User::factory()->create();
+        $intruder = User::factory()->create();
+        $order = $this->createOrderFor($owner);
+
+        $this->actingAs($intruder)
+            ->get(route('orders.receipt', $order))
+            ->assertForbidden();
+    }
 }

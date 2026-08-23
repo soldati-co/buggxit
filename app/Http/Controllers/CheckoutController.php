@@ -7,6 +7,7 @@ use App\Models\Address;
 use App\Models\Order;
 use App\Services\CartService;
 use App\Services\OrderService;
+use App\Services\ReceiptService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\URL;
 
@@ -79,7 +80,28 @@ class CheckoutController extends Controller
             abort(403);
         }
 
-        return view('checkout.success', compact('order'));
+        // A guest reached this page via a signed link, not a session -- give
+        // them an equally signed link to their receipt rather than one that
+        // 403s the moment they click it.
+        $receiptUrl = URL::temporarySignedRoute('checkout.receipt', now()->addHours(48), ['order' => $order->id]);
+
+        return view('checkout.success', compact('order', 'receiptUrl'));
+    }
+
+    public function receipt(Request $request, Order $order, ReceiptService $receipts)
+    {
+        $isOwner = auth()->check() && $order->user_id == auth()->id();
+
+        if (! $request->hasValidSignature() && ! $isOwner) {
+            abort(403);
+        }
+
+        $pdf = $receipts->render($order, 'customer');
+
+        return response($pdf, 200, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'inline; filename="'.$receipts->filename($order).'"',
+        ]);
     }
 
     private function resolveShippingAddress(Request $request): Address

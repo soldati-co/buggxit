@@ -52,6 +52,8 @@ Route::prefix('checkout')->name('checkout.')->middleware('web')->group(function 
     // signature has expired. The signature-or-ownership check happens inside
     // CheckoutController::success() instead.
     Route::get('/success/{order}', [CheckoutController::class, 'success'])->name('success');
+    // Same signature-or-ownership pattern as success() -- see CheckoutController::receipt().
+    Route::get('/receipt/{order}', [CheckoutController::class, 'receipt'])->name('receipt');
 });
 
 Route::prefix('payfast')->name('payfast.')->middleware('web')->group(function () {
@@ -67,6 +69,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [PageController::class, 'dashboard'])->name('dashboard');
     Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
     Route::get('/orders/{order}', [OrderController::class, 'show'])->name('orders.show');
+    Route::get('/orders/{order}/receipt', [OrderController::class, 'receipt'])->name('orders.receipt');
 });
 
 // Route::get('/search', [SearchController::class, 'index'])->name('search');

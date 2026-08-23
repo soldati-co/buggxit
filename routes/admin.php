@@ -79,6 +79,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::prefix('orders')->name('orders.')->group(function () {
             Route::get('/', [AdminOrderController::class, 'index'])->name('index');
             Route::get('/{order}', [AdminOrderController::class, 'show'])->name('show');
+            Route::get('/{order}/receipt', [AdminOrderController::class, 'receipt'])->name('receipt');
             Route::patch('/{order}/status', [AdminOrderController::class, 'updateStatus'])->name('update-status');
         });
 

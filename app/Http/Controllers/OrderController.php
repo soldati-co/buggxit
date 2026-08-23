@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Order;
+use App\Services\ReceiptService;
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
@@ -26,5 +27,19 @@ class OrderController extends Controller
         }
 
         return view('orders.show', compact('order'));
+    }
+
+    public function receipt(Order $order, ReceiptService $receipts)
+    {
+        if ($order->user_id != auth()->id()) {
+            abort(403);
+        }
+
+        $pdf = $receipts->render($order, 'customer');
+
+        return response($pdf, 200, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'inline; filename="'.$receipts->filename($order).'"',
+        ]);
     }
 }

@@ -159,4 +159,33 @@ class CheckoutFlowTest extends TestCase
             ->get(route('checkout.success', $order->id))
             ->assertForbidden();
     }
+
+    public function test_guest_without_a_valid_signature_cannot_download_someone_elses_receipt(): void
+    {
+        $order = \App\Models\Order::factory()->create(['user_id' => null]);
+
+        $this->get(route('checkout.receipt', $order->id))->assertForbidden();
+    }
+
+    public function test_signed_receipt_url_returns_a_pdf(): void
+    {
+        $order = \App\Models\Order::factory()->create(['user_id' => null]);
+
+        $url = \Illuminate\Support\Facades\URL::temporarySignedRoute('checkout.receipt', now()->addHours(48), ['order' => $order->id]);
+
+        $response = $this->get($url);
+
+        $response->assertOk();
+        $response->assertHeader('Content-Type', 'application/pdf');
+    }
+
+    public function test_owning_authenticated_user_can_download_receipt_without_a_signature(): void
+    {
+        $user = User::factory()->create();
+        $order = \App\Models\Order::factory()->create(['user_id' => $user->id]);
+
+        $this->actingAs($user)
+            ->get(route('checkout.receipt', $order->id))
+            ->assertOk();
+    }
 }

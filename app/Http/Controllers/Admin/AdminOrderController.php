@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Order;
+use App\Services\ReceiptService;
 use Illuminate\Http\Request;
 
 class AdminOrderController extends Controller
@@ -18,6 +19,16 @@ class AdminOrderController extends Controller
     {
         $order->load('items.dress', 'user', 'shippingAddress', 'billingAddress');
         return view('admin.orders.show', compact('order'));
+    }
+
+    public function receipt(Order $order, ReceiptService $receipts)
+    {
+        $pdf = $receipts->render($order, 'store');
+
+        return response($pdf, 200, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'inline; filename="'.$receipts->filename($order).'"',
+        ]);
     }
 
     public function updateStatus(Request $request, Order $order)

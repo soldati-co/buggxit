@@ -5,9 +5,13 @@
 @section('page-description', 'Order #' . $order->order_number)
 
 @section('content')
-    <div class="mb-6">
+    <div class="mb-6 flex items-center justify-between">
         <a href="{{ route('admin.orders.index') }}" class="text-gold hover:text-gold-bright flex items-center">
             <i class="fas fa-arrow-left mr-2"></i> Back to Orders
+        </a>
+        <a href="{{ route('admin.orders.receipt', $order) }}" target="_blank"
+            class="inline-flex items-center px-4 py-2 bg-ink-raised2/50 border border-line rounded-lg text-bone-dim hover:text-gold hover:border-gold/50 transition-colors text-sm">
+            <i class="fas fa-file-pdf mr-2 text-gold"></i> Download Receipt
         </a>
     </div>
 
