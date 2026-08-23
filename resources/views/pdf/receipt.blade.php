@@ -78,6 +78,7 @@
 
         .items-table {
             margin-top: 20px;
+            table-layout: fixed;
         }
 
         .items-table th {
@@ -86,13 +87,30 @@
             text-transform: uppercase;
             color: #777;
             border-bottom: 2px solid #ddd;
-            padding: 6px 0;
+            padding: 6px 4px 6px 0;
         }
 
         .items-table td {
             border-bottom: 1px solid #eee;
-            padding: 8px 0;
+            padding: 8px 4px 8px 0;
             font-size: 12px;
+            word-wrap: break-word;
+        }
+
+        .col-item {
+            width: 46%;
+        }
+
+        .col-qty {
+            width: 12%;
+        }
+
+        .col-price {
+            width: 21%;
+        }
+
+        .col-total {
+            width: 21%;
         }
 
         .text-right {
@@ -204,16 +222,16 @@
     <table class="items-table">
         <thead>
             <tr>
-                <th>Item</th>
-                <th class="text-right">Qty</th>
-                <th class="text-right">Unit Price</th>
-                <th class="text-right">Line Total</th>
+                <th class="col-item">Item</th>
+                <th class="col-qty text-right">Qty</th>
+                <th class="col-price text-right">Unit Price</th>
+                <th class="col-total text-right">Line Total</th>
             </tr>
         </thead>
         <tbody>
             @foreach ($order->items as $item)
                 <tr>
-                    <td>
+                    <td class="col-item">
                         {{ $item->dress?->name ?? 'Item' }}
                         @if (! empty($item->attributes['size']) || ! empty($item->attributes['color']))
                             <br><span class="item-meta">
@@ -221,9 +239,9 @@
                             </span>
                         @endif
                     </td>
-                    <td class="text-right">{{ $item->quantity }}</td>
-                    <td class="text-right">R{{ number_format($item->price, 2) }}</td>
-                    <td class="text-right">R{{ number_format($item->price * $item->quantity, 2) }}</td>
+                    <td class="col-qty text-right">{{ $item->quantity }}</td>
+                    <td class="col-price text-right">R{{ number_format($item->price, 2) }}</td>
+                    <td class="col-total text-right">R{{ number_format($item->price * $item->quantity, 2) }}</td>
                 </tr>
             @endforeach
         </tbody>
