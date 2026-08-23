@@ -67,7 +67,7 @@
                                         class="w-full px-4 py-3 bg-ink-raised2/50 border border-line rounded-lg text-bone">
                                 </div>
                                 <div>
-                                    <label class="block text-sm font-medium text-bone-dim mb-1">State/Province</label>
+                                    <label class="block text-sm font-medium text-bone-dim mb-1">Province</label>
                                     <select name="state"
                                         class="w-full px-4 py-3 bg-ink-raised2/50 border border-line rounded-lg text-bone">
                                         <option value="">Select a province</option>
