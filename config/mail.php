@@ -65,6 +65,14 @@ return [
             'transport' => 'resend',
         ],
 
+        // Hetzner blocks outbound SMTP (25/465/587) by default, and ZeptoMail's
+        // SMTP and API credentials are different tokens -- SMTP won't work
+        // here regardless of what's configured. This sends over HTTPS (443)
+        // instead, which is never blocked since the site itself runs on it.
+        'zeptomail' => [
+            'transport' => 'zeptomail',
+        ],
+
         'sendmail' => [
             'transport' => 'sendmail',
             'path' => env('MAIL_SENDMAIL_PATH', '/usr/sbin/sendmail -bs -i'),

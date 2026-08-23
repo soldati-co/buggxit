@@ -2,8 +2,10 @@
 
 namespace App\Providers;
 
+use App\Mail\Transport\ZeptoMailTransport;
 use App\Services\CartService;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\View;
 
@@ -49,6 +51,10 @@ class AppServiceProvider extends ServiceProvider
         // Share cart count with all views
         View::composer('*', function ($view) {
             $view->with('cartCount', app(CartService::class)->count());
+        });
+
+        Mail::extend('zeptomail', function () {
+            return new ZeptoMailTransport(config('services.zeptomail.token'));
         });
     }
 }

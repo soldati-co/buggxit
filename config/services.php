@@ -22,6 +22,13 @@ return [
         'key' => env('RESEND_KEY'),
     ],
 
+    'zeptomail' => [
+        // Full Authorization header value, e.g. "Zoho-enczapikey <token>" --
+        // stored whole since that's exactly what ZeptoMail's dashboard hands
+        // you to copy, no assembly required.
+        'token' => env('ZEPTOMAIL_TOKEN'),
+    ],
+
     'ses' => [
         'key' => env('AWS_ACCESS_KEY_ID'),
         'secret' => env('AWS_SECRET_ACCESS_KEY'),
