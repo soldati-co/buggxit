@@ -49,9 +49,12 @@
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16">
                     <div class="space-y-4">
                         <div class="relative aspect-square rounded-2xl overflow-hidden border border-line bg-ink-raised/90 backdrop-blur-sm group">
+                            <template x-if="!mainImageLoaded">
+                                <div class="absolute inset-0 bg-ink-raised2/90 animate-pulse z-10"></div>
+                            </template>
                             <img :src="selectedImage" :alt="product.name"
                                 :class="selectedImage === product.detail_image_url && product.has_detail_crop ? 'object-cover' : 'object-contain'"
-                                class="w-full h-full">
+                                class="w-full h-full" @load="mainImageLoaded = true" x-on:error="mainImageLoaded = true">
                             <template x-if="product.is_featured">
                                 <span class="absolute top-4 left-4 z-20 px-3 py-1.5 text-xs font-medium bg-gold/90 text-ink rounded-full backdrop-blur-sm">
                                     <i class="fas fa-star mr-1"></i> Featured
@@ -205,6 +208,7 @@
                 product: null,
                 selectedImage: null,
                 galleryImages: [],
+                mainImageLoaded: false,
                 selectedSize: null,
                 selectedColor: null,
                 showAddedModal: false,
@@ -216,12 +220,13 @@
                 },
 
                 get canAddToCart() {
-                    if (!this.product) return false;
+                    if (!this.product || !this.mainImageLoaded) return false;
                     return !(this.product.sizes?.length && !this.selectedSize)
                         && !(this.product.colors?.length && !this.selectedColor);
                 },
 
                 get missingSelectionText() {
+                    if (!this.mainImageLoaded) return 'Please wait for the image to finish loading.';
                     const needsSize = this.product?.sizes?.length && !this.selectedSize;
                     const needsColor = this.product?.colors?.length && !this.selectedColor;
                     if (needsSize && needsColor) return 'Please select a size and color.';
