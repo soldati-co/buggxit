@@ -124,6 +124,9 @@
                     <p class="text-bone-dim text-sm">{{ $order->user->email }}</p>
                 @else
                     <p class="text-bone-dim">Guest checkout</p>
+                    @if ($order->email)
+                        <p class="text-bone-dim text-sm">{{ $order->email }}</p>
+                    @endif
                 @endif
             </div>
 

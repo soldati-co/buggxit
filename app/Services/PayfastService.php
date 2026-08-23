@@ -44,7 +44,7 @@ class PayfastService
             'notify_url' => route('payfast.notify'),
             'name_first' => $firstName,
             'name_last' => $lastName,
-            'email_address' => $user?->email,
+            'email_address' => $order->email ?? $user?->email,
             'm_payment_id' => $order->order_number,
             'amount' => (float) $order->total,
             'item_name' => 'BUGGXIT Couture Order '.$order->order_number,

@@ -50,6 +50,7 @@ class CheckoutController extends Controller
                 paymentMethod: $request->payment_method,
                 userId: auth()->id(),
                 notes: $request->input('notes'),
+                email: $request->input('email') ?: auth()->user()?->email,
             );
 
             // Guests need a way back to their own order confirmation without

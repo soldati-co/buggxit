@@ -24,7 +24,7 @@ class CheckoutRequest extends FormRequest
             'phone' => 'required_without:shipping_address_id|string|max:50',
             'payment_method' => 'required|in:payfast',
             'same_as_shipping' => 'nullable|boolean',
-            'email' => 'required_if:guest,true|email|max:255',
+            'email' => 'required|email|max:255',
             'notes' => 'nullable|string|max:2000',
         ];
     }

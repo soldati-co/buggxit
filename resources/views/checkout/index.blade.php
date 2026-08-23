@@ -73,6 +73,12 @@
                                     <input type="text" name="phone" value="{{ old('phone') }}"
                                         class="w-full px-4 py-3 bg-ink-raised2/50 border border-line rounded-lg text-bone">
                                 </div>
+                                <div class="md:col-span-2">
+                                    <label class="block text-sm font-medium text-bone-dim mb-1">Email *</label>
+                                    <input type="email" name="email" value="{{ old('email', auth()->user()?->email) }}"
+                                        class="w-full px-4 py-3 bg-ink-raised2/50 border border-line rounded-lg text-bone">
+                                    <p class="text-xs text-bone-faint mt-1">We'll send your order confirmation and payment receipt here.</p>
+                                </div>
                             </div>
                         </div>
                     </div>

@@ -111,6 +111,7 @@ class CheckoutFlowTest extends TestCase
                 'postal_code' => '8001',
                 'country' => 'South Africa',
                 'phone' => '0111234567',
+                'email' => 'guest@example.com',
                 'payment_method' => 'payfast',
             ]);
 
@@ -119,6 +120,7 @@ class CheckoutFlowTest extends TestCase
         $this->assertDatabaseCount('order_items', 1);
 
         $order = \App\Models\Order::first();
+        $this->assertSame('guest@example.com', $order->email);
         $response->assertRedirect();
         $this->assertStringContainsString('signature=', $response->headers->get('Location'));
         $this->assertStringContainsString((string) $order->id, $response->headers->get('Location'));

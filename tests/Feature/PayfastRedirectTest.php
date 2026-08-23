@@ -53,6 +53,7 @@ class PayfastRedirectTest extends TestCase
                 'postal_code' => '2000',
                 'country' => 'South Africa',
                 'phone' => '0123456789',
+                'email' => 'guest@example.com',
                 'payment_method' => 'payfast',
             ]);
 
