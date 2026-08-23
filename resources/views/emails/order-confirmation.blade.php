@@ -7,26 +7,17 @@
         body {
             font-family: 'Manrope', sans-serif;
             background: #0a0a0a;
-            color: #fff;
+            color: #ffffff;
             padding: 20px;
         }
 
         .container {
             max-width: 600px;
             margin: 0 auto;
-            background: #111;
+            background: #111111;
             border: 1px solid #D4AF37;
             border-radius: 10px;
             padding: 20px;
-        }
-
-        h2 {
-            color: #D4AF37;
-        }
-
-        .label {
-            font-weight: bold;
-            color: #D4AF37;
         }
 
         table {
@@ -37,59 +28,54 @@
 
         td {
             padding: 8px 0;
-            border-bottom: 1px solid #222;
+            border-bottom: 1px solid #222222;
             font-size: 14px;
-        }
-
-        .total-row td {
-            border-bottom: none;
-            font-weight: bold;
-            color: #D4AF37;
-            padding-top: 12px;
         }
     </style>
 </head>
 
-<body>
-    <div class="container">
+<body style="font-family:'Manrope',sans-serif;background:#0a0a0a;color:#ffffff;padding:20px;">
+    <div class="container" style="max-width:600px;margin:0 auto;background:#111111;border:1px solid #D4AF37;border-radius:10px;padding:20px;">
         <div style="text-align:center;margin-bottom:20px;">
             <img src="{{ asset('logo.webp') }}" alt="Buggxit Couture" width="140" style="max-width:140px;height:auto;">
         </div>
-        <h2>Thank you for your order</h2>
-        <p>Hi{{ ($order->name ?? $order->user?->name) ? ' '.($order->name ?? $order->user->name) : '' }}, your order has been confirmed and payment received. Here's a summary:</p>
+        <h2 style="color:#D4AF37;margin-top:0;">Thank you for your order</h2>
+        <p style="color:#ffffff;">Hi{{ ($order->name ?? $order->user?->name) ? ' '.($order->name ?? $order->user->name) : '' }}, your order has been confirmed and payment received. Here's a summary:</p>
 
-        <p><span class="label">Order number:</span> {{ $order->order_number }}</p>
+        <p style="color:#ffffff;"><span style="color:#D4AF37;font-weight:bold;">Order number:</span> <span style="color:#ffffff;">{{ $order->order_number }}</span></p>
 
-        <table>
+        <table style="width:100%;border-collapse:collapse;margin:16px 0;">
             @foreach ($order->items as $item)
                 <tr>
-                    <td>
+                    <td style="padding:8px 0;border-bottom:1px solid #222222;font-size:14px;color:#ffffff;">
                         {{ $item->dress?->name ?? 'Item' }}
                         @if (! empty($item->attributes['size']) || ! empty($item->attributes['color']))
-                            <br><span style="color:#888;font-size:12px;">
+                            <br><span style="color:#999999;font-size:12px;">
                                 {{ collect([$item->attributes['size'] ?? null ? 'Size '.$item->attributes['size'] : null, $item->attributes['color'] ?? null ? ucfirst($item->attributes['color']) : null])->filter()->implode(', ') }}
                             </span>
                         @endif
-                        <br><span style="color:#888;font-size:12px;">Qty {{ $item->quantity }}</span>
+                        <br><span style="color:#999999;font-size:12px;">Qty {{ $item->quantity }}</span>
                     </td>
-                    <td style="text-align:right;">R{{ number_format($item->price * $item->quantity, 2) }}</td>
+                    <td style="padding:8px 0;border-bottom:1px solid #222222;font-size:14px;color:#ffffff;text-align:right;">R{{ number_format($item->price * $item->quantity, 2) }}</td>
                 </tr>
             @endforeach
-            <tr class="total-row">
-                <td>Total</td>
-                <td style="text-align:right;">R{{ number_format($order->total, 2) }}</td>
+            <tr>
+                <td style="padding-top:12px;border-bottom:none;font-weight:bold;color:#D4AF37;">Total</td>
+                <td style="padding-top:12px;border-bottom:none;font-weight:bold;color:#D4AF37;text-align:right;">R{{ number_format($order->total, 2) }}</td>
             </tr>
         </table>
 
         @if ($order->shippingAddress)
-            <p><span class="label">Shipping to:</span><br>
-                {{ $order->shippingAddress->address_line1 }}@if ($order->shippingAddress->address_line2), {{ $order->shippingAddress->address_line2 }}@endif<br>
-                {{ $order->shippingAddress->city }}, {{ $order->shippingAddress->postal_code }}<br>
-                {{ $order->shippingAddress->country }}
+            <p style="color:#ffffff;"><span style="color:#D4AF37;font-weight:bold;">Shipping to:</span><br>
+                <span style="color:#ffffff;">
+                    {{ $order->shippingAddress->address_line1 }}@if ($order->shippingAddress->address_line2), {{ $order->shippingAddress->address_line2 }}@endif<br>
+                    {{ $order->shippingAddress->city }}, {{ $order->shippingAddress->postal_code }}<br>
+                    {{ $order->shippingAddress->country }}
+                </span>
             </p>
         @endif
 
-        <p style="color:#888;font-size:13px;">We'll be in touch with updates as your order is prepared and shipped. If you have any questions, just reply to this email.</p>
+        <p style="color:#999999;font-size:13px;">We'll be in touch with updates as your order is prepared and shipped. If you have any questions, just reply to this email.</p>
     </div>
 </body>
 
