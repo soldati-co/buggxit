@@ -168,6 +168,31 @@
                 </div>
             </template>
         </section>
+
+        {{-- Post add-to-cart choice: view cart, or keep browsing --}}
+        <div x-show="showAddedModal" x-cloak
+            class="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-ink/80 backdrop-blur-sm"
+            @keydown.escape.window="showAddedModal = false">
+            <div class="bg-ink-raised border border-line rounded-2xl p-6 w-full max-w-sm text-center"
+                @click.outside="showAddedModal = false">
+                <div class="w-14 h-14 mx-auto mb-4 rounded-full flex items-center justify-center"
+                    :class="addedIsWarning ? 'bg-gold/10 border border-gold/30' : 'bg-good/20 border border-good/30'">
+                    <i class="text-2xl" :class="addedIsWarning ? 'fas fa-triangle-exclamation text-gold' : 'fas fa-check text-good'"></i>
+                </div>
+                <h3 class="text-lg font-semibold text-bone mb-2" x-text="addedMessage"></h3>
+                <p class="text-bone-dim text-sm mb-6">Would you like to view your cart, or keep browsing?</p>
+                <div class="flex flex-col sm:flex-row gap-3">
+                    <a href="{{ route('products.index') }}"
+                        class="flex-1 px-4 py-3 bg-ink-raised2/50 border border-line rounded-lg text-bone hover:bg-ink-raised2 transition-colors text-sm font-medium">
+                        Continue Shopping
+                    </a>
+                    <a href="{{ route('cart.index') }}"
+                        class="flex-1 px-4 py-3 bg-gradient-to-r from-gold to-gold-dim text-ink font-semibold rounded-lg hover:from-gold-bright hover:to-gold transition-all duration-300 text-sm">
+                        View Cart
+                    </a>
+                </div>
+            </div>
+        </div>
     </div>
 @endsection
 
@@ -182,6 +207,9 @@
                 galleryImages: [],
                 selectedSize: null,
                 selectedColor: null,
+                showAddedModal: false,
+                addedMessage: '',
+                addedIsWarning: false,
 
                 init() {
                     this.fetchProduct(productIdentifier);
@@ -254,7 +282,14 @@
                         const data = await response.json();
                         if (data.success) {
                             window.updateCartBadges(data.cart_count);
-                            window.showCartToast(data.message || 'Added to your cart.', data.capped === true);
+                            // Clear the selection so the button requires a fresh
+                            // size/color pick before another item can be added —
+                            // canAddToCart naturally goes false again from this.
+                            this.selectedSize = null;
+                            this.selectedColor = null;
+                            this.addedMessage = data.message || 'Added to your cart.';
+                            this.addedIsWarning = data.capped === true;
+                            this.showAddedModal = true;
                         } else {
                             window.showCartToast(data.message || 'Could not add this to your cart. Please try again.', true);
                         }
