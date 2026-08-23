@@ -5,7 +5,7 @@
 @section('page-description', 'For orders placed via WhatsApp, phone, or in person')
 
 @section('content')
-    <div class="max-w-4xl mx-auto" x-data="manualOrderForm(@json($dresses))">
+    <div class="max-w-4xl mx-auto" x-data='manualOrderForm(@json($dresses), @json(old("state", "")), @json(old("courier_method", "courier_guy")), @json(old("pep_point_code", "")))'>
         <form action="{{ route('admin.orders.store') }}" method="POST">
             @csrf
 
@@ -50,8 +50,10 @@
                         @error('city')<p class="mt-2 text-sm text-bad">{{ $message }}</p>@enderror
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-bone-dim mb-2">Province</label>
-                        <select name="state"
+                        <label class="block text-sm font-medium text-bone-dim mb-2">
+                            Province <span class="text-gold" x-show="courierMethod === 'pep'">*</span>
+                        </label>
+                        <select name="state" x-model="province"
                             class="w-full px-4 py-3 bg-ink-raised2/50 border border-line rounded-lg text-bone text-sm focus:outline-none focus:border-gold">
                             <option value="">Select a province</option>
                             @foreach ([
@@ -81,6 +83,49 @@
                         @error('phone')<p class="mt-2 text-sm text-bad">{{ $message }}</p>@enderror
                     </div>
                 </div>
+            </div>
+
+            {{-- Courier Method --}}
+            <div class="bg-ink-raised/90 backdrop-blur-sm border border-line rounded-xl p-6 mb-6">
+                <h3 class="text-lg font-semibold text-bone mb-4">Courier Method</h3>
+                <div>
+                    <label class="block text-sm font-medium text-bone-dim mb-2">Select courier</label>
+                    <select name="courier_method" x-model="courierMethod"
+                        class="w-full md:w-1/2 px-4 py-3 bg-ink-raised2/50 border border-line rounded-lg text-bone text-sm focus:outline-none focus:border-gold">
+                        <option value="courier_guy">Courier Guy (delivered to shipping address)</option>
+                        <option value="pep">PEP (collect from a PEP store)</option>
+                    </select>
+                    @error('courier_method')<p class="mt-2 text-sm text-bad">{{ $message }}</p>@enderror
+                </div>
+
+                <template x-if="courierMethod === 'pep'">
+                    <div class="mt-4">
+                        <template x-if="!province">
+                            <p class="text-sm text-bad">Please select a province above first.</p>
+                        </template>
+                        <template x-if="province">
+                            <div>
+                                <label class="block text-sm font-medium text-bone-dim mb-2">PEP Point <span class="text-gold">*</span></label>
+                                <template x-if="pepLoading">
+                                    <p class="text-sm text-bone-dim">Loading PEP stores...</p>
+                                </template>
+                                <template x-if="!pepLoading && pepError">
+                                    <p class="text-sm text-bad" x-text="pepError"></p>
+                                </template>
+                                <template x-if="!pepLoading && !pepError && pepPoints.length">
+                                    <select name="pep_point_code" x-model="pepPointCode"
+                                        class="w-full md:w-1/2 px-4 py-3 bg-ink-raised2/50 border border-line rounded-lg text-bone text-sm focus:outline-none focus:border-gold">
+                                        <option value="">Select a PEP point</option>
+                                        <template x-for="point in pepPoints" :key="point.code">
+                                            <option :value="point.code" x-text="point.name + ' — ' + point.address"></option>
+                                        </template>
+                                    </select>
+                                </template>
+                                @error('pep_point_code')<p class="mt-2 text-sm text-bad">{{ $message }}</p>@enderror
+                            </div>
+                        </template>
+                    </div>
+                </template>
             </div>
 
             {{-- Items --}}
@@ -210,12 +255,62 @@
 
 @push('scripts')
     <script>
-        function manualOrderForm(dresses) {
+        function manualOrderForm(dresses, initialProvince, initialCourierMethod, initialPepPointCode) {
             return {
                 dresses: dresses,
                 items: [
                     { dress_id: '', size: '', color: '', quantity: 1, price: 0 },
                 ],
+                province: initialProvince || '',
+                courierMethod: initialCourierMethod || 'courier_guy',
+                pepPointCode: initialPepPointCode || '',
+                pepPoints: [],
+                pepLoading: false,
+                pepError: null,
+
+                init() {
+                    this.$watch('province', () => this.maybeFetchPepPoints());
+                    this.$watch('courierMethod', () => this.maybeFetchPepPoints());
+
+                    if (this.courierMethod === 'pep' && this.province) {
+                        this.fetchPepPoints();
+                    }
+                },
+
+                maybeFetchPepPoints() {
+                    if (this.courierMethod !== 'pep') {
+                        return;
+                    }
+                    if (!this.province) {
+                        this.pepPoints = [];
+                        this.pepError = null;
+                        return;
+                    }
+                    this.fetchPepPoints();
+                },
+
+                async fetchPepPoints() {
+                    this.pepLoading = true;
+                    this.pepError = null;
+                    this.pepPoints = [];
+
+                    try {
+                        const response = await fetch(`{{ route('api.pep-points.index', [], false) }}?province=${encodeURIComponent(this.province)}`);
+                        const data = await response.json();
+                        this.pepPoints = data.data || [];
+                        if (!this.pepPoints.length) {
+                            this.pepError = 'No open PEP points found for this province.';
+                        } else if (!this.pepPoints.some((point) => point.code === this.pepPointCode)) {
+                            this.pepPointCode = '';
+                        }
+                    } catch (error) {
+                        console.error(error);
+                        this.pepError = 'Could not load PEP points. Please try again.';
+                    } finally {
+                        this.pepLoading = false;
+                    }
+                },
+
                 dressFor(id) {
                     return this.dresses.find(d => d.id === id);
                 },

@@ -98,12 +98,14 @@ class OrderService
         ?string $name = null,
         ?string $email = null,
         ?string $notes = null,
+        ?string $courierMethod = null,
+        ?array $pepPoint = null,
     ): Order {
         if (empty($items)) {
             throw new RuntimeException('An order needs at least one item.');
         }
 
-        return DB::transaction(function () use ($items, $shippingAddress, $paymentMethod, $paymentStatus, $status, $name, $email, $notes) {
+        return DB::transaction(function () use ($items, $shippingAddress, $paymentMethod, $paymentStatus, $status, $name, $email, $notes, $courierMethod, $pepPoint) {
             $subtotal = array_reduce($items, fn ($carry, $item) => $carry + ($item['price'] * $item['quantity']), 0);
 
             $order = Order::create([
@@ -120,6 +122,8 @@ class OrderService
                 'payment_method' => $paymentMethod,
                 'payment_status' => $paymentStatus,
                 'notes' => $notes,
+                'courier_method' => $courierMethod,
+                'pep_point' => $pepPoint,
             ]);
 
             foreach ($items as $item) {

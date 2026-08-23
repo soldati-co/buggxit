@@ -26,11 +26,23 @@
                     <span class="text-bone-dim">Total</span>
                     <span class="text-gold font-bold font-numeric">R{{ number_format($order->total, 0) }}</span>
                 </div>
-                <div class="flex justify-between">
+                <div class="flex justify-between {{ $order->courier_method ? 'mb-2' : '' }}">
                     <span class="text-bone-dim">Payment Method</span>
                     <span
                         class="text-bone">{{ match ($order->payment_method) { 'eft' => 'Bank Transfer (EFT)', 'cash_on_delivery' => 'Cash on Delivery', 'payfast' => 'PayFast', 'whatsapp' => 'WhatsApp Order', 'other' => 'Other', default => ucfirst($order->payment_method ?? 'Unknown') } }}</span>
                 </div>
+                @if ($order->courier_method)
+                    <div class="flex justify-between">
+                        <span class="text-bone-dim">Courier</span>
+                        <span class="text-bone text-right">
+                            @if ($order->courier_method === 'pep' && $order->pep_point)
+                                PEP &mdash; {{ $order->pep_point['name'] ?? '' }}
+                            @else
+                                The Courier Guy
+                            @endif
+                        </span>
+                    </div>
+                @endif
             </div>
 
             <p class="text-bone-dim mb-8">We'll send you a confirmation email with order details and tracking information

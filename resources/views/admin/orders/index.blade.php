@@ -28,6 +28,7 @@
                         <th class="px-6 py-4 text-left text-xs font-medium text-bone-dim uppercase">Total</th>
                         <th class="px-6 py-4 text-left text-xs font-medium text-bone-dim uppercase">Status</th>
                         <th class="px-6 py-4 text-left text-xs font-medium text-bone-dim uppercase">Payment</th>
+                        <th class="px-6 py-4 text-left text-xs font-medium text-bone-dim uppercase">Courier</th>
                         <th class="px-6 py-4 text-left text-xs font-medium text-bone-dim uppercase">Actions</th>
                     </tr>
                 </thead>
@@ -59,6 +60,15 @@
                                 @else bg-gold/10 text-gold-bright border border-gold/30 @endif">
                                     {{ ucfirst($order->payment_status) }}
                                 </span>
+                            </td>
+                            <td class="px-6 py-4 text-sm text-bone-dim">
+                                @if ($order->courier_method === 'pep')
+                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gold/10 text-gold-bright border border-gold/30">PEP</span>
+                                @elseif ($order->courier_method)
+                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-info/10 text-info border border-info/30">Courier Guy</span>
+                                @else
+                                    <span class="text-bone-faint">&mdash;</span>
+                                @endif
                             </td>
                             <td class="px-6 py-4">
                                 <a href="{{ route('admin.orders.show', $order) }}"
