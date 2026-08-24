@@ -75,15 +75,24 @@
                     link instead.
                 </p>
 
-                <div>
-                    <label class="block text-sm font-medium text-bone-dim mb-1">Elfsight Widget ID</label>
-                    <input type="text" name="instagram_widget_id" value="{{ old('instagram_widget_id', $settings['instagram_widget_id']) }}"
-                        placeholder="e.g. 29f4d79e-8ae9-4324-bce0-5553440396bf"
-                        class="w-full bg-ink-raised2 border border-line rounded-lg px-4 py-3 text-bone focus:border-gold focus:ring-gold">
-                    @error('instagram_widget_id')
-                        <p class="text-bad text-xs mt-1">{{ $message }}</p>
-                    @enderror
-                    <p class="text-xs text-bone-faint mt-1">Find this in your Elfsight dashboard under the widget's Export/Publish code — it's the UUID after "elfsight-app-" in the embed snippet.</p>
+                <div class="space-y-6">
+                    <label class="flex items-center p-3 border border-line rounded-lg cursor-pointer hover:border-gold/50 transition-colors">
+                        <input type="checkbox" name="instagram_feed_enabled" value="1"
+                            {{ old('instagram_feed_enabled', $settings['instagram_feed_enabled']) ? 'checked' : '' }}
+                            class="h-4 w-4 rounded bg-ink-raised2 border-line text-gold focus:ring-gold">
+                        <span class="ml-3 text-bone">Show the Follow Along / Instagram Feed section on the homepage</span>
+                    </label>
+
+                    <div>
+                        <label class="block text-sm font-medium text-bone-dim mb-1">Elfsight Widget ID</label>
+                        <input type="text" name="instagram_widget_id" value="{{ old('instagram_widget_id', $settings['instagram_widget_id']) }}"
+                            placeholder="e.g. 29f4d79e-8ae9-4324-bce0-5553440396bf"
+                            class="w-full bg-ink-raised2 border border-line rounded-lg px-4 py-3 text-bone focus:border-gold focus:ring-gold">
+                        @error('instagram_widget_id')
+                            <p class="text-bad text-xs mt-1">{{ $message }}</p>
+                        @enderror
+                        <p class="text-xs text-bone-faint mt-1">Find this in your Elfsight dashboard under the widget's Export/Publish code — it's the UUID after "elfsight-app-" in the embed snippet.</p>
+                    </div>
                 </div>
             </div>
 

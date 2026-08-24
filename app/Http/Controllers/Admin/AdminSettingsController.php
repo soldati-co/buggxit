@@ -25,6 +25,7 @@ class AdminSettingsController extends Controller
             'whatsapp_enabled' => Setting::get('whatsapp_enabled', '0'),
             'whatsapp_number' => Setting::get('whatsapp_number', ''),
             'whatsapp_position' => Setting::get('whatsapp_position', 'right'),
+            'instagram_feed_enabled' => Setting::get('instagram_feed_enabled', '1'),
             'instagram_widget_id' => Setting::get('instagram_widget_id', ''),
             'popup_banner_enabled' => Setting::get('popup_banner_enabled', '0'),
             'popup_banner_text' => Setting::get('popup_banner_text', "We're coming to you. Pop-up shop coming soon — follow @buggxit_couture for the date and location."),
@@ -45,6 +46,7 @@ class AdminSettingsController extends Controller
             // International format, digits only (with an optional leading +).
             'whatsapp_number' => 'nullable|string|max:20|regex:/^\+?[0-9]{7,15}$/',
             'whatsapp_position' => 'required|in:left,right',
+            'instagram_feed_enabled' => 'nullable|boolean',
             'instagram_widget_id' => 'nullable|string|max:50|regex:/^[a-zA-Z0-9_-]*$/',
             'popup_banner_enabled' => 'nullable|boolean',
             'popup_banner_text' => 'nullable|string|max:300',
@@ -61,6 +63,7 @@ class AdminSettingsController extends Controller
         Setting::set('whatsapp_enabled', $request->boolean('whatsapp_enabled') ? '1' : '0');
         Setting::set('whatsapp_number', $validated['whatsapp_number'] ?? null);
         Setting::set('whatsapp_position', $validated['whatsapp_position']);
+        Setting::set('instagram_feed_enabled', $request->boolean('instagram_feed_enabled') ? '1' : '0');
         Setting::set('instagram_widget_id', $validated['instagram_widget_id'] ?? null);
         Setting::set('popup_banner_enabled', $request->boolean('popup_banner_enabled') ? '1' : '0');
         Setting::set('popup_banner_text', $validated['popup_banner_text'] ?? null);

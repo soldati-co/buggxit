@@ -109,6 +109,33 @@ class AdminSettingsTest extends TestCase
         $this->assertNull(Setting::get('instagram_widget_id'));
     }
 
+    public function test_admin_can_disable_the_instagram_feed_section(): void
+    {
+        $admin = Admin::factory()->create();
+
+        $response = $this->actingAs($admin, 'admin')->put(route('admin.settings.update'), [
+            'whatsapp_position' => 'right',
+            // instagram_feed_enabled omitted -- unchecked checkboxes send nothing
+        ]);
+
+        $response->assertRedirect();
+        $this->assertSame('0', Setting::get('instagram_feed_enabled'));
+    }
+
+    public function test_admin_can_re_enable_the_instagram_feed_section(): void
+    {
+        Setting::set('instagram_feed_enabled', '0');
+        $admin = Admin::factory()->create();
+
+        $response = $this->actingAs($admin, 'admin')->put(route('admin.settings.update'), [
+            'whatsapp_position' => 'right',
+            'instagram_feed_enabled' => '1',
+        ]);
+
+        $response->assertRedirect();
+        $this->assertSame('1', Setting::get('instagram_feed_enabled'));
+    }
+
     public function test_admin_can_enable_popup_banner_with_custom_text(): void
     {
         $admin = Admin::factory()->create();

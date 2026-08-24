@@ -73,6 +73,27 @@ class HomepageEnhancementsTest extends TestCase
         $response->assertSee('elfsightcdn.com/platform.js', false);
     }
 
+    public function test_follow_along_section_hidden_when_disabled(): void
+    {
+        Setting::set('instagram_feed_enabled', '0');
+        Setting::set('instagram_widget_id', '29f4d79e-8ae9-4324-bce0-5553440396bf');
+
+        $response = $this->get(route('home'));
+
+        $response->assertOk();
+        $response->assertDontSee('Follow Along');
+        $response->assertDontSee('elfsight-app-29f4d79e-8ae9-4324-bce0-5553440396bf', false);
+        $response->assertDontSee('elfsightcdn.com', false);
+    }
+
+    public function test_follow_along_section_visible_by_default_when_setting_never_saved(): void
+    {
+        $response = $this->get(route('home'));
+
+        $response->assertOk();
+        $response->assertSee('Follow Along');
+    }
+
     public function test_size_guide_page_loads_with_expected_content(): void
     {
         $response = $this->get(route('size-guide'));
