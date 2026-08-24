@@ -29,6 +29,7 @@ class AdminAuthTest extends TestCase
             'orders.index' => ['admin.orders.index'],
             'hero-slides.index' => ['admin.hero-slides.index'],
             'settings.edit' => ['admin.settings.edit'],
+            'admins.index' => ['admin.admins.index'],
         ];
     }
 

@@ -3,8 +3,10 @@
 use App\Http\Controllers\Admin\AdminAuthController;
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\AdminDressController;
+use App\Http\Controllers\Admin\AdminInvitationController;
 use App\Http\Controllers\Admin\AdminOrderController;
 use App\Http\Controllers\Admin\AdminCategoryController;
+use App\Http\Controllers\Admin\AdminUserController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\AdminPasswordResetController;
 use App\Http\Controllers\Admin\AdminSettingsController;
@@ -33,6 +35,13 @@ Route::prefix('admin')->name('admin.')->group(function () {
     
     Route::post('/password/reset', [AdminPasswordResetController::class, 'reset'])
         ->name('password.update');
+
+    // Admin invitation acceptance - public, since the invitee isn't an admin yet
+    Route::get('/invite/accept/{token}', [AdminInvitationController::class, 'accept'])
+        ->name('invitations.accept');
+
+    Route::post('/invite/accept', [AdminInvitationController::class, 'store'])
+        ->name('invitations.store');
 
     // Protected routes - enforced by the admin.auth middleware group below
     Route::middleware('admin.auth')->group(function () {
@@ -100,6 +109,13 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::prefix('settings')->name('settings.')->group(function () {
             Route::get('/', [AdminSettingsController::class, 'edit'])->name('edit');
             Route::put('/', [AdminSettingsController::class, 'update'])->name('update');
+        });
+
+        // ===== Admin User Management =====
+        Route::prefix('admins')->name('admins.')->group(function () {
+            Route::get('/', [AdminUserController::class, 'index'])->name('index');
+            Route::post('/invite', [AdminUserController::class, 'invite'])->name('invite');
+            Route::delete('/invitations/{invitation}', [AdminUserController::class, 'revoke'])->name('invitations.revoke');
         });
 
         // ===== Logout =====

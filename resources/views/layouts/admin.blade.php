@@ -34,6 +34,7 @@
             ['route' => 'admin.categories.index', 'match' => 'admin.categories.*', 'icon' => 'fa-tags', 'label' => 'Categories'],
             ['route' => 'admin.orders.index', 'match' => 'admin.orders.*', 'icon' => 'fa-receipt', 'label' => 'Orders'],
             ['route' => 'admin.hero-slides.index', 'match' => 'admin.hero-slides.*', 'icon' => 'fa-images', 'label' => 'Hero Slides'],
+            ['route' => 'admin.admins.index', 'match' => 'admin.admins.*', 'icon' => 'fa-user-shield', 'label' => 'Admins'],
             ['route' => 'admin.settings.edit', 'match' => 'admin.settings.*', 'icon' => 'fa-cog', 'label' => 'Settings'],
         ];
     @endphp
