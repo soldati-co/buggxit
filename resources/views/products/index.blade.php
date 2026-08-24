@@ -30,7 +30,7 @@
         </section>
 
         <section class="container-wide px-4 sm:px-6 lg:px-8 mx-auto mb-12">
-            <div class="flex items-center justify-between gap-4">
+            <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
                 <div>
                     <h2 class="text-bone font-semibold text-lg flex items-center">
                         <i class="fas fa-filter mr-2 text-gold"></i>
@@ -39,11 +39,24 @@
                     <template x-if="category">
                         <p class="text-bone-dim text-sm mt-2">Filtering by category: <span class="text-bone" x-text="category"></span></p>
                     </template>
+                    <template x-if="searchQuery">
+                        <p class="text-bone-dim text-sm mt-2">
+                            Search results for "<span class="text-bone" x-text="searchQuery"></span>"
+                            <button type="button" @click="searchQuery = ''" class="ml-2 text-gold hover:text-gold-bright underline">Clear</button>
+                        </p>
+                    </template>
                 </div>
-                <button type="button" @click="refresh()" class="inline-flex items-center gap-2 px-4 py-2 bg-ink-raised2/80 border border-line rounded-lg text-bone-dim hover:text-bone hover:border-gold/50 transition">
-                    <i class="fas fa-sync-alt text-gold"></i>
-                    Refresh
-                </button>
+                <div class="flex items-center gap-3">
+                    <div class="relative flex-1 lg:w-64">
+                        <input type="search" x-model.debounce.400ms="searchQuery" placeholder="Search dresses..."
+                            class="w-full pl-10 pr-4 py-2 bg-ink-raised2/50 border border-line rounded-lg text-bone text-sm focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold/30 transition-all duration-300">
+                        <i class="fas fa-search absolute left-3.5 top-1/2 -translate-y-1/2 text-bone-dim text-sm"></i>
+                    </div>
+                    <button type="button" @click="refresh()" class="inline-flex items-center gap-2 px-4 py-2 bg-ink-raised2/80 border border-line rounded-lg text-bone-dim hover:text-bone hover:border-gold/50 transition whitespace-nowrap">
+                        <i class="fas fa-sync-alt text-gold"></i>
+                        Refresh
+                    </button>
+                </div>
             </div>
         </section>
 
@@ -139,6 +152,7 @@
                 newArrivals: newArrivals || false,
                 category: null,
                 sort: 'latest',
+                searchQuery: '',
                 dresses: [],
                 pagination: {},
                 resultText: 'Loading dresses...',
@@ -147,7 +161,10 @@
                     const params = new URLSearchParams(window.location.search);
                     this.category = params.get('category');
                     this.sort = params.get('sort') || 'latest';
+                    this.searchQuery = params.get('search') || '';
                     this.fetchProducts();
+
+                    this.$watch('searchQuery', () => this.fetchProducts(1));
                 },
 
                 sortLabel() {
@@ -175,6 +192,11 @@
                         } else {
                             params.set('page', page);
                             params.set('sort', this.sort);
+                            if (this.searchQuery) {
+                                params.set('search', this.searchQuery);
+                            } else {
+                                params.delete('search');
+                            }
                         }
 
                         const url = this.newArrivals ? endpoint : `${endpoint}?${params.toString()}`;

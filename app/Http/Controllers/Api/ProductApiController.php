@@ -16,6 +16,15 @@ class ProductApiController extends Controller
     {
         $query = Dress::with('categories')->withImageUrls()->where('status', 'active');
 
+        if ($request->filled('search')) {
+            $term = strtolower($request->input('search'));
+
+            $query->where(function ($query) use ($term) {
+                $query->whereRaw('LOWER(name) LIKE ?', ["%{$term}%"])
+                    ->orWhereRaw('LOWER(description) LIKE ?', ["%{$term}%"]);
+            });
+        }
+
         if ($request->filled('category')) {
             $category = Category::where('slug', $request->category)
                 ->when(

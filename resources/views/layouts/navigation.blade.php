@@ -34,9 +34,32 @@
 
             <!-- Right: Icons -->
             <div class="flex items-center justify-end flex-1 space-x-3 relative z-20">
-                <!-- Search Icon -->
-                <button
-                    class="p-2.5 text-bone-dim hover:text-gold hover:bg-ink-raised2/50 rounded-full transition-all duration-300 group">
+                <!-- Search -->
+                <div class="hidden md:block relative" x-data="{ searchOpen: false }">
+                    <button @click="searchOpen = !searchOpen; $nextTick(() => searchOpen && $refs.searchInput.focus())"
+                        class="p-2.5 text-bone-dim hover:text-gold hover:bg-ink-raised2/50 rounded-full transition-all duration-300 group">
+                        <i class="fas fa-search text-lg group-hover:scale-110"></i>
+                    </button>
+
+                    <div x-show="searchOpen" x-cloak x-transition:enter="transition ease-out duration-200"
+                        x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100"
+                        x-transition:leave="transition ease-in duration-150"
+                        x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-95"
+                        @click.away="searchOpen = false" @keydown.escape.window="searchOpen = false"
+                        class="absolute right-0 mt-2 w-72 rounded-lg shadow-xl bg-ink-raised/90 backdrop-blur-sm border border-line z-50 overflow-hidden p-3">
+                        <form method="GET" action="{{ route('products.index') }}">
+                            <div class="relative">
+                                <input x-ref="searchInput" type="search" name="search" placeholder="Search dresses..."
+                                    class="w-full pl-10 pr-4 py-2.5 bg-ink-raised2/50 border border-line rounded-lg text-bone text-sm focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold/30 transition-all duration-300">
+                                <i class="fas fa-search absolute left-3.5 top-1/2 -translate-y-1/2 text-bone-dim text-sm"></i>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Mobile Search Icon -->
+                <button @click="mobileMenuOpen = true; $nextTick(() => $refs.mobileSearchInput.focus())"
+                    class="md:hidden p-2.5 text-bone-dim hover:text-gold hover:bg-ink-raised2/50 rounded-full transition-all duration-300 group">
                     <i class="fas fa-search text-lg group-hover:scale-110"></i>
                 </button>
 
@@ -146,6 +169,19 @@
         <!-- Mobile Menu Content with vertical scroll -->
         <div class="max-h-[70vh] overflow-y-auto overscroll-contain">
             <div class="px-4 py-3 space-y-1">
+                <!-- Mobile Search -->
+                <div class="px-4 py-3">
+                    <form method="GET" action="{{ route('products.index') }}">
+                        <div class="relative">
+                            <input x-ref="mobileSearchInput" type="search" name="search" placeholder="Search products..."
+                                class="w-full px-4 py-3 bg-ink-raised2/50 backdrop-blur-sm border border-line rounded-full text-bone text-sm focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold/30 transition-all duration-300 pl-12">
+                            <div class="absolute left-4 top-1/2 -translate-y-1/2 text-bone-dim">
+                                <i class="fas fa-search"></i>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
                 <!-- Mobile Navigation Links -->
                 @foreach ([['route' => 'home', 'label' => 'Home', 'icon' => 'home'], ['route' => 'products.index', 'label' => 'Products', 'icon' => 'shopping-bag'], ['route' => 'about', 'label' => 'About Us', 'icon' => 'info-circle'], ['route' => 'contact', 'label' => 'Contact Us', 'icon' => 'envelope']] as $item)
                     <a href="{{ route($item['route']) }}" @click="mobileMenuOpen = false"
@@ -167,17 +203,6 @@
                 <div class="px-4 py-3">
                     <x-cart-icon :count="$cartCount ?? 0" size="lg" showText="true"
                         class="w-full justify-between text-bone-dim hover:text-gold hover:bg-ink-raised2/50 rounded-lg px-4 py-3 transition-all duration-300" />
-                </div>
-
-                <!-- Mobile Search -->
-                <div class="px-4 py-3">
-                    <div class="relative">
-                        <input type="search" placeholder="Search products..."
-                            class="w-full px-4 py-3 bg-ink-raised2/50 backdrop-blur-sm border border-line rounded-full text-bone text-sm focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold/30 transition-all duration-300 pl-12">
-                        <div class="absolute left-4 top-1/2 -translate-y-1/2 text-bone-dim">
-                            <i class="fas fa-search"></i>
-                        </div>
-                    </div>
                 </div>
 
                 <!-- Mobile Account Section -->
