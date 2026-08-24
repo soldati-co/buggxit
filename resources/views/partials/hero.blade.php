@@ -98,7 +98,7 @@ class="relative w-full h-[60vh] md:h-[85vh] min-h-[min(450px,100vh)] overflow-hi
     </button>
 
     {{-- Dot indicators --}}
-    <div class="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 flex space-x-2">
+    <div class="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 flex gap-2">
         @foreach($slides as $index => $slide)
         <button @click="goTo({{ $index }})" aria-label="Go to slide {{ $index + 1 }}"
                 class="p-2 -m-2 flex items-center justify-center">
