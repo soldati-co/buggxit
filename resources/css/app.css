@@ -36,3 +36,13 @@
         font-size: 16px !important;
     }
 }
+
+/* Checkout order summary: floats with scroll, but only once there's
+   comfortable room for it -- a short viewport would otherwise have it
+   overlapping the fold immediately. */
+@media (min-width: 1024px) and (min-height: 924px) {
+    .checkout-summary-sticky {
+        position: sticky;
+        top: 6rem;
+    }
+}

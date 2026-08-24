@@ -66,15 +66,23 @@
 
         html,
         body {
-            overflow-x: hidden;
-            /* Explicit, since an unset overflow-y next to overflow-x: hidden
-               computes to auto per the CSS overflow spec -- turning html/body
-               into a scroll container that breaks position: sticky for every
-               descendant (e.g. the checkout order summary). */
-            overflow-y: visible;
             width: 100%;
             max-width: 100%;
             position: relative;
+        }
+
+        /* Only the root element clips horizontal overflow. A non-root
+           element (body, .page-wrapper, etc.) with overflow-x: hidden and no
+           overflow-y forces the used value of overflow-y from visible to
+           auto (CSS Overflow spec) -- turning that element into a real
+           scroll container and breaking position: sticky for every
+           descendant (verified live: the checkout order summary never
+           stuck because body/.page-wrapper had both been promoted to
+           overflow-y: auto this way). html is exempt because a root
+           element's overflow governs the viewport directly instead of
+           creating a wrapping scroll box, so it alone is safe here. */
+        html {
+            overflow-x: hidden;
         }
 
         body {
@@ -100,7 +108,16 @@
             font-variant-numeric: tabular-nums;
         }
 
-        /* Main content wrapper that pushes footer down */
+        /* Main content wrapper that pushes footer down. No overflow-x here
+           on purpose: html/body already clip horizontal overflow site-wide,
+           and that's safe for position: sticky descendants only because
+           overflow on the root element propagates to the viewport instead
+           of creating a real scroll box. overflow-x: hidden on a plain
+           element like this one does NOT get that special case -- it forces
+           overflow-y's used value from visible to auto (CSS Overflow spec),
+           which turns .page-wrapper itself into a scroll container and
+           breaks position: sticky for every descendant, including the
+           checkout order summary. */
         .page-wrapper {
             flex: 1 0 auto;
             display: flex;
@@ -108,8 +125,6 @@
             width: 100%;
             max-width: 100%;
             position: relative;
-            overflow-x: hidden;
-            overflow-y: visible;
         }
 
         .main-content {

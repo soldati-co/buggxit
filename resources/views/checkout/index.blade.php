@@ -200,7 +200,7 @@
 
             {{-- Order Summary (right column) --}}
             <div class="lg:col-span-1">
-                <div class="bg-ink-raised/90 backdrop-blur-sm border border-line rounded-xl p-6 sticky top-24">
+                <div class="bg-ink-raised/90 backdrop-blur-sm border border-line rounded-xl p-6 checkout-summary-sticky">
                     <h3 class="text-lg font-semibold text-bone mb-4 flex items-center">
                         <i class="fas fa-shopping-bag text-gold mr-2"></i>
                         Your Order
