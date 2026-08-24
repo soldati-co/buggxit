@@ -186,11 +186,11 @@
                 <p class="text-bone-dim text-sm mb-6">Would you like to view your cart, or keep browsing?</p>
                 <div class="flex flex-col sm:flex-row gap-3">
                     <a href="{{ route('products.index') }}"
-                        class="flex-1 px-4 py-3 bg-ink-raised2/50 border border-line rounded-lg text-bone hover:bg-ink-raised2 transition-colors text-sm font-medium">
+                        class="flex-1 whitespace-nowrap px-4 py-3 bg-ink-raised2/50 border border-line rounded-lg text-bone hover:bg-ink-raised2 transition-colors text-sm font-medium">
                         Continue Shopping
                     </a>
                     <a href="{{ route('cart.index') }}"
-                        class="flex-1 px-4 py-3 bg-gradient-to-r from-gold to-gold-dim text-ink font-semibold rounded-lg hover:from-gold-bright hover:to-gold transition-all duration-300 text-sm">
+                        class="flex-1 whitespace-nowrap px-4 py-3 bg-gradient-to-r from-gold to-gold-dim text-ink font-semibold rounded-lg hover:from-gold-bright hover:to-gold transition-all duration-300 text-sm">
                         View Cart
                     </a>
                 </div>

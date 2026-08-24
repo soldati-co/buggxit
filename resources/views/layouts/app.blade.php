@@ -67,6 +67,11 @@
         html,
         body {
             overflow-x: hidden;
+            /* Explicit, since an unset overflow-y next to overflow-x: hidden
+               computes to auto per the CSS overflow spec -- turning html/body
+               into a scroll container that breaks position: sticky for every
+               descendant (e.g. the checkout order summary). */
+            overflow-y: visible;
             width: 100%;
             max-width: 100%;
             position: relative;
@@ -104,6 +109,7 @@
             max-width: 100%;
             position: relative;
             overflow-x: hidden;
+            overflow-y: visible;
         }
 
         .main-content {
