@@ -156,6 +156,7 @@
                 dresses: [],
                 pagination: {},
                 resultText: 'Loading dresses...',
+                requestSeq: 0,
 
                 init() {
                     const params = new URLSearchParams(window.location.search);
@@ -181,6 +182,13 @@
                 },
 
                 async fetchProducts(page = 1) {
+                    // Typing in the search box (or a fast sort/page change before the
+                    // previous fetch resolves) can fire overlapping requests. Only the
+                    // most recently *started* call is allowed to commit its results,
+                    // so a slow, now-stale response can't clobber a newer one that
+                    // already landed.
+                    const requestId = ++this.requestSeq;
+
                     try {
                         this.loading = true;
                         this.dresses = [];
@@ -205,6 +213,11 @@
                             throw new Error('Unable to load products.');
                         }
                         const json = await response.json();
+
+                        if (requestId !== this.requestSeq) {
+                            return;
+                        }
+
                         this.dresses = json.data || json;
 
                         if (json.meta) {
@@ -225,10 +238,15 @@
                             window.history.replaceState({}, '', `${window.location.pathname}?${params.toString()}`);
                         }
                     } catch (error) {
+                        if (requestId !== this.requestSeq) {
+                            return;
+                        }
                         console.error(error);
                         this.resultText = 'Unable to load dresses';
                     } finally {
-                        this.loading = false;
+                        if (requestId === this.requestSeq) {
+                            this.loading = false;
+                        }
                     }
                 },
 
